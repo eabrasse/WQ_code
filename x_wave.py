@@ -35,5 +35,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'data/waves_{:04d}.p'.format(tt)
+outfn = home + 'WQ_data/waves_{:04d}.p'.format(tt)
 pickle.dump(D,open(outfn,'wb'))
