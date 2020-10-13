@@ -26,34 +26,46 @@ Hwave = ds['Hwave'][:]
 
 nt, ny, nx = Hwave.shape
 
-Dwave_max = np.zeros((nt))
-Dwave_min = np.zeros((nt))
+# Dwave_max = np.zeros((nt))
+# Dwave_min = np.zeros((nt))
 Dwave_avg = np.zeros((nt))
-Dwave_std = np.zeros((nt))
-Hwave_max = np.zeros((nt))
-Hwave_min = np.zeros((nt))
+Dwave_10 = np.zeros((nt))
+Dwave_25 = np.zeros((nt))
+Dwave_75 = np.zeros((nt))
+Dwave_90 = np.zeros((nt))
+# Dwave_std = np.zeros((nt))
+# Hwave_max = np.zeros((nt))
+# Hwave_min = np.zeros((nt))
 Hwave_avg = np.zeros((nt))
-Hwave_std = np.zeros((nt))
+Hwave_10 = np.zeros((nt))
+Hwave_25 = np.zeros((nt))
+Hwave_75 = np.zeros((nt))
+Hwave_90 = np.zeros((nt))
+# Hwave_std = np.zeros((nt))
 
 for t in range(nt):
     y_inds,x_inds = np.where(Hwave[t,:,:]!=0)
     Hwave0 = Hwave[t,y_inds,x_inds]
     Dwave0 = Dwave[t,y_inds,x_inds]
-    Dwave_max[t] = np.max(Dwave0)
-    Dwave_min[t] = np.min(Dwave0)
     Dwave_avg[t] = np.mean(Dwave0)
-    Dwave_std[t] = np.std(Dwave0)
-    Hwave_max[t] = np.max(Hwave0)
-    Hwave_min[t] = np.min(Hwave0)
+    Dwave_10[t] = np.percentile(Dwave0,10)
+    Dwave_25[t] = np.percentile(Dwave0,25)
+    Dwave_75[t] = np.percentile(Dwave0,75)
+    Dwave_90[t] = np.percentile(Dwave0,90)
     Hwave_avg[t] = np.mean(Hwave0)
-    Hwave_std[t] = np.std(Hwave0)
+    Hwave_10[t] = np.percentile(Hwave0,10)
+    Hwave_25[t] = np.percentile(Hwave0,25)
+    Hwave_75[t] = np.percentile(Hwave0,75)
+    Hwave_90[t] = np.percentile(Hwave0,90)
 
 # lat_rho = ds['lat_rho'][:]
 # lon_rho = ds['lon_rho'][:]
 # mask_rho = ds['mask_rho'][:]
 ocean_time = ds['ocean_time'][:]
 
-var_list = 'Dwave_max','Dwave_min','Dwave_avg','Dwave_std','Hwave_max','Hwave_min','Hwave_avg','Hwave_std','ocean_time'
+var_list = ['Dwave_avg','Dwave_10','Dwave_25','Dwave_75','Dwave_90',
+    'Hwave_avg','Hwave_10','Hwave_25','Hwave_75','Hwave_90',
+    'ocean_time']
 
 D = dict()
 for var in var_list:
