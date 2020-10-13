@@ -27,8 +27,8 @@ Hwave0 = ds['Hwave'][:]
 nt, ny, nx = Hwave0.shape
 
 #ignore undefined fill values in center when determining mean
-Hwave0 = Hwave0[Hwave0>0.1]
-Dwave0 = Dwave0[Dwave0>82]
+Hwave0[Hwave0>0.1] = np.nan
+Dwave0[Dwave0>82] = np.nan
 
 Dwave_max = np.zeros((nt))
 Dwave_min = np.zeros((nt))
@@ -38,12 +38,12 @@ Hwave_min = np.zeros((nt))
 Hwave_avg = np.zeros((nt))
 
 for t in range(nt):
-    Dwave_max[t] = np.max(Dwave0[t,:])
-    Dwave_min[t] = np.min(Dwave0[t,:])
-    Dwave_avg[t] = np.mean(Dwave0[t,:])
-    Hwave_max[t] = np.max(Hwave0[t,:])
-    Hwave_min[t] = np.min(Hwave0[t,:])
-    Hwave_avg[t] = np.mean(Hwave0[t,:])
+    Dwave_max[t] = np.nanmax(Dwave0[t,:])
+    Dwave_min[t] = np.nanmin(Dwave0[t,:])
+    Dwave_avg[t] = np.nanmean(Dwave0[t,:])
+    Hwave_max[t] = np.nanmax(Hwave0[t,:])
+    Hwave_min[t] = np.nanmin(Hwave0[t,:])
+    Hwave_avg[t] = np.nanmean(Hwave0[t,:])
 
 # lat_rho = ds['lat_rho'][:]
 # lon_rho = ds['lon_rho'][:]
