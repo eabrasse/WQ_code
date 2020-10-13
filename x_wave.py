@@ -48,15 +48,15 @@ for t in range(nt):
     Hwave0 = Hwave[t,y_inds,x_inds]
     Dwave0 = Dwave[t,y_inds,x_inds]
     Dwave_avg[t] = np.mean(Dwave0)
-    Dwave_10[t] = np.percentile(Dwave0,10)
-    Dwave_25[t] = np.percentile(Dwave0,25)
-    Dwave_75[t] = np.percentile(Dwave0,75)
-    Dwave_90[t] = np.percentile(Dwave0,90)
+    Dwave_10[t] = np.nanpercentile(Dwave0,10)
+    Dwave_25[t] = np.nanpercentile(Dwave0,25)
+    Dwave_75[t] = np.nanpercentile(Dwave0,75)
+    Dwave_90[t] = np.nanpercentile(Dwave0,90)
     Hwave_avg[t] = np.mean(Hwave0)
-    Hwave_10[t] = np.percentile(Hwave0,10)
-    Hwave_25[t] = np.percentile(Hwave0,25)
-    Hwave_75[t] = np.percentile(Hwave0,75)
-    Hwave_90[t] = np.percentile(Hwave0,90)
+    Hwave_10[t] = np.nanpercentile(Hwave0,10)
+    Hwave_25[t] = np.nanpercentile(Hwave0,25)
+    Hwave_75[t] = np.nanpercentile(Hwave0,75)
+    Hwave_90[t] = np.nanpercentile(Hwave0,90)
 
 # lat_rho = ds['lat_rho'][:]
 # lon_rho = ds['lon_rho'][:]
