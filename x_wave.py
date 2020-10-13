@@ -21,7 +21,6 @@ ds = nc.Dataset(fn)
 
 # select wave direction and significant wave height
 
-
 Dwave0 = ds['Dwave'][:]
 Hwave0 = ds['Hwave'][:]
 
