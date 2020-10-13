@@ -27,8 +27,8 @@ Hwave0 = ds['Hwave'][:]
 nt, ny, nx = Hwave0.shape
 
 #ignore undefined fill values in center when determining mean
-Hwave0[Hwave0>0.1] = np.nan
-Dwave0[Dwave0>82] = np.nan
+Hwave0[Hwave0<0.1] = np.nan
+Dwave0[Dwave0<82] = np.nan
 
 Dwave_max = np.zeros((nt))
 Dwave_min = np.zeros((nt))
