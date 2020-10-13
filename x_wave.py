@@ -50,12 +50,12 @@ for t in range(nt):
     Dwave0 = Dwave[t,y_inds,x_inds]
     Dwave0 = np.ma.filled(Dwave0,np.nan)
     
-    Dwave_avg[t] = np.mean(Dwave0)
+    Dwave_avg[t] = np.nanmean(Dwave0)
     Dwave_10[t] = np.nanpercentile(Dwave0,10)
     Dwave_25[t] = np.nanpercentile(Dwave0,25)
     Dwave_75[t] = np.nanpercentile(Dwave0,75)
     Dwave_90[t] = np.nanpercentile(Dwave0,90)
-    Hwave_avg[t] = np.mean(Hwave0)
+    Hwave_avg[t] = np.nanmean(Hwave0)
     Hwave_10[t] = np.nanpercentile(Hwave0,10)
     Hwave_25[t] = np.nanpercentile(Hwave0,25)
     Hwave_75[t] = np.nanpercentile(Hwave0,75)
