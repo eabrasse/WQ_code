@@ -20,7 +20,7 @@ ds = nc.Dataset(fn)
 # select wave direction and significant wave height
 
 # at first time step 
-tt = 0
+tt = 5
 
 Dwave = ds['Dwave'][tt,:]
 Hwave = ds['Hwave'][tt,:]
