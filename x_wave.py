@@ -46,7 +46,10 @@ Hwave_90 = np.zeros((nt))
 for t in range(nt):
     y_inds,x_inds = np.where(Hwave[t,:,:]!=0)
     Hwave0 = Hwave[t,y_inds,x_inds]
+    Hwave0 = np.ma.filled(Hwave0,np.nan)
     Dwave0 = Dwave[t,y_inds,x_inds]
+    Dwave0 = np.ma.filled(Dwave0,np.nan)
+    
     Dwave_avg[t] = np.mean(Dwave0)
     Dwave_10[t] = np.nanpercentile(Dwave0,10)
     Dwave_25[t] = np.nanpercentile(Dwave0,25)
