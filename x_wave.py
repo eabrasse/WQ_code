@@ -84,7 +84,7 @@ for fn in f_list:
     ds.close()
     tt+=1
 
-var_list = ['Dwave_avg','Hwave_avg','ocean_time']
+var_list = ['Dwave_avg','Hwave_avg','ot']
 
 D = dict()
 for var in var_list:
