@@ -34,7 +34,7 @@ Hwave_min = np.zeros((nt))
 Hwave_avg = np.zeros((nt))
 
 for t in range(nt):
-    y_inds,x_inds = np.where(Hwave[t,:,:]==0)
+    y_inds,x_inds = np.where(Hwave[t,:,:]!=0)
     Hwave0 = Hwave[t,y_inds,x_inds]
     Dwave0 = Dwave[t,y_inds,x_inds]
     Dwave_max[t] = np.max(Dwave0)
