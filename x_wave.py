@@ -17,7 +17,7 @@ dir0 = '/home/x1wu/SDTJRE_EPA/LV4_RUNFILES/Run2017/Couple/'
 
 f_list = os.listdir(dir0)
 f_list.sort()
-f_list = [x for x in f_list if x[:5]=='ocean']
+f_list = [x for x in f_list if x[:24]=='ocean_his_LV4_EPA_winter']
 nfiles = len(f_list)
 
 tt=0
