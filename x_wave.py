@@ -28,7 +28,7 @@ nt, ny, nx = Hwave0.shape
 
 #ignore undefined fill values in center when determining mean
 Hwave0 = Hwave0[Hwave0>0.1]
-Dwave0 = Dwave0[Dwave>82]
+Dwave0 = Dwave0[Dwave0>82]
 
 Dwave_max = np.zeros((nt))
 Dwave_min = np.zeros((nt))
@@ -50,9 +50,7 @@ for t in range(nt):
 # mask_rho = ds['mask_rho'][:]
 ocean_time = ds['ocean_time'][:]
 
-var_list = 'Dwave_max','Dwave_min','Dwave_avg',
-    'Hwave_max','Hwave_min','Hwave_avg',
-    'ocean_time'
+var_list = 'Dwave_max','Dwave_min','Dwave_avg','Hwave_max','Hwave_min','Hwave_avg','ocean_time'
 
 D = dict()
 for var in var_list:
