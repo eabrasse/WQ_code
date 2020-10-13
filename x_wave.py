@@ -27,7 +27,7 @@ for fn in f_list:
     
     if tt==0:
         #initialize time series
-        nt = ds['ocean_time'].shape()[0]
+        nt = ds['ocean_time'].shape[0]
         
         NT = nt*nfiles
 
