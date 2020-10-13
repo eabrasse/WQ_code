@@ -29,9 +29,11 @@ nt, ny, nx = Hwave.shape
 Dwave_max = np.zeros((nt))
 Dwave_min = np.zeros((nt))
 Dwave_avg = np.zeros((nt))
+Dwave_std = np.zeros((nt))
 Hwave_max = np.zeros((nt))
 Hwave_min = np.zeros((nt))
 Hwave_avg = np.zeros((nt))
+Hwave_std = np.zeros((nt))
 
 for t in range(nt):
     y_inds,x_inds = np.where(Hwave[t,:,:]!=0)
@@ -40,16 +42,18 @@ for t in range(nt):
     Dwave_max[t] = np.max(Dwave0)
     Dwave_min[t] = np.min(Dwave0)
     Dwave_avg[t] = np.mean(Dwave0)
+    Dwave_std[t] = np.std(Dwave0)
     Hwave_max[t] = np.max(Hwave0)
     Hwave_min[t] = np.min(Hwave0)
     Hwave_avg[t] = np.mean(Hwave0)
+    Hwave_std[t] = np.std(Hwave0)
 
 # lat_rho = ds['lat_rho'][:]
 # lon_rho = ds['lon_rho'][:]
 # mask_rho = ds['mask_rho'][:]
 ocean_time = ds['ocean_time'][:]
 
-var_list = 'Dwave_max','Dwave_min','Dwave_avg','Hwave_max','Hwave_min','Hwave_avg','ocean_time'
+var_list = 'Dwave_max','Dwave_min','Dwave_avg','Dwave_std','Hwave_max','Hwave_min','Hwave_avg','Hwave_std','ocean_time'
 
 D = dict()
 for var in var_list:
