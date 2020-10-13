@@ -24,7 +24,7 @@ ds = nc.Dataset(fn)
 Dwave = ds['Dwave'][:]
 Hwave = ds['Hwave'][:]
 
-nt, ny, nx = Hwave0.shape
+nt, ny, nx = Hwave.shape
 
 Dwave_max = np.zeros((nt))
 Dwave_min = np.zeros((nt))
