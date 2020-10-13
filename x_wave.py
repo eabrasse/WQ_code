@@ -13,7 +13,7 @@ home = '/home/ebrasseale/'
 
 dir0 = '/home/x1wu/SDTJRE_EPA/LV4_RUNFILES/Run2017/Couple/'
 
-fn = dir0+'ocean_his_LV4_EPA_winter_00001.nc'
+fn = dir0+'ocean_his_LV4_EPA_winter_00005.nc'
 
 ds = nc.Dataset(fn)
 
