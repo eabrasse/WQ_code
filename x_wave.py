@@ -34,15 +34,15 @@ Hwave_min = np.zeros((nt))
 Hwave_avg = np.zeros((nt))
 
 for t in range(nt):
-    A = np.where(Hwave[t,:,:]==0)
-    Hwave0 = Hwave[t,A]
-    Dwave0 = Dwave[t,A]
-    Dwave_max[t] = np.nanmax(Dwave0)
-    Dwave_min[t] = np.nanmin(Dwave0)
-    Dwave_avg[t] = np.nanmean(Dwave0)
-    Hwave_max[t] = np.nanmax(Hwave0)
-    Hwave_min[t] = np.nanmin(Hwave0)
-    Hwave_avg[t] = np.nanmean(Hwave0)
+    y_inds,x_inds = np.where(Hwave[t,:,:]==0)
+    Hwave0 = Hwave[t,y_inds,x_inds]
+    Dwave0 = Dwave[t,y_inds,x_inds]
+    Dwave_max[t] = np.max(Dwave0)
+    Dwave_min[t] = np.min(Dwave0)
+    Dwave_avg[t] = np.mean(Dwave0)
+    Hwave_max[t] = np.max(Hwave0)
+    Hwave_min[t] = np.min(Hwave0)
+    Hwave_avg[t] = np.mean(Hwave0)
 
 # lat_rho = ds['lat_rho'][:]
 # lon_rho = ds['lon_rho'][:]
