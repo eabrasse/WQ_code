@@ -23,7 +23,7 @@ nfiles = len(f_list)
 tt=0
 for fn in f_list:
     print('day {} of {}'.format(tt,nfiles))
-    ds = nc.Dataset(fn)
+    ds = nc.Dataset(dir0+fn)
     
     if tt==0:
         #initialize time series
