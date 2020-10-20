@@ -76,13 +76,16 @@ for fn in f_list:
     Dwave0 = ds['Dwave'][:]
     Hwave0 = ds['Hwave'][:]
 
+    ocean_time = ds['ocean_time'][:]
+    nt = ocean_time.shape
+
     for j in range(ny):
         dye_01[old_nt:old_nt+nt,j] = np.mean(dye_01_0[:,:,j,int(x_list[j])],axis=1)
         dye_02[old_nt:old_nt+nt,j] = np.mean(dye_02_0[:,:,j,int(x_list[j])],axis=1)
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
-    ot[old_nt:old_nt+nt] = ds['ocean_time'][:]
+    ot[old_nt:old_nt+nt] = ocean_time
     old_nt += nt
     
     ds.close()
