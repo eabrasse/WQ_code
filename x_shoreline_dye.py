@@ -48,7 +48,7 @@ for fn in f_list:
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         
         for j in range(ny):
-            x_list[j] = int(np.where(mask_rho[j,:])[0][0]-1)
+            x_list[j] = int(np.where(mask_rho[j,:]==0)[0][0]-1)
             shorelon[j] = lon_rho[j,x_list[j]]
             shorelat[j] = lat_rho[j,x_list[j]]
     else:
