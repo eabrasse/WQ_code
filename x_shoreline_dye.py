@@ -48,9 +48,9 @@ for fn in f_list:
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         
         for j in range(ny):
-            x_list[j] = int(np.where(mask_rho[j,:]==0)[0][0]-1)
-            shorelon[j] = lon_rho[j,x_list[j]]
-            shorelat[j] = lat_rho[j,x_list[j]]
+            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-1
+            shorelon[j] = lon_rho[j,int(x_list[j])]
+            shorelat[j] = lat_rho[j,int(x_list[j])]
     else:
         nt = ds['ocean_time'].shape[0]
     NT += nt
@@ -77,8 +77,8 @@ for fn in f_list:
     Hwave0 = ds['Hwave'][:]
 
     for j in range(ny):
-        dye_01[old_nt:old_nt+nt,j] = np.mean(dye_01_0[:,:,j,x_list[j]],axis=1)
-        dye_02[old_nt:old_nt+nt,j] = np.mean(dye_02_0[:,:,j,x_list[j]],axis=1)
+        dye_01[old_nt:old_nt+nt,j] = np.mean(dye_01_0[:,:,j,int(x_list[j])],axis=1)
+        dye_02[old_nt:old_nt+nt,j] = np.mean(dye_02_0[:,:,j,int(x_list[j])],axis=1)
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
