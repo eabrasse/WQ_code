@@ -77,7 +77,7 @@ for fn in f_list:
     Hwave0 = ds['Hwave'][:]
 
     ocean_time = ds['ocean_time'][:]
-    nt = ocean_time.shape
+    nt = ocean_time.shape[0]
 
     for j in range(ny):
         dye_01[old_nt:old_nt+nt,j] = np.mean(dye_01_0[:,:,j,int(x_list[j])],axis=1)
