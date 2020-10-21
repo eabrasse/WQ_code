@@ -48,7 +48,7 @@ for fn in f_list:
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         
         for j in range(ny):
-            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-1
+            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-2
             shorelon[j] = lon_rho[j,int(x_list[j])]
             shorelat[j] = lat_rho[j,int(x_list[j])]
     else:
@@ -80,8 +80,8 @@ for fn in f_list:
     nt = ocean_time.shape[0]
 
     for j in range(ny):
-        dye_01[old_nt:old_nt+nt,j] = dye_01_0[:,-1,j,int(x_list[j])]
-        dye_02[old_nt:old_nt+nt,j] = dye_02_0[:,-1,j,int(x_list[j])]
+        dye_01[old_nt:old_nt+nt,j] = np.mean(dye_01_0[:,:,j,int(x_list[j])],axis=1)
+        dye_02[old_nt:old_nt+nt,j] = np.mean(dye_02_0[:,:,j,int(x_list[j])],axis=1)
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
@@ -97,5 +97,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_surf_dye.p'
+outfn = home + 'WQ_data/shoreline_dye_-2.p'
 pickle.dump(D,open(outfn,'wb'))
