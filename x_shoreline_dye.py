@@ -48,7 +48,7 @@ for fn in f_list:
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         
         for j in range(ny):
-            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-5
+            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-10
             shorelon[j] = lon_rho[j,int(x_list[j])]
             shorelat[j] = lat_rho[j,int(x_list[j])]
     else:
@@ -97,5 +97,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_dye_-5.p'
+outfn = home + 'WQ_data/shoreline_dye_-10.p'
 pickle.dump(D,open(outfn,'wb'))
