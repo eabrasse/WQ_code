@@ -19,7 +19,7 @@ f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
 
-testing=True
+testing=False
 if testing:
     f_list = f_list[:3]
 
@@ -48,7 +48,7 @@ for fn in f_list:
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         
         for j in range(ny):
-            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-10
+            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-5
             shorelon[j] = lon_rho[j,int(x_list[j])]
             shorelat[j] = lat_rho[j,int(x_list[j])]
     else:
@@ -97,5 +97,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_dye_-10.p'
+outfn = home + 'WQ_data/shoreline_dye.p'
 pickle.dump(D,open(outfn,'wb'))
