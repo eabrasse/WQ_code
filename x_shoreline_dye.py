@@ -69,7 +69,7 @@ for fn in f_list:
     ds = nc.Dataset(dir0+fn)
 
     # select wave direction and significant wave height
-    wetdry_mask_rho = ds['wetdry_mash_rho'][:]
+    wetdry_mask_rho = ds['wetdry_mask_rho'][:]
     dye_01_0 = ds['dye_01'][:]
     dye_02_0 = ds['dye_02'][:]
     Dwave0 = ds['Dwave'][:]
