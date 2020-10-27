@@ -33,7 +33,7 @@ NT = 0
 for fn in f_list:
     ds = nc.Dataset(dir0+fn)
     if NT==0:
-        nt,nz,ny,nx = ds['u'].shape
+        nt,nz,ny,nx = ds['salt'].shape
         
         lon_rho = ds['lon_rho'][:]
         lat_rho = ds['lat_rho'][:]
