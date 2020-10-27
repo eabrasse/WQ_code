@@ -33,11 +33,7 @@ NT = 0
 for fn in f_list:
     ds = nc.Dataset(dir0+fn)
     if NT==0:
-        nt,nz,ny,nx = ds['u'].shape
-        
-        x_list = np.zeros((ny))
-        shorelon = np.zeros((ny))
-        shorelat = np.zeros((ny))
+        nt,nz,ny,nx = ds['salt'].shape
         
         lon_rho = ds['lon_rho'][:]
         lat_rho = ds['lat_rho'][:]
@@ -84,8 +80,8 @@ for fn in f_list:
     for t in range(nt):
         for j in range(ny):
             x_ind = np.where(wetdry_mask_rho[t,j,:]==0)[0][0]-1
-            dye_01[old_nt+t,j] = np.mean(dye_01_0[t,:,j,int(x_ind)],axis=1)
-            dye_02[old_nt+t,j] = np.mean(dye_02_0[t,:,j,int(x_ind)],axis=1)
+            dye_01[old_nt+t,j] = np.mean(dye_01_0[t,:,j,int(x_ind)])
+            dye_02[old_nt+t,j] = np.mean(dye_02_0[t,:,j,int(x_ind)])
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
