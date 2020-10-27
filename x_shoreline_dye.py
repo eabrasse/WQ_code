@@ -46,11 +46,7 @@ for fn in f_list:
         refgrid = np.abs(lon_rho-buoylon)+np.abs(lat_rho-buoylat)
         buoy_x = np.where(refgrid==refgrid.min())[1][0]
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
-        
-        for j in range(ny):
-            x_list[j] = np.where(mask_rho[j,:]==0)[0][0]-5
-            shorelon[j] = lon_rho[j,int(x_list[j])]
-            shorelat[j] = lat_rho[j,int(x_list[j])]
+
     else:
         nt = ds['ocean_time'].shape[0]
     NT += nt
@@ -60,6 +56,9 @@ dye_01 = np.zeros((NT,ny))
 dye_02 = np.zeros((NT,ny))
 Dwave = np.zeros((NT))
 Hwave = np.zeros((NT))
+Lwave = np.zeros((NT))
+h = np.zeros((NT))
+zeta = np.zeros((NT))
 ot = np.zeros((NT))
 
 # Now do the extraction and processing
@@ -70,28 +69,37 @@ for fn in f_list:
     ds = nc.Dataset(dir0+fn)
 
     # select wave direction and significant wave height
-
+    wetdry_mask_rho = ds['wetdry_mash_rho'][:]
     dye_01_0 = ds['dye_01'][:]
     dye_02_0 = ds['dye_02'][:]
     Dwave0 = ds['Dwave'][:]
     Hwave0 = ds['Hwave'][:]
+    Lwave0 = ds['Lwave'][:]
+    h0 = ds['h'][:]
+    zeta0 = ds['zeta'][:]
 
     ocean_time = ds['ocean_time'][:]
     nt = ocean_time.shape[0]
 
-    for j in range(ny):
-        dye_01[old_nt:old_nt+nt,j] = np.mean(dye_01_0[:,:,j,int(x_list[j])],axis=1)
-        dye_02[old_nt:old_nt+nt,j] = np.mean(dye_02_0[:,:,j,int(x_list[j])],axis=1)
+    for t in range(nt):
+        for j in range(ny):
+            x_ind = np.where(wetdry_mask_rho[t,j,:]==0)[0][0]-1
+            dye_01[old_nt+t,j] = np.mean(dye_01_0[t,:,j,int(x_ind)],axis=1)
+            dye_02[old_nt+t,j] = np.mean(dye_02_0[t,:,j,int(x_ind)],axis=1)
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
+    Lwave[old_nt:old_nt+nt] = Lwave0[:,buoy_y,buoy_x]
+    h[old_nt:old_nt+nt] = h0[:,buoy_y,buoy_x]
+    zeta[old_nt:old_nt+nt] = zeta0[:,buoy_y,buoy_x]
+    
     ot[old_nt:old_nt+nt] = ocean_time
     old_nt += nt
     
     ds.close()
     tt+=1
 
-var_list = ['shorelat','shorelon','dye_01','dye_02','Dwave','Hwave','ot','lon_rho','lat_rho','mask_rho']
+var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta']
 
 D = dict()
 for var in var_list:
