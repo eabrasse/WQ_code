@@ -50,8 +50,8 @@ for fn in f_list:
         
         for j in range(ny):
             x_ind = np.where(mask_rho[j,:]==0)[0][0]-1
-            shorelon[j] = lon_rho[j,ind(x_ind)]
-            shorelat[j] = lat_rho[j,ind(x_ind)]
+            shorelon[j] = lon_rho[j,int(x_ind)]
+            shorelat[j] = lat_rho[j,int(x_ind)]
 
     else:
         nt = ds['ocean_time'].shape[0]
