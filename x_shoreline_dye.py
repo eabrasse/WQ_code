@@ -35,13 +35,23 @@ for fn in f_list:
     if NT==0:
         nt,nz,ny,nx = ds['salt'].shape
         
+        shorelon = np.zeros((ny))
+        shorelat = np.zeros((ny))
+        
         lon_rho = ds['lon_rho'][:]
         lat_rho = ds['lat_rho'][:]
         mask_rho = ds['mask_rho'][:]
+        h0 = ds['h'][:]
         
         refgrid = np.abs(lon_rho-buoylon)+np.abs(lat_rho-buoylat)
         buoy_x = np.where(refgrid==refgrid.min())[1][0]
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
+        h = h0[buoy_y,buoy_x]
+        
+        for j in range(ny):
+            x_ind = np.where(mask_rho[j,:]==0)[0][0]-1
+            shorelon[j] = lon_rho[j,ind(x_ind)]
+            shorelat[j] = lat_rho[j,ind(x_ind)]
 
     else:
         nt = ds['ocean_time'].shape[0]
@@ -71,7 +81,6 @@ for fn in f_list:
     Dwave0 = ds['Dwave'][:]
     Hwave0 = ds['Hwave'][:]
     Lwave0 = ds['Lwave'][:]
-    h0 = ds['h'][:]
     zeta0 = ds['zeta'][:]
 
     ocean_time = ds['ocean_time'][:]
@@ -86,7 +95,6 @@ for fn in f_list:
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
     Lwave[old_nt:old_nt+nt] = Lwave0[:,buoy_y,buoy_x]
-    h[old_nt:old_nt+nt] = h0[:,buoy_y,buoy_x]
     zeta[old_nt:old_nt+nt] = zeta0[:,buoy_y,buoy_x]
     
     ot[old_nt:old_nt+nt] = ocean_time
@@ -95,7 +103,7 @@ for fn in f_list:
     ds.close()
     tt+=1
 
-var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta']
+var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta','shorelon','shorelat']
 
 D = dict()
 for var in var_list:
