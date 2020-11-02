@@ -37,7 +37,7 @@ shorelat = np.zeros((ny))
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
-
+x_ind=0
 for j in range(ny):
     x_ind0 = np.where(mask_rho[j,:]==0)[0][0]-1
     if lon_rho[j,int(x_ind0)]<-117.2:
