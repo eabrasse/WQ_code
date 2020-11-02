@@ -42,14 +42,14 @@ for j in range(ny):
     x_ind0 = np.where(mask_rho[j,:]==0)[0][0]-1
     if lon_rho[j,int(x_ind0)]<-117.2:
         print('lon_rho<-117.2')
-        x_ind0 = np.argmin(x_ind-np.where(mask_rho[j,:])[0][:])-1
+        x_ind0 = np.argmin(np.abs(x_ind-np.where(mask_rho[j,:])[0][:]))-1
     shorelon[j] = lon_rho[j,int(x_ind)]
     shorelat[j] = lat_rho[j,int(x_ind)]
     x_ind = x_ind0
 
 ds.close()
 
-fig = plt.figure(figsize=(3,4))
+fig = plt.figure(figsize=(6,8))
 ax5 = fig.gca()
 ax5.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
 ax5.scatter(shorelon,shorelat,color='cornflowerblue')
