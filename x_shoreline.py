@@ -46,9 +46,9 @@ for j in range(ny):
     if len(mask_diff)>1:
         #look for the edge closest to the previously identified edge
         temp_ind = np.argmin(np.abs(x_ind-mask_diff))
-    else if len(mask_diff)==1:
+    elif len(mask_diff)==1:
         temp_ind = mask_diff[0]
-    else if len(mask_diff)==0:
+    elif len(mask_diff)==0:
         continue
     x_ind0 = np.where(mask_diff)[0][temp_ind]-1
     # if lon_rho[j,int(x_ind0)]<-117.2:
