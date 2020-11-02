@@ -64,7 +64,7 @@ for j in range(ny):
     shorelat[j] = lat_rho[j,int(x_ind[j])]
     # x_ind = x_ind0
 
-x_diff = np.diff(x_ind)
+x_diff = np.diff(shorelon)
 cutoff = np.argmax(np.abs(x_diff))
 
 ds.close()
