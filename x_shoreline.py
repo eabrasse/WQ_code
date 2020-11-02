@@ -48,7 +48,7 @@ for j in range(ny):
     #if multiple edges
     if len(mask_diff)>1:
         #look for the edge closest to the previously identified edge
-        x_ind0 = np.argmin(np.abs(x_ind-mask_diff))
+        x_ind0 = mask_diff[np.argmin(np.abs(x_ind-mask_diff))]
         count_multi+=1
     elif len(mask_diff)==1:
         x_ind0 = mask_diff[0]
