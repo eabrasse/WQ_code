@@ -37,6 +37,7 @@ for fn in f_list:
         
         shorelon = np.zeros((ny))
         shorelat = np.zeros((ny))
+        x_ind=np.zeros((ny))
         
         lon_rho = ds['lon_rho'][:]
         lat_rho = ds['lat_rho'][:]
@@ -48,10 +49,33 @@ for fn in f_list:
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         h = h0[buoy_y,buoy_x]
         
-        for j in range(ny):
-            x_ind = np.where(mask_rho[j,:]==0)[0][0]-1
-            shorelon[j] = lon_rho[j,int(x_ind)]
-            shorelat[j] = lat_rho[j,int(x_ind)]
+        # for j in range(ny):
+        #     x_ind = np.where(mask_rho[j,:]==0)[0][0]-1
+        #     if lon_rho[j,int(x_ind)]<-117.2:
+        #         x_ind = np.where(mask_rho[j,:])[0][2]-1
+        #     shorelon[j] = lon_rho[j,int(x_ind)]
+        #     shorelat[j] = lat_rho[j,int(x_ind)]
+        # find the edge of the mask
+        mask_diff = np.where(np.diff(mask_rho[j,:]))[0]
+    
+        #if multiple edges, north of TJRE
+        if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
+            #look for the edge closest to the previously identified edge
+            x_ind[j] = mask_diff[np.argmin(np.abs(x_ind[j-1]-mask_diff))]
+        
+        #if multiple edges, south of TJRE
+        elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
+            #do outermost edge
+            x_ind[j] = mask_diff[0]
+        
+        elif len(mask_diff)==1:
+            x_ind[j] = mask_diff[0]
+        
+        elif len(mask_diff)==0:
+            x_ind[j] = x_ind[j-1]
+
+        shorelon[j] = lon_rho[j,int(x_ind[j])]
+        shorelat[j] = lat_rho[j,int(x_ind[j])]
 
     else:
         nt = ds['ocean_time'].shape[0]
@@ -88,9 +112,24 @@ for fn in f_list:
 
     for t in range(nt):
         for j in range(ny):
-            x_ind = np.where(wetdry_mask_rho[t,j,:]==0)[0][0]-1
-            dye_01[old_nt+t,j] = np.mean(dye_01_0[t,:,j,int(x_ind)])
-            dye_02[old_nt+t,j] = np.mean(dye_02_0[t,:,j,int(x_ind)])
+            # find the edge of the mask
+            mask_diff = np.where(np.diff(wetdry_mask_rho[t,j,:]))[0]
+    
+            #if multiple edges, north of TJRE
+            if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
+                #look for the edge closest to the previously identified edge
+                x_wd_ind = mask_diff[np.argmin(np.abs(x_wd_ind-mask_diff))]
+        
+            #if multiple edges, south of TJRE
+            elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
+                #do outermost edge
+                x_wd_ind = mask_diff[0]
+        
+            elif len(mask_diff)==1:
+                x_wd_ind = mask_diff[0]
+
+            dye_01[old_nt+t,j] = np.mean(dye_01_0[t,:,j,int(x_wd_ind)])
+            dye_02[old_nt+t,j] = np.mean(dye_02_0[t,:,j,int(x_wd_ind)])
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
@@ -102,6 +141,14 @@ for fn in f_list:
     
     ds.close()
     tt+=1
+
+#trim the top of the data, since it doesn't follow the shoreline
+x_diff = np.diff(shorelon)
+cutoff = np.argmax(np.abs(x_diff))
+shorelon = shorelon[:cutoff]
+shorelat = shorelat[:cutoff]
+dye_01 = dye_01[:,:cutoff]
+dye_02 = dye_02[:,:cutoff]
 
 var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta','shorelon','shorelat']
 
