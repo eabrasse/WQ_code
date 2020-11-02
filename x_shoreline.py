@@ -37,7 +37,7 @@ shorelat = np.zeros((ny))
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
-x_ind=0
+x_ind=np.zeros((ny))
 
 for j in range(ny):
     
@@ -47,29 +47,32 @@ for j in range(ny):
     #if multiple edges, north of TJRE
     if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
         #look for the edge closest to the previously identified edge
-        x_ind0 = mask_diff[np.argmin(np.abs(x_ind-mask_diff))]
+        x_ind[j] = mask_diff[np.argmin(np.abs(x_ind[j-1]-mask_diff))]
         
     #if multiple edges, south of TJRE
     elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
         #do outermost edge
-        x_ind0 = mask_diff[0]
+        x_ind[j] = mask_diff[0]
         
     elif len(mask_diff)==1:
-        x_ind0 = mask_diff[0]
+        x_ind[j] = mask_diff[0]
         
     elif len(mask_diff)==0:
-        x_ind0 = x_ind
+        x_ind[j] = x_ind[j-1]
 
-    shorelon[j] = lon_rho[j,int(x_ind0)]
-    shorelat[j] = lat_rho[j,int(x_ind0)]
-    x_ind = x_ind0
+    shorelon[j] = lon_rho[j,int(x_ind[j])]
+    shorelat[j] = lat_rho[j,int(x_ind[j])]
+    # x_ind = x_ind0
+
+x_diff = np.diff(x_ind)
+cutoff = np.argmax(np.abs(x_diff))
 
 ds.close()
 
 fig = plt.figure(figsize=(6,8))
 ax5 = fig.gca()
 ax5.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
-ax5.scatter(shorelon,shorelat,color='cornflowerblue')
+ax5.scatter(shorelon[:cutoff],shorelat[:cutoff],color='cornflowerblue')
 yl = ax5.get_ylim()
 yav = (yl[0] + yl[1])/2
 ax5.set_aspect(1/np.sin(np.pi*yav/180))
