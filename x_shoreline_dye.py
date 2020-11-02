@@ -49,33 +49,29 @@ for fn in f_list:
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         h = h0[buoy_y,buoy_x]
         
-        # for j in range(ny):
-        #     x_ind = np.where(mask_rho[j,:]==0)[0][0]-1
-        #     if lon_rho[j,int(x_ind)]<-117.2:
-        #         x_ind = np.where(mask_rho[j,:])[0][2]-1
-        #     shorelon[j] = lon_rho[j,int(x_ind)]
-        #     shorelat[j] = lat_rho[j,int(x_ind)]
-        # find the edge of the mask
-        mask_diff = np.where(np.diff(mask_rho[j,:]))[0]
-    
-        #if multiple edges, north of TJRE
-        if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
-            #look for the edge closest to the previously identified edge
-            x_ind[j] = mask_diff[np.argmin(np.abs(x_ind[j-1]-mask_diff))]
-        
-        #if multiple edges, south of TJRE
-        elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
-            #do outermost edge
-            x_ind[j] = mask_diff[0]
-        
-        elif len(mask_diff)==1:
-            x_ind[j] = mask_diff[0]
-        
-        elif len(mask_diff)==0:
-            x_ind[j] = x_ind[j-1]
+        for j in range(ny):
 
-        shorelon[j] = lon_rho[j,int(x_ind[j])]
-        shorelat[j] = lat_rho[j,int(x_ind[j])]
+            # find the edge of the mask
+            mask_diff = np.where(np.diff(mask_rho[j,:]))[0]
+    
+            #if multiple edges, north of TJRE
+            if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
+                #look for the edge closest to the previously identified edge
+                x_ind[j] = mask_diff[np.argmin(np.abs(x_ind[j-1]-mask_diff))]
+        
+            #if multiple edges, south of TJRE
+            elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
+                #do outermost edge
+                x_ind[j] = mask_diff[0]
+        
+            elif len(mask_diff)==1:
+                x_ind[j] = mask_diff[0]
+        
+            elif len(mask_diff)==0:
+                x_ind[j] = x_ind[j-1]
+
+            shorelon[j] = lon_rho[j,int(x_ind[j])]
+            shorelat[j] = lat_rho[j,int(x_ind[j])]
 
     else:
         nt = ds['ocean_time'].shape[0]
