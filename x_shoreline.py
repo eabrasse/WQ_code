@@ -39,14 +39,24 @@ lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
 x_ind=0
 for j in range(ny):
-    temp_ind = np.argmin(np.abs(x_ind-np.where(mask_rho[j,:])[0][:]))
-    x_ind0 = np.where(mask_rho[j,:])[0][temp_ind]-1
+    # find the edge of the mask
+    mask_diff = np.where(np.diff(mask_rho[j,:]))[0]
+    
+    #if multiple edges
+    if len(mask_diff)>1:
+        #look for the edge closest to the previously identified edge
+        temp_ind = np.argmin(np.abs(x_ind-mask_diff))
+    else if len(mask_diff)==1:
+        temp_ind = mask_diff[0]
+    else if len(mask_diff)==0:
+        continue
+    x_ind0 = np.where(mask_diff)[0][temp_ind]-1
     # if lon_rho[j,int(x_ind0)]<-117.2:
     #     print('lon_rho<-117.2')
     #     temp_ind = np.argmin(np.abs(x_ind-np.where(mask_rho[j,:])[0][:]))
     #     x_ind0 = np.where(mask_rho[j,:])[0][temp_ind]-1
-    shorelon[j] = lon_rho[j,int(x_ind)]
-    shorelat[j] = lat_rho[j,int(x_ind)]
+    shorelon[j] = lon_rho[j,int(x_ind0)]
+    shorelat[j] = lat_rho[j,int(x_ind0)]
     x_ind = x_ind0
 
 ds.close()
