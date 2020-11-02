@@ -39,12 +39,13 @@ lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
 
 for j in range(ny):
-    x_ind = np.where(mask_rho[j,:]==0)[0][0]-1
-    if lon_rho[j,int(x_ind)]<-117.2:
+    x_ind0 = np.where(mask_rho[j,:]==0)[0][0]-1
+    if lon_rho[j,int(x_ind0)]<-117.2:
         print('lon_rho<-117.2')
-        x_ind = np.where(mask_rho[j,:])[0][-1]-1
+        x_ind0 = np.argmin(x_ind-np.where(mask_rho[j,:])[0][:])-1
     shorelon[j] = lon_rho[j,int(x_ind)]
     shorelat[j] = lat_rho[j,int(x_ind)]
+    x_ind = x_ind0
 
 ds.close()
 
