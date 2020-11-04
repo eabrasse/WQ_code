@@ -51,15 +51,15 @@ for fn in f_list:
         
         Dwave0 = ds['Dwave'][:]
         Dwave = Dwave0[:,buoy_y,buoy_x]
-        nt_N = np.count(Dwave>shorenormal)
-        nt_S = np.count(Dwave<shorenormal)
+        nt_N = np.sum(Dwave>shorenormal)
+        nt_S = np.sum(Dwave<shorenormal)
 
     else:
         nt = ds['ocean_time'].shape[0]
         Dwave0 = ds['Dwave'][:]
         Dwave = Dwave0[:,buoy_y,buoy_x]
-        nt_N = np.count(Dwave>shorenormal)
-        nt_S = np.count(Dwave<shorenormal)
+        nt_N = np.sum(Dwave>shorenormal)
+        nt_S = np.sum(Dwave<shorenormal)
         
     NT += nt
     NT_N += nt_N
