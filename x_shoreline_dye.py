@@ -11,7 +11,7 @@ import pickle
 import numpy as np
 import netCDF4 as nc
 
-home = '/home/ebrasseale/'
+home = '/data0/ebrasseale/'
 
 dir0 = '/data0/NADB2017/NADB2017_0/Output/'
 
