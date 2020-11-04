@@ -92,13 +92,13 @@ for fn in f_list:
         
         # if waves from north...
         if Dwave[t]>shorenormal:
-            dye_01_N += dye_01_0[t,:,:]/NT_N
-            dye_02_N += dye_02_0[t,:,:]/NT_N
+            dye_01_N += dye_01_0[t,-1,:,:]/NT_N
+            dye_02_N += dye_02_0[t,-1,:,:]/NT_N
             
         # if waves from south...
         elif Dwave[t]<shorenormal:
-            dye_01_S += dye_01_0[t,:,:]/NT_S
-            dye_02_S += dye_02_0[t,:,:]/NT_S 
+            dye_01_S += dye_01_0[t,-1,:,:]/NT_S
+            dye_02_S += dye_02_0[t,-1,:,:]/NT_S 
     
     ds.close()
     tt+=1
