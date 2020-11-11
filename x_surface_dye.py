@@ -19,7 +19,7 @@ riv_fn = dir0+'river_tracer_4river_NADB2017_0.nc'
 dsr = nc.Dataset(riv_fn)
 rt = dsr['river_time'][:]
 rt = rt * 24*60*60 #river time is in days; match to ocean time in seconds
-Q = dsr['river_transport'][:,0] # indeces 0–4 are TJRE, but they are all zero at the same times
+Q = np.sum(dsr['river_transport'][:,5],axis=1) # indeces 0–4 are TJRE, but they are all zero at the same times
 
 f_list = os.listdir(dir0)
 f_list.sort()
@@ -65,8 +65,8 @@ for fn in f_list:
         
         rtt0 = np.argmin(np.abs(rt-ds['ocean_time'][0]))
         rtt1 = np.argmin(np.abs(rt-ds['ocean_time'][-1]))+1
-        nt_NQ = np.sum((Dwave>shorenormal)&(Q[rtt0:rtt1]!=0))
-        nt_SQ = np.sum((Dwave<shorenormal)&(Q[rtt0:rtt1]!=0))
+        nt_NQ = np.sum((Dwave>shorenormal)&(Q[rtt0:rtt1]<-5.0))
+        nt_SQ = np.sum((Dwave<shorenormal)&(Q[rtt0:rtt1]<-5.0))
 
     else:
         nt = ds['ocean_time'].shape[0]
@@ -77,8 +77,8 @@ for fn in f_list:
         
         rtt0 = np.argmin(np.abs(rt-ds['ocean_time'][0]))
         rtt1 = np.argmin(np.abs(rt-ds['ocean_time'][-1]))+1
-        nt_NQ = np.sum((Dwave>shorenormal)&(Q[rtt0:rtt1]!=0))
-        nt_SQ = np.sum((Dwave<shorenormal)&(Q[rtt0:rtt1]!=0))
+        nt_NQ = np.sum((Dwave>shorenormal)&(Q[rtt0:rtt1]<-5.0))
+        nt_SQ = np.sum((Dwave<shorenormal)&(Q[rtt0:rtt1]<-5.0))
         
     NT += nt
     NT_N += nt_N
@@ -120,7 +120,7 @@ for fn in f_list:
             dye_01_N += dye_01_0[t,-1,:,:]/NT_N
             dye_02_N += dye_02_0[t,-1,:,:]/NT_N
             
-            if Q[rtt]!=0:
+            if Q[rtt]<-5.0:
                 dye_02_NQ += dye_02_0[t,-1,:,:]/NT_NQ
             
         # if waves from south...
@@ -128,7 +128,7 @@ for fn in f_list:
             dye_01_S += dye_01_0[t,-1,:,:]/NT_S
             dye_02_S += dye_02_0[t,-1,:,:]/NT_S      
                   
-            if Q[rtt]!=0:
+            if Q[rtt]<-5.0:
                 dye_02_SQ += dye_02_0[t,-1,:,:]/NT_SQ
 
     
@@ -141,5 +141,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/surface_dye_Q.p'
+outfn = home + 'WQ_data/surface_dye_Q-5.p'
 pickle.dump(D,open(outfn,'wb'))
