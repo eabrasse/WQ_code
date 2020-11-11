@@ -19,7 +19,7 @@ riv_fn = dir0+'river_tracer_4river_NADB2017_0.nc'
 dsr = nc.Dataset(riv_fn)
 rt = dsr['river_time'][:]
 rt = rt * 24*60*60 #river time is in days; match to ocean time in seconds
-Q = np.sum(dsr['river_transport'][:,5],axis=1) # indeces 0–4 are TJRE, but they are all zero at the same times
+Q = np.sum(dsr['river_transport'][:,:5],axis=1) # indeces 0–4 are TJRE, but they are all zero at the same times
 
 f_list = os.listdir(dir0)
 f_list.sort()
