@@ -33,7 +33,7 @@ nfiles = len(f_list)
 
 buoylon = -117.169
 buoylat = 32.570
-shorenormal = 259.03
+shorenormal = 265
 
 # Time steps are inconsistent across files, so first count 'em up
 NT = 0
