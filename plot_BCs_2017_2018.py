@@ -54,7 +54,8 @@ for fn in BC_2017,BC_2018:
         if row==0:
             ax0 = fig.add_subplot(gs[row,col])
             ax = ax0
-            ax.title(['2017','2018'][col])
+            year_for_title = ['2017','2018'][col]
+            ax.title(year_for_title)
         else:
             ax = fig.add_subplot(gs[row,col],sharex=ax0)
             
