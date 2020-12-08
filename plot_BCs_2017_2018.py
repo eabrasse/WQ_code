@@ -44,17 +44,18 @@ for fn in BC_2017,BC_2018:
     ds = nc.Dataset(fn)
     tt = ds['temp_time'][:]
     
-    if col==0:
-        t0=-1
-        # dt_list = []
-        # for ott in tt:
-        #     dt_list.append(datetime(1999,1,1,0,0) + timedelta(days=ott))
-    
-    if col>0:
-        t0 = len(dt_list)
+    tt = tt[np.where(tt!=0)[0]]
+    # if col==0:
+    #     t0=-1
+    #     # dt_list = []
+    #     # for ott in tt:
+    #     #     dt_list.append(datetime(1999,1,1,0,0) + timedelta(days=ott))
+    #
+    # if col>0:
+    #     t0 = len(dt_list)
         
     dt_list = []
-    for ott in tt[:t0]:
+    for ott in tt:
         dt_list.append(datetime(1999,1,1,0,0) + timedelta(days=ott))
         
     
@@ -69,7 +70,7 @@ for fn in BC_2017,BC_2018:
         else:
             ax = fig.add_subplot(gs[row,col],sharex=ax0)
             
-        v = ds[var][:t0,:]
+        v = ds[var][:]
         y = np.arange(0,v.shape[1])
         p = ax.pcolormesh(dt_list,y,np.transpose(v),cmap='rainbow')
         ax.text(0.1,0.9,edge,color='black',fontweight='bold',transform=ax.transAxes)
