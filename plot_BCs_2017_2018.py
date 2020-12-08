@@ -38,7 +38,7 @@ fig=plt.figure(figsize=(12,10))
 gs = GridSpec(3,2)
 
 var_name = 'zeta'
-3d = 'False'
+is3d = 'False'
 
 col = 0
 for fn in BC_2017,BC_2018:
@@ -72,7 +72,7 @@ for fn in BC_2017,BC_2018:
         else:
             ax = fig.add_subplot(gs[row,col],sharex=ax0)
         
-        if 3d:
+        if is3d:
             v=ds[var][:,-1,:] #extract just surface value
         else:
             v = ds[var][:]
@@ -96,5 +96,8 @@ for fn in BC_2017,BC_2018:
     ds.close()
 
 plt.tight_layout()
-out_fn = '/data0/ebrasseale/WQ_plots/ROMS_2018_BC_'+var_name+'.png'
+if is3d:
+    out_fn = '/data0/ebrasseale/WQ_plots/ROMS_2018_BC_surf_'+var_name+'.png'
+else:
+    out_fn = '/data0/ebrasseale/WQ_plots/ROMS_2018_BC_'+var_name+'.png'
 plt.savefig(out_fn)
