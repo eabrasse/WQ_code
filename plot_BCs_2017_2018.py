@@ -38,7 +38,7 @@ fig=plt.figure(figsize=(12,10))
 gs = GridSpec(3,2)
 
 var_name = 'zeta'
-is3d = 'False'
+is3d = False
 
 col = 0
 for fn in BC_2017,BC_2018:
@@ -79,7 +79,7 @@ for fn in BC_2017,BC_2018:
         v = v[ind_list,:]
         y = np.arange(0,v.shape[1])
         p = ax.pcolormesh(dt_list,y,np.transpose(v),cmap='rainbow')
-        ax.text(0.1,0.9,edge,color='black',fontweight='bold',transform=ax.transAxes)
+        ax.text(0.1,0.9,var,color='black',fontweight='bold',transform=ax.transAxes)
         
         ax.set_ylabel('index along boundary')
         ax.get_xaxis().set_visible(False)
