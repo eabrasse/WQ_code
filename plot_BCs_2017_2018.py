@@ -80,4 +80,4 @@ for fn in BC_2017,BC_2018:
 
 plt.tight_layout()
 out_fn = '/data0/ebrasseale/WQ_plots/ROMS_2018_BC_'+var_name+'.png'
-plt.savefig()
+plt.savefig(out_fn)
