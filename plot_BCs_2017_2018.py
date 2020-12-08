@@ -37,7 +37,8 @@ BC_2017 = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/LV4/BC_LV4/BC_LV4_20170720_
 fig=plt.figure(figsize=(12,10))
 gs = GridSpec(3,2)
 
-var_name = 'vbar'
+var_name = 'zeta'
+3d = 'False'
 
 col = 0
 for fn in BC_2017,BC_2018:
@@ -70,8 +71,11 @@ for fn in BC_2017,BC_2018:
             ax.set_title(year_for_title)
         else:
             ax = fig.add_subplot(gs[row,col],sharex=ax0)
-            
-        v = ds[var][:]
+        
+        if 3d:
+            v=ds[var][:,-1,:] #extract just surface value
+        else:
+            v = ds[var][:]
         v = v[ind_list,:]
         y = np.arange(0,v.shape[1])
         p = ax.pcolormesh(dt_list,y,np.transpose(v),cmap='rainbow')
