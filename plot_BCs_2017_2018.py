@@ -44,7 +44,8 @@ for fn in BC_2017,BC_2018:
     ds = nc.Dataset(fn)
     tt = ds['temp_time'][:]
     
-    tt = tt[np.where(tt!=0)[0]]
+    ind_list = np.where(tt!=0)[0]
+    tt = tt[ind_list]
     # if col==0:
     #     t0=-1
     #     # dt_list = []
@@ -71,6 +72,7 @@ for fn in BC_2017,BC_2018:
             ax = fig.add_subplot(gs[row,col],sharex=ax0)
             
         v = ds[var][:]
+        v = v[ind_list,:]
         y = np.arange(0,v.shape[1])
         p = ax.pcolormesh(dt_list,y,np.transpose(v),cmap='rainbow')
         ax.text(0.1,0.9,edge,color='black',fontweight='bold',transform=ax.transAxes)
