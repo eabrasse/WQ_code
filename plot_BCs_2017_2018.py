@@ -37,8 +37,8 @@ BC_2017 = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/LV4/BC_LV4/BC_LV4_20170720_
 fig=plt.figure(figsize=(12,10))
 gs = GridSpec(3,2)
 
-var_name = 'zeta'
-is3d = False
+var_name = 'salt'
+is3d = True
 
 col = 0
 for fn in BC_2017,BC_2018:
