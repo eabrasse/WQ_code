@@ -124,6 +124,8 @@ for fn in f_list:
             elif len(mask_diff)==1:
                 x_wd_ind = mask_diff[0]
 
+            #go offshore of the wet/dry mask by a tad
+            x_wd_ind = x_wd_ind - 2
             dye_01[old_nt+t,j] = np.mean(dye_01_0[t,:,j,int(x_wd_ind)])
             dye_02[old_nt+t,j] = np.mean(dye_02_0[t,:,j,int(x_wd_ind)])
         
@@ -152,5 +154,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_dye.p'
+outfn = home + 'WQ_data/shoreline_dye_xind-2.p'
 pickle.dump(D,open(outfn,'wb'))
