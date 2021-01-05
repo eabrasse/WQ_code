@@ -20,8 +20,8 @@ dir0 = '/data0/NADB2017/NADB2017_0/Output/'
 
 f_list = os.listdir(dir0)
 f_list.sort()
-riv_fn = [x for x in f_list if x[0]=='r']
-f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_'][0]
+riv_fn = [x for x in f_list if x[0]=='r'][0]
+f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
 
 testing=True
 if testing:
