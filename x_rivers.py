@@ -42,8 +42,7 @@ Qdye_in = Q_in * np.mean(dye_in,axis=1)
 
 # count=0
 # for fn in f_list:
-fn = f_list[0]
-ds = nc.Dataset(dir0+fn)
+ds = nc.Dataset(dir0+f_list)
 # if count == 0:
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
