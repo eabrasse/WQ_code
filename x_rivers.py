@@ -28,7 +28,7 @@ if testing:
     f_list = f_list[0]
 
 # nfiles = len(f_list)
-dsr = nc.Dataset(dir0+riv_data)
+dsr = nc.Dataset(dir0+riv_fn)
 i0 = dsr['river_Xposition'][5]
 j0 = dsr['river_Eposition'][5]
 
