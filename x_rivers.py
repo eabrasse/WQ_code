@@ -29,7 +29,7 @@ if testing:
 
 # nfiles = len(f_list)
 dsr = nc.Dataset(dir0+riv_fn)
-i0 = dsr['river_Xposition'][5]
+i0 = dsr['river_Xposition'][5]-1
 j0 = dsr['river_Eposition'][5]
 
 i0 = int(i0)
