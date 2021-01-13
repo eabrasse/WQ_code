@@ -101,7 +101,7 @@ for t in range(2): # change to range(nt) when ready to go
     # add context details to both plots
     for ax in axdye, axsalt:
         # add river indicator
-        ax.plot(lon_rho[j00,i00],lat_rho[j00,i00],marker='<',edgecolor='black',markerfacecolor='yellow',s=8)
+        ax.plot(lon_rho[j00,i00],lat_rho[j00,i00],marker='<',markeredgecolor='black',markerfacecolor='yellow',s=8)
         
         # scatter land mask
         ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],mask_rho[j0:j1,i0:i1],levels=[0.5],marker='x',colors='None',edgecolors='black')
