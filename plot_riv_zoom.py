@@ -63,7 +63,7 @@ dye_01 = ds['dye_01'][:]
 salt = ds['salt'][:]
 nt,nz,ny,nx = salt.shape
 
-for t in range(2): # change to range(nt) when ready to go
+for t in range(nt):
     # initialize figure and axis
     fig = plt.figure(figsize=(14,6))
     axdye = fig.add_subplot(1,2,1)
