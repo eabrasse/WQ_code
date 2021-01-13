@@ -116,7 +116,7 @@ for t in range(2): # change to range(nt) when ready to go
         ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],10*wetdry_masked_rho[t,j0:j1,i0:i1],c='None',marker='o',edgecolors='magenta')
     
     #save, close, start next
-    plt.tight_layout()
+    # plt.tight_layout()
     outfn = home+'WQ_plots/river_zoom_movie/fig_{:04}.png'.format(t)
     plt.savefig(outfn)
     plt.close()
