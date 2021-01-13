@@ -106,7 +106,7 @@ for t in range(2): # change to range(nt) when ready to go
         ax.plot(lon_u[j00,i00],lat_u[j00,i00],marker='<',markeredgecolor='black',markerfacecolor='yellow',markersize=8)
         
         # scatter land mask
-        ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],10*masked_rho[j0:j1,i0:i1],c='None',marker='x',edgecolors='black')
+        ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],10*masked_rho[j0:j1,i0:i1],c='black',marker='x',edgecolors='black')
         
         # contour wet-dry mask
         ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],10*wetdry_masked_rho[t,j0:j1,i0:i1],c='None',marker='o',edgecolors='magenta')
