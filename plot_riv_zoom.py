@@ -54,7 +54,9 @@ lat_rho = ds['lat_rho'][:]
 lon_u = ds['lon_u'][:]
 lat_u = ds['lat_u'][:]
 mask_rho = ds['mask_rho'][:]
+masked_rho = 1 - mask_rho
 wetdry_mask_rho = ds['wetdry_mask_rho'][:]
+wetdry_masked_rho = 1 - wetdry_mask_rho
 
 #variables to plot
 dye_01 = ds['dye_01'][:]
@@ -63,11 +65,11 @@ nt,nz,ny,nx = salt.shape
 
 for t in range(2): # change to range(nt) when ready to go
     # initialize figure and axis
-    fig = plt.figure(figsize=(10,6))
+    fig = plt.figure(figsize=(14,6))
     axdye = fig.add_subplot(1,2,1)
     
     # plot dye
-    pd=axdye.pcolormesh(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],dye_01[t,-1,j0:j1,i0:i1],cmap='Greens',linewidths=1)
+    pd=axdye.pcolormesh(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],dye_01[t,-1,j0:j1,i0:i1],cmap='Greens',linewidths=1,shading='nearest')
     
     # add colorbar
     cbaxes = inset_axes(axdye, width="4%", height="80%", loc=4,bbox_transform=axdye.transAxes,bbox_to_anchor=(0.075,0.,1,1))
@@ -86,7 +88,7 @@ for t in range(2): # change to range(nt) when ready to go
     axsalt = fig.add_subplot(1,2,2)
     
     #plot salt
-    ps=axsalt.pcolormesh(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],salt[t,-1,j0:j1,i0:i1],cmap='Blues',linewidths=1)
+    ps=axsalt.pcolormesh(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],salt[t,-1,j0:j1,i0:i1],cmap='Blues',linewidths=1,shading='nearest')
     
     # add colorbar
     cbaxes = inset_axes(axsalt, width="4%", height="80%", loc=4,bbox_transform=axsalt.transAxes,bbox_to_anchor=(0.075,0.,1,1))
@@ -101,16 +103,16 @@ for t in range(2): # change to range(nt) when ready to go
     # add context details to both plots
     for ax in axdye, axsalt:
         # add river indicator
-        ax.plot(lon_rho[j00,i00],lat_rho[j00,i00],marker='<',markeredgecolor='black',markerfacecolor='yellow',markersize=8)
+        ax.plot(lon_u[j00,i00],lat_u[j00,i00],marker='<',markeredgecolor='black',markerfacecolor='yellow',markersize=8)
         
         # scatter land mask
-        ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],mask_rho[j0:j1,i0:i1],c='None',marker='x',edgecolors='black')
+        ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],10*masked_rho[j0:j1,i0:i1],c='None',marker='x',edgecolors='black')
         
         # contour wet-dry mask
-        ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],wetdry_mask_rho[t,j0:j1,i0:i1],c='None',marker='o',edgecolors='magenta')
+        ax.scatter(lon_rho[j0:j1,i0:i1],lat_rho[j0:j1,i0:i1],10*wetdry_masked_rho[t,j0:j1,i0:i1],c='None',marker='o',edgecolors='magenta')
     
     #save, close, start next
-    plt.tight_layout()
+    # plt.tight_layout()
     outfn = home+'WQ_plots/river_zoom_movie/fig_{:04}.png'.format(t)
     plt.savefig(outfn)
     plt.close()
