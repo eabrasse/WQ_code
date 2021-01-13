@@ -36,11 +36,11 @@ dsr = nc.Dataset(dir0+riv_fn)
 i00 = dsr['river_Xposition'][5]-1
 j00 = dsr['river_Eposition'][5]
 
-i0 = int(i00)-5
-j0 = int(j00)-5
+i0 = int(i00-5)
+j0 = int(j00-5)
 
-i1 = int(i00)+5+1
-j1 = int(j00)+5+1
+i1 = int(i00+5+1)
+j1 = int(j00+5+1)
 
 # count=0
 # for fn in f_list:
