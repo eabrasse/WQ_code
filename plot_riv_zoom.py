@@ -36,6 +36,9 @@ dsr = nc.Dataset(dir0+riv_fn)
 i00 = dsr['river_Xposition'][5]-1
 j00 = dsr['river_Eposition'][5]
 
+i00 = int(i00)
+j00 = int(j00)
+
 i0 = int(i00-5)
 j0 = int(j00-5)
 
