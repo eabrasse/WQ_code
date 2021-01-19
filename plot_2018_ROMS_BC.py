@@ -98,7 +98,7 @@ for ji in ji_4to3_west:
     if ji not in LV3_ji_west:
         LV3_ji_west = LV3_ji_west + [ji]
 
-ny3 = len(LV_ji_west)
+ny3 = len(LV3_ji_west)
 nz3 = var_lv3.shape[1] # should have t,z,y,x indexes
 var_lv3_west = np.zeros((nz3,ny3))
 for ji in range(ny3):
@@ -127,7 +127,7 @@ for ji in ji_4to3_south:
     if ji not in LV3_ji_south:
         LV3_ji_south = LV3_ji_south + [ji]
 
-nx3 = len(LV_ji_south)
+nx3 = len(LV3_ji_south)
 
 var_lv3_south = np.zeros((nz3,nx3))
 for ji in range(nx3):
