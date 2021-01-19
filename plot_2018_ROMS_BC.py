@@ -46,7 +46,7 @@ latr_lv4 = dgrd['lat_rho'][:]
 
 dlv4 = nc.Dataset(LV4_BC_2018)
 
-dlv3 = nc.Datset(LV3_BC_2018)
+dlv3 = nc.Dataset(LV3_BC_2018)
 lonr_lv3 = dlv3['lon_rho'][:]
 latr_lv3 = dlv3['lat_rho'][:]
 
