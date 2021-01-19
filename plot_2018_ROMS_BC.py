@@ -170,7 +170,7 @@ j0,i0 = LV3_ji_west[0]
 var_lv3_timeseries = var_lv3[:,-1,j0,i0]
 
 ax2.plot(dt_list,var_lv3_timeseries,color='cornflowerblue',label='LV3')
-ax2.plot(dt_list,var_west_lv4[:,-1,0],color='orange',label='LV4')
+ax2.plot(dt_list,var_west_LV4[:,-1,0],color='orange',label='LV4')
 ax2.legend()
 ax2.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax2.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
@@ -178,7 +178,7 @@ ax2.set_xlabel('Time')
 
 # next LV4 west boundary
 ax3 = fig.add_subplot(gs[0,1])
-ax3.pcolormesh(var_lv4_west[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
+ax3.pcolormesh(var_LV4_west[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
 ax3.set_ylabel('vertical index')
 ax3.set_xlabel('horizontal index')
 labeltext= 'LV4 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'west'
@@ -186,7 +186,7 @@ ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
-ax4.pcolormesh(var_lv4_south[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
+ax4.pcolormesh(var_LV4_south[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
 ax4.set_ylabel('vertical index')
 ax4.set_xlabel('horizontal index')
 labeltext= 'LV4 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'south'
