@@ -178,7 +178,7 @@ ax2.set_xlabel('Time')
 
 # next LV4 west boundary
 ax3 = fig.add_subplot(gs[0,1])
-ax3.pcolormesh(var_LV4_west[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
+ax3.pcolormesh(var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
 ax3.set_ylabel('vertical index')
 ax3.set_xlabel('horizontal index')
 labeltext= 'LV4 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'west'
@@ -186,7 +186,7 @@ ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
-ax4.pcolormesh(var_LV4_south[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
+ax4.pcolormesh(var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
 ax4.set_ylabel('vertical index')
 ax4.set_xlabel('horizontal index')
 labeltext= 'LV4 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'south'
