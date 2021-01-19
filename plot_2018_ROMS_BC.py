@@ -199,8 +199,8 @@ ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
 axmap = fig.add_subplot(gs[:,:1])
 #plot coastline
 axmap.contour(lonr_lv3,latr_lv3,maskr_lv3,levels=[0.5])
-axmap.scatter(lonr_lv3[LV3_ji_west],latr_lv3[LV3_ji_west],color='green')
-axmap.scatter(lonr_lv3[LV3_ji_south],latr_lv3[LV3_ji_south],color='magneta')
+axmap.scatter(lonr_lv3[LV3_ji_west],latr_lv3[LV3_ji_west],c='green')
+axmap.scatter(lonr_lv3[LV3_ji_south],latr_lv3[LV3_ji_south],c='magneta')
 
 dlv3.close()
 dlv4.close()
