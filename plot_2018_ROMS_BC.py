@@ -49,6 +49,7 @@ dlv4 = nc.Dataset(LV4_BC_2018)
 dlv3 = nc.Dataset(LV3_BC_2018)
 lonr_lv3 = dlv3['lon_rho'][:]
 latr_lv3 = dlv3['lat_rho'][:]
+maskr_lv3 = dlv3['mask_rho'][:]
 
 var_name = 'temp'
 var_west_LV4 = dlv4[var_name+'_west'][:]
@@ -135,12 +136,12 @@ for ji in range(nx3):
     var_lv3_south[:,ji] = var_lv3[t3,:,j,i]
 
 
-fig=plt.figure(figsize=(12,10))
-gs = GridSpec(3,2)
+fig=plt.figure(figsize=(12,14))
+gs = GridSpec(3,3)
 
 #plot LV3 on left
 # start with west boundary
-vmin = 12
+vmin = 16.5
 vmax = 18
 ax0 = fig.add_subplot(gs[0,0])
 p=ax0.pcolormesh(var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax)
@@ -151,7 +152,7 @@ cb.ax.set_ylabel('temp (C)',rotation=90,labelpad=10,fontweight='bold')
 ax0.set_ylabel('vertical index')
 ax0.set_xlabel('horizontal index')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
-ax0.text(0.1,0.9,labeltext,transform=ax0.transAxes,fontweight='bold')
+ax0.text(0.1,0.9,labeltext,transform=ax0.transAxes,fontweight='bold',va='top')
 
 # next LV3 south boundary
 ax1 = fig.add_subplot(gs[1,0])
@@ -159,7 +160,7 @@ ax1.pcolormesh(var_lv3_south,cmap='YlOrRd',vmin=vmin,vmax=vmax)
 ax1.set_ylabel('vertical index')
 ax1.set_xlabel('horizontal index')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
-ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold')
+ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold',va='top')
 
 
 #finally add time series at bottom of western boundary
@@ -184,7 +185,7 @@ ax3.pcolormesh(var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
 ax3.set_ylabel('vertical index')
 ax3.set_xlabel('horizontal index')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
-ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold')
+ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold',va='top')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
@@ -192,7 +193,14 @@ ax4.pcolormesh(var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
 ax4.set_ylabel('vertical index')
 ax4.set_xlabel('horizontal index')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
-ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold')
+ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
+
+#add map to make sure you're extracting correctly
+axmap = fig.add_subplot(gs)
+#plot coastline
+axmap.contour(lonr_lv3,latr_lv3,maskr_lv3,levels=[0.5])
+axmap.scatter(lonr_lv3[LV3_ji_west],latr_lv3[LV3_ji_west],color='green')
+axmap.scatter(lonr_lv3[LV3_ji_south],latr_lv3[LV3_ji_south],color='magneta')
 
 dlv3.close()
 dlv4.close()
