@@ -67,15 +67,23 @@ var_south_LV4 = dlv4[var_name+'_south'][:]
 var_lv3 = dlv3[var_name]
 
 # now match time indexes between the two grids
-t3 = -1
+t30 = 0
 ott = dlv3['ocean_time'][:]
+ot0 = ott[t3]
+date = datetime(1999,1,1)+timedelta(seconds=ot0)
+ot0_days = ot0/(24*60*60)
+
+vart = dlv4[var_name+'_time'][:]
+t_diff = np.abs(ot0_days-vart)
+print('t_diff min = {:0.4f}'.format(t_diff.min()))
+t40 = np.argmin(t_diff)
+
+t3 = -1
 ot = ott[t3]
 date = datetime(1999,1,1)+timedelta(seconds=ot)
 ot_days = ot/(24*60*60)
 
-vart = dlv4[var_name+'_time'][:]
-t_diff = np.abs(ot_days-vart)
-print('t_diff min = {:0.4f}'.format(t_diff.min()))
+t_diff = np.abs(ot0_days-vart)
 t4 = np.argmin(t_diff)
 
 # extract relevant LV3 data along boundary
@@ -183,7 +191,7 @@ j0,i0 = LV3_ji_west[0]
 var_lv3_timeseries = var_lv3[:,-1,j0,i0]
 
 ax2.plot(dt_list,var_lv3_timeseries,color='cornflowerblue',label='LV3')
-ax2.plot(dt_list,var_west_LV4[t4:t4+nt3,-1,0],color='orange',label='LV4')
+ax2.plot(dt_list,var_west_LV4[t40:t40+nt3,-1,0],color='orange',label='LV4')
 ax2.legend()
 ax2.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax2.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
