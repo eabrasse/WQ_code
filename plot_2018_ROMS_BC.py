@@ -44,7 +44,7 @@ dgrd = nc.Dataset(LV4_grid)
 lonr_lv4 = dgrd['lon_rho'][:]
 latr_lv4 = dgrd['lat_rho'][:]
 
-dlv4 = nc.Datset(LV4_BC_2018)
+dlv4 = nc.Dataset(LV4_BC_2018)
 
 dlv3 = nc.Datset(LV3_BC_2018)
 lonr_lv3 = dlv3['lon_rho'][:]
