@@ -102,7 +102,7 @@ ny3 = len(LV3_ji_west)
 nz3 = var_lv3.shape[1] # should have t,z,y,x indexes
 var_lv3_west = np.zeros((nz3,ny3))
 for ji in range(ny3):
-    j,i = LV_ji_west[ji]
+    j,i = LV3_ji_west[ji]
     var_lv3_west[:,ji] = var_lv3[t3,:,j,i]
 
 #repeat for southern edge
@@ -166,7 +166,7 @@ dt_list = []
 nt3 = var_lv3.shape[0]
 for tt in ott:
     dt_list.append(datetime(1999,1,1,0,0)+timedelta(seconds=tt))
-j0,i0 = LV_ji_west[0]
+j0,i0 = LV3_ji_west[0]
 var_lv3_timeseries = var_lv3[:,-1,j0,i0]
 
 ax2.plot(dt_list,var_lv3_timeseries,color='cornflowerblue',label='LV3')
