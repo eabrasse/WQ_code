@@ -140,23 +140,25 @@ gs = GridSpec(3,2)
 
 #plot LV3 on left
 # start with west boundary
+vmin = 12
+vmax = 18
 ax0 = fig.add_subplot(gs[0,0])
-p=ax0.pcolormesh(var_lv3_west,cmap='YlOrRd',vmin=5,vmax=20)
+p=ax0.pcolormesh(var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax)
 cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(-0.15,0.0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
 cb.ax.set_ylabel('temp (C)',rotation=90,labelpad=10,fontweight='bold')
 
 ax0.set_ylabel('vertical index')
 ax0.set_xlabel('horizontal index')
-labeltext= 'LV3 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'west'
+labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax0.text(0.1,0.9,labeltext,transform=ax0.transAxes,fontweight='bold')
 
 # next LV3 south boundary
 ax1 = fig.add_subplot(gs[1,0])
-ax1.pcolormesh(var_lv3_south,cmap='YlOrRd',vmin=5,vmax=20)
+ax1.pcolormesh(var_lv3_south,cmap='YlOrRd',vmin=vmin,vmax=vmax)
 ax1.set_ylabel('vertical index')
 ax1.set_xlabel('horizontal index')
-labeltext= 'LV3 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'south'
+labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold')
 
 
@@ -178,18 +180,18 @@ ax2.set_xlabel('Time')
 
 # next LV4 west boundary
 ax3 = fig.add_subplot(gs[0,1])
-ax3.pcolormesh(var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
+ax3.pcolormesh(var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
 ax3.set_ylabel('vertical index')
 ax3.set_xlabel('horizontal index')
-labeltext= 'LV4 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'west'
+labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
-ax4.pcolormesh(var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=5,vmax=20)
+ax4.pcolormesh(var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
 ax4.set_ylabel('vertical index')
 ax4.set_xlabel('horizontal index')
-labeltext= 'LV4 /n'+date.strftime("%m/%d/%Y") + '/n'+ var_name + '/n' + 'south'
+labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold')
 
 dlv3.close()
