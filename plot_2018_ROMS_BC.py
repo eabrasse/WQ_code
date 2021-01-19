@@ -196,7 +196,7 @@ labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
 
 #add map to make sure you're extracting correctly
-axmap = fig.add_subplot(gs)
+axmap = fig.add_subplot(gs[:,:1])
 #plot coastline
 axmap.contour(lonr_lv3,latr_lv3,maskr_lv3,levels=[0.5])
 axmap.scatter(lonr_lv3[LV3_ji_west],latr_lv3[LV3_ji_west],color='green')
