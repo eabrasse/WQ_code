@@ -131,7 +131,7 @@ nx3 = len(LV3_ji_south)
 
 var_lv3_south = np.zeros((nz3,nx3))
 for ji in range(nx3):
-    j,i = LV_ji_south[ji]
+    j,i = LV3_ji_south[ji]
     var_lv3_south[:,ji] = var_lv3[t3,:,j,i]
 
 
