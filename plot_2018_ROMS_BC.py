@@ -45,9 +45,9 @@ LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye
 #goes from Jan 1 2018 to Jan 16 2018
 # LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00037.nc'
 # #goes from Jun 1 2018 to Jun 15 2018
-LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
+# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
 # #goes from Jun 15 2018 to Jun 30 2018
-# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00051.nc'
+LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00051.nc'
 # #goes from Dec 15 2018 to Dec 31 2018
 
 dgrd = nc.Dataset(LV4_grid)
@@ -67,7 +67,7 @@ var_south_LV4 = dlv4[var_name+'_south'][:]
 var_lv3 = dlv3[var_name]
 
 # now match time indexes between the two grids
-t3 = 0
+t3 = -1
 ott = dlv3['ocean_time'][:]
 ot = ott[t3]
 date = datetime(1999,1,1)+timedelta(seconds=ot)
