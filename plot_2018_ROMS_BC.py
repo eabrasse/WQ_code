@@ -69,7 +69,7 @@ var_lv3 = dlv3[var_name]
 # now match time indexes between the two grids
 t30 = 0
 ott = dlv3['ocean_time'][:]
-ot0 = ott[t3]
+ot0 = ott[t30]
 date = datetime(1999,1,1)+timedelta(seconds=ot0)
 ot0_days = ot0/(24*60*60)
 
