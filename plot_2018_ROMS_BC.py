@@ -83,7 +83,7 @@ ot = ott[t3]
 date = datetime(1999,1,1)+timedelta(seconds=ot)
 ot_days = ot/(24*60*60)
 
-t_diff = np.abs(ot0_days-vart)
+t_diff = np.abs(ot_days-vart)
 t4 = np.argmin(t_diff)
 
 # extract relevant LV3 data along boundary
