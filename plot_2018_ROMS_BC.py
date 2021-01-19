@@ -90,7 +90,7 @@ for j in range(ny4):
     # take grid cell w/ smallest distance
     j_4to3_west = np.where(lonlatdiff==lonlatdiff.min())[0][0]
     i_4to3_west = np.where(lonlatdiff==lonlatdiff.min())[1][0]
-    ji_4to3_west = ji_4to3_west + [j_4to3_west, i_4to3_west]
+    ji_4to3_west = ji_4to3_west + [[j_4to3_west, i_4to3_west]]
 
 #reduce index pairs to only unique pairs on LV3 grid
 LV3_ji_west = []
@@ -120,7 +120,7 @@ for i in range(nx4):
     # take grid cell w/ smallest distance
     j_4to3_south = np.where(lonlatdiff==lonlatdiff.min())[0][0]
     i_4to3_south = np.where(lonlatdiff==lonlatdiff.min())[1][0]
-    ji_4to3_south = ji_4to3_south + [j_4to3_south, i_4to3_south]
+    ji_4to3_south = ji_4to3_south + [[j_4to3_south, i_4to3_south]]
 
 #reduce index pairs to only unique pairs on LV3 grid
 LV3_ji_south = []
