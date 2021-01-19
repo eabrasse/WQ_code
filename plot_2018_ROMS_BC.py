@@ -170,7 +170,7 @@ j0,i0 = LV3_ji_west[0]
 var_lv3_timeseries = var_lv3[:,-1,j0,i0]
 
 ax2.plot(dt_list,var_lv3_timeseries,color='cornflowerblue',label='LV3')
-ax2.plot(dt_list,var_west_LV4[:,-1,0],color='orange',label='LV4')
+ax2.plot(dt_list,var_west_LV4[t4:t4+nt3+1,-1,0],color='orange',label='LV4')
 ax2.legend()
 ax2.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax2.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
