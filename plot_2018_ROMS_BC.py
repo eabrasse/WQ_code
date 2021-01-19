@@ -96,6 +96,7 @@ for j in range(ny4):
 LV3_ji_west = []
 for ji in ji_4to3_west:
     if ji not in LV3_ji_west:
+        j,i=ji
         LV3_ji_west = LV3_ji_west + [j,i]
 
 ny3 = len(LV_ji_west)
@@ -125,6 +126,7 @@ for i in range(nx4):
 LV3_ji_south = []
 for ji in ji_4to3_south:
     if ji not in LV3_ji_south:
+        j,i = ji
         LV3_ji_south = LV3_ji_south + [j,i]
 
 nx3 = len(LV_ji_south)
