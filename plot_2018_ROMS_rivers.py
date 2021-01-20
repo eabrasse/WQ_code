@@ -65,7 +65,7 @@ ax[2].set_ylabel('transport m3s-1')
 ax[2].get_xaxis().set_visible("false")
 ax[2].text(0.1,0.9,'Sweetwater (7–8)',transform=ax[1].transAxes)
 
-ax[3].plot(rt_list,-rQ[:,9])
+ax[3].plot(rt_list,-rQ[:,8])
 ax[3].set_ylabel('transport m3s-1')
 ax[3].get_xaxis().set_visible("false")
 ax[3].text(0.1,0.9,'Otay (9)',transform=ax[1].transAxes)
