@@ -50,17 +50,26 @@ nt,nriv = rQ.shape
 
 fig,ax=plt.subplots(4,1,sharex=True,figsize=(8,10))
 
-ax[0].plot(rt_list,rQ[:,:5])
-ax[0].text(0.1,0.9,'Tijuana River Estuary',transform=ax[0].transAxes)
+ax[0].plot(rt_list,-rQ[:,:5])
+ax[0].text(0.1,0.1,'Tijuana River Estuary (1–5)',transform=ax[0].transAxes)
 ax[0].set_ylabel('transport m3s-1')
 ax[0].get_xaxis().set_visible("false")
 
-for i in range(nriv-5):
-    ax[i].plot(rt_list,rQ[:,5+i])
-    ax[i].set_ylabel('transport m3s-1')
-    ax[i].get_xaxis().set_visible("false")
+ax[1].plot(rt_list,-rQ[:,5])
+ax[1].set_ylabel('transport m3s-1')
+ax[1].get_xaxis().set_visible("false")
+ax[1].text(0.1,0.9,'Punta Bandera (6)',transform=ax[1].transAxes)
 
-ax[1].text(0.1,0.9,'Punta Bandera',transform=ax[1].transAxes)
+ax[2].plot(rt_list,-rQ[:,6:8])
+ax[2].set_ylabel('transport m3s-1')
+ax[2].get_xaxis().set_visible("false")
+ax[2].text(0.1,0.9,'Sweetwater (7–8)',transform=ax[1].transAxes)
+
+ax[3].plot(rt_list,-rQ[:,9])
+ax[3].set_ylabel('transport m3s-1')
+ax[3].get_xaxis().set_visible("false")
+ax[3].text(0.1,0.9,'Otay (9)',transform=ax[1].transAxes)
+
 ax[-1].get_xaxis().set_visible("true")
 ax[-1].xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax[-1].xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
