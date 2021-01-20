@@ -42,7 +42,7 @@ dsriv = nc.Dataset(rivfn)
 rt = dsriv['river_time'][:]
 rt_list = []
 for t in rt:
-    rt_list.append(datetime(1999,1,1)+timedelta(days=rt))
+    rt_list.append(datetime(1999,1,1)+timedelta(days=t))
     
 rQ = dsriv['river_transport'][:]
 
