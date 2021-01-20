@@ -188,7 +188,7 @@ ax0.set_ylabel('relative depth')
 ax0.set_xlabel('latitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax0.text(0.1,0.9,labeltext,transform=ax0.transAxes,fontweight='bold',va='top')
-ax0.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_lv3_west.shape),transform=ax0.transAxes,frontweight='bold',ha='right')
+ax0.text(0.9,0.1,'shape = ({:},{:})'.format(var_lv3_west.shape[0],var_lv3_west.shape[1]),transform=ax0.transAxes,frontweight='bold',ha='right')
 
 # next LV3 south boundary
 ax1 = fig.add_subplot(gs[1,0])
@@ -197,7 +197,7 @@ ax1.set_ylabel('relative depth')
 ax1.set_xlabel('longitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold',va='top')
-ax1.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_lv3_south.shape),transform=ax1.transAxes,frontweight='bold',ha='right')
+ax1.text(0.9,0.1,'shape = ({:},{:})'.format(var_lv3_south.shape[0],var_lv3_south.shape[1]),transform=ax1.transAxes,frontweight='bold',ha='right')
 
 #finally add time series at bottom of western boundary
 ax2 = fig.add_subplot(gs[2,:])
@@ -222,7 +222,7 @@ ax3.set_ylabel('relative depth')
 ax3.set_xlabel('latitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold',va='top')
-ax3.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_west_LV4.shape),transform=ax3.transAxes,frontweight='bold',ha='right')
+ax3.text(0.9,0.1,'shape = ({:},{:})'.format(var_west_LV4.shape[0],var_west_LV4.shape[1]),transform=ax3.transAxes,frontweight='bold',ha='right')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
@@ -231,7 +231,7 @@ ax4.set_ylabel('relative depth')
 ax4.set_xlabel('longitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
-ax4.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_south_LV4.shape),transform=ax4.transAxes,frontweight='bold',ha='right')
+ax4.text(0.9,0.1,'shape = ({:},{:})'.format(var_south_LV4.shape[0],var_south_LV4.shape[1]),transform=ax4.transAxes,frontweight='bold',ha='right')
 
 #compare horizontal resolution of LV3 and LV4
 ax5 = fig.add_subplot(gs[0,2])
