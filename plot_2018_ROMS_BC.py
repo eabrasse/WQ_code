@@ -240,7 +240,8 @@ ax5.plot(lat_lv3_west,var_lv3_west[-1,:],color='cornflowerblue',label='LV3')
 ax5.plot(latr_lv4[:,0],var_west_LV4[t4,-1,:],color='orange',label='LV4')
 ax5.set_xlabel('latitude')
 ax5.set_ylabel('temp (C)')
-ax5.text(0.1,0.9,'surface '+var_name+' snapshot along western boundary',transform=ax5.transAxes)
+ylim = ax5.get_ylim()
+# ax5.text(0.1,0.9,'surface '+var_name+' snapshot along western boundary',transform=ax5.transAxes)
 
 #compare horizontal resolution of LV3 and LV4
 ax6 = fig.add_subplot(gs[1,2])
@@ -248,7 +249,8 @@ ax6.plot(lon_lv3_south,var_lv3_south[-1,:],color='cornflowerblue',label='LV3')
 ax6.plot(lonr_lv4[0,:],var_south_LV4[t4,-1,:],color='orange',label='LV4')
 ax6.set_xlabel('longitude')
 ax6.set_ylabel('temp (C)')
-ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
+ax6.set_ylim(ylim)
+# ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
 
 # compare values in LV3 and LV4
 ax7 = fig.add_subplot(gs[0,3])
@@ -262,8 +264,10 @@ for k in range(nz4):
 
 ax7.set_ylabel(var_name)
 ax7.set_xlabel('latitude')
+ylim = ax7.get_ylim()
 ax8.set_ylabel(var_name)
 ax8.set_xlabel('longitude')
+ax8.set_ylim(ylim)
 
 #add map to make sure you're extracting correctly
 axmap = fig.add_subplot(gs[:2,-1])
