@@ -36,29 +36,31 @@ def dar(ax):
 plt.close('all')
 
 LV4_grid = '/data0/ebrasseale/NADB2018/Input/GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
-# LV4_BC_2018 = '/data0/ebrasseale/NADB2018/Input/BC_LV4_20171117_20180615_Nz10_dye.nc'
+LV4_BC_2018 = '/data0/ebrasseale/NADB2018/Input/BC_LV4_20171117_20180615_Nz10_dye.nc'
 # goes from Nov 17 2017 to June 15 2018
-LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye.nc'
+# LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye.nc'
 # goes from May 1 2018 to Dec 31 2018
 
-# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00027.nc'
+LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00027.nc'
 #goes from Jan 1 2018 to Jan 16 2018
 # LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00037.nc'
 # #goes from Jun 1 2018 to Jun 15 2018
 # LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
 # #goes from Jun 15 2018 to Jun 30 2018
-LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00051.nc'
+# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00051.nc'
 # #goes from Dec 15 2018 to Dec 31 2018
 
 dgrd = nc.Dataset(LV4_grid)
 lonr_lv4 = dgrd['lon_rho'][:]
 latr_lv4 = dgrd['lat_rho'][:]
+sr_lv4 = dgrd['s_rho'][:]
 
 dlv4 = nc.Dataset(LV4_BC_2018)
 
 dlv3 = nc.Dataset(LV3_BC_2018)
 lonr_lv3 = dlv3['lon_rho'][:]
 latr_lv3 = dlv3['lat_rho'][:]
+sr_lv3 = dlv3['s_rho'][:]
 maskr_lv3 = dlv3['mask_rho'][:]
 
 var_name = 'temp'
@@ -78,13 +80,15 @@ t_diff = np.abs(ot0_days-vart)
 print('t_diff min = {:0.4f}'.format(t_diff.min()))
 t40 = np.argmin(t_diff)
 
-t3 = -1
-ot = ott[t3]
-date = datetime(1999,1,1)+timedelta(seconds=ot)
-ot_days = ot/(24*60*60)
-
-t_diff = np.abs(ot_days-vart)
-t4 = np.argmin(t_diff)
+# t3 = -1
+# ot = ott[t3]
+# date = datetime(1999,1,1)+timedelta(seconds=ot)
+# ot_days = ot/(24*60*60)
+#
+# t_diff = np.abs(ot_days-vart)
+# t4 = np.argmin(t_diff)
+t3 = t30
+t4 = t40
 
 # extract relevant LV3 data along boundary
 # unfortunately, grids are tilted and not plaid
@@ -112,17 +116,23 @@ for j in range(ny4):
     ji_4to3_west = ji_4to3_west + [[j_4to3_west, i_4to3_west]]
 
 #reduce index pairs to only unique pairs on LV3 grid
+unique_j = []
 LV3_ji_west = []
 for ji in ji_4to3_west:
-    if ji not in LV3_ji_west:
+    j,i = ji
+    # if ji not in LV3_ji_west:
+    if j not in unique_j:
+        unique_j = unique_j + [j]
         LV3_ji_west = LV3_ji_west + [ji]
 
 ny3 = len(LV3_ji_west)
 nz3 = var_lv3.shape[1] # should have t,z,y,x indexes
 var_lv3_west = np.zeros((nz3,ny3))
+lat_lv3_west = np.zeros((ny3))
 for ji in range(ny3):
     j,i = LV3_ji_west[ji]
     var_lv3_west[:,ji] = var_lv3[t3,:,j,i]
+    lat_lv3_west[j] = latr_lv3[ji]
 
 #repeat for southern edge
 ji_4to3_south = []
@@ -141,17 +151,23 @@ for i in range(nx4):
     ji_4to3_south = ji_4to3_south + [[j_4to3_south, i_4to3_south]]
 
 #reduce index pairs to only unique pairs on LV3 grid
+unique_i = []
 LV3_ji_south = []
 for ji in ji_4to3_south:
-    if ji not in LV3_ji_south:
+    j,i = ji
+    # if ji not in LV3_ji_south:
+    if i not in unique_i:
+        unique_i = unique_i + [i]
         LV3_ji_south = LV3_ji_south + [ji]
 
 nx3 = len(LV3_ji_south)
 
 var_lv3_south = np.zeros((nz3,nx3))
+lon_lv3_south = np.zeros((nx3))
 for ji in range(nx3):
     j,i = LV3_ji_south[ji]
     var_lv3_south[:,ji] = var_lv3[t3,:,j,i]
+    lon_lv3_south[i] = lonr_lv3[ji]
 
 
 fig=plt.figure(figsize=(12,14))
@@ -162,21 +178,21 @@ gs = GridSpec(3,3)
 vmin = 16.5
 vmax = 18
 ax0 = fig.add_subplot(gs[0,0])
-p=ax0.pcolormesh(var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax)
+p=ax0.pcolormesh(lat_lv3_west,sr_lv3,var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax)
 cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(-0.15,0.0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
 cb.ax.set_ylabel('temp (C)',rotation=90,labelpad=10,fontweight='bold')
 
-ax0.set_ylabel('vertical index')
-ax0.set_xlabel('horizontal index')
+ax0.set_ylabel('relative depth')
+ax0.set_xlabel('latitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax0.text(0.1,0.9,labeltext,transform=ax0.transAxes,fontweight='bold',va='top')
 
 # next LV3 south boundary
 ax1 = fig.add_subplot(gs[1,0])
-ax1.pcolormesh(var_lv3_south,cmap='YlOrRd',vmin=vmin,vmax=vmax)
-ax1.set_ylabel('vertical index')
-ax1.set_xlabel('horizontal index')
+ax1.pcolormesh(lon_lv3_south,sr_lv3,var_lv3_south,cmap='YlOrRd',vmin=vmin,vmax=vmax)
+ax1.set_ylabel('relative depth')
+ax1.set_xlabel('longitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold',va='top')
 
@@ -199,17 +215,17 @@ ax2.set_xlabel('Time')
 
 # next LV4 west boundary
 ax3 = fig.add_subplot(gs[0,1])
-ax3.pcolormesh(var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
-ax3.set_ylabel('vertical index')
-ax3.set_xlabel('horizontal index')
+ax3.pcolormesh(latr_lv4[:,0],sr_lv4,var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
+ax3.set_ylabel('relative depth')
+ax3.set_xlabel('latitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold',va='top')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
-ax4.pcolormesh(var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
-ax4.set_ylabel('vertical index')
-ax4.set_xlabel('horizontal index')
+ax4.pcolormesh(lonr_lv4[0,:],sr_lv4,var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
+ax4.set_ylabel('relative depth')
+ax4.set_xlabel('longitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
 
@@ -223,7 +239,8 @@ for ji in LV3_ji_west:
 for ji in LV3_ji_south:
     j,i = ji
     axmap.scatter(lonr_lv3[j,i],latr_lv3[j,i],c='magenta')
-axmap.plot(lonr_lv3[j0,i0],latr_lv3[j0,i0],marker='*',markerfacecolor='orange')
+axmap.plot(lonr_lv3[j0,i0],latr_lv3[j0,i0],marker='*',markerfacecolor='orange',markersize=15)
+axmap.axis([-117.4,-117.05,32.3,32.8])
 dar(axmap)
 axmap.set_xlabel('longitude')
 axmap.set_ylabel('latitude')
