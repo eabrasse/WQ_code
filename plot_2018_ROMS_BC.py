@@ -35,7 +35,8 @@ def dar(ax):
     
 plt.close('all')
 
-LV4_grid = '/data0/ebrasseale/NADB2018/Input/GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
+# LV4_grid = '/data0/ebrasseale/NADB2018/Input/GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
+LV4_grid = '/data0/NADB2017/NADB2017_0_NEW/ocean_his_NADB_0_new_00038.nc'
 LV4_BC_2018 = '/data0/ebrasseale/NADB2018/Input/BC_LV4_20171117_20180615_Nz10_dye.nc'
 # goes from Nov 17 2017 to June 15 2018
 # LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye.nc'
