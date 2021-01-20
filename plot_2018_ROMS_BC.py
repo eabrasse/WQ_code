@@ -257,8 +257,8 @@ for k in range(nz3):
     ax7.scatter(lat_lv3_west,var_lv3_west[k,:],c='None',marker='o',edgecolors='cornflowerblue')
     ax8.scatter(lon_lv3_south,var_lv3_south[k,:],c='None',marker='o',edgecolors='cornflowerblue')
 for k in range(nz4):
-    ax7.scatter(latr_lv4[:,0],var_west[t4,k,:],c='orange',marker='x')
-    ax8.scatter(lonr_lv4[0,:],var_south[t4,k,:],c='orange',marker='x')
+    ax7.scatter(latr_lv4[:,0],var_west_LV4[t4,k,:],c='orange',marker='x')
+    ax8.scatter(lonr_lv4[0,:],var_south_LV4[t4,k,:],c='orange',marker='x')
 
 ax7.set_ylabel(var_name)
 ax7.set_xlabel('latitude')
