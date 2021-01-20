@@ -128,6 +128,7 @@ for ji in ji_4to3_west:
 
 ny3 = len(LV3_ji_west)
 nz3 = var_lv3.shape[1] # should have t,z,y,x indexes
+nz4 = var_west_LV4.shape[0]
 var_lv3_west = np.zeros((nz3,ny3))
 lat_lv3_west = np.zeros((ny3))
 for ji in range(ny3):
