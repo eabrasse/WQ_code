@@ -171,8 +171,8 @@ for ji in range(nx3):
     lon_lv3_south[ji] = lonr_lv3[j,i]
 
 
-fig=plt.figure(figsize=(12,14))
-gs = GridSpec(3,3)
+fig=plt.figure(figsize=(16,14))
+gs = GridSpec(3,5)
 
 #plot LV3 on left
 # start with west boundary
@@ -188,6 +188,7 @@ ax0.set_ylabel('relative depth')
 ax0.set_xlabel('latitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax0.text(0.1,0.9,labeltext,transform=ax0.transAxes,fontweight='bold',va='top')
+ax0.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_lv3_west.shape),transform=ax0.transAxes,frontweight='bold',ha='right')
 
 # next LV3 south boundary
 ax1 = fig.add_subplot(gs[1,0])
@@ -196,7 +197,7 @@ ax1.set_ylabel('relative depth')
 ax1.set_xlabel('longitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold',va='top')
-
+ax1.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_lv3_south.shape),transform=ax1.transAxes,frontweight='bold',ha='right')
 
 #finally add time series at bottom of western boundary
 ax2 = fig.add_subplot(gs[2,:])
@@ -221,6 +222,7 @@ ax3.set_ylabel('relative depth')
 ax3.set_xlabel('latitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold',va='top')
+ax3.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_west_LV4.shape),transform=ax3.transAxes,frontweight='bold',ha='right')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
@@ -229,9 +231,39 @@ ax4.set_ylabel('relative depth')
 ax4.set_xlabel('longitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
+ax4.text(0.9,0.1,'shape = ({:d},{:d})'.format(var_south_LV4.shape),transform=ax4.transAxes,frontweight='bold',ha='right')
+
+#compare horizontal resolution of LV3 and LV4
+ax5 = fig.add_subplot(gs[0,2])
+ax5.plot(lat_lv3_west,var_lv3_west[-1,:],color='cornflowerblue',label='LV3')
+ax5.plot(latr_lv4[:,0],var_west_LV4[t4,-1,:],color='orange',label='LV4')
+ax5.set_xlabel('latitude')
+ax5.set_ylabel('temp (C)')
+ax5.text(0.1,0.9,'surface '+var_name+' snapshot along western boundary',transform=ax5.transAxes)
+
+#compare horizontal resolution of LV3 and LV4
+ax6 = fig.add_subplot(gs[1,2])
+ax6.plot(lon_lv3_south,var_lv3_south[-1,:],color='cornflowerblue',label='LV3')
+ax6.plot(lonr_lv4[0,:],var_south_LV4[t4,-1,:],color='orange',label='LV4')
+ax6.set_xlabel('longitude')
+ax6.set_ylabel('temp (C)')
+ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
+
+# compare values in LV3 and LV4
+ax7 = fig.add_subplot(gs[0,3])
+ax7.scatter(lat_lv3_west,var_lv3_west,c='None',marker='o',edgecolors='cornflowerblue')
+ax7.scatter(latr_lv4[:,0],var_west[t4,:,:],c='orange',marker='x')
+ax7.set_ylabel(var_name)
+ax7.set_xlabel('latitude')
+
+ax8 = fig.add_subplot(gs[1,3])
+ax8.scatter(lon_lv3_south,var_lv3_south,c='None',marker='o',edgecolors='cornflowerblue')
+ax8.scatter(lonr_lv4[0,:],var_south[t4,:,:],c='orange',marker='x')
+ax8.set_ylabel(var_name)
+ax8.set_xlabel('longitude')
 
 #add map to make sure you're extracting correctly
-axmap = fig.add_subplot(gs[:2,2])
+axmap = fig.add_subplot(gs[:2,-1])
 #plot coastline
 axmap.contour(lonr_lv3,latr_lv3,maskr_lv3,levels=[0.5])
 for ji in LV3_ji_west:
