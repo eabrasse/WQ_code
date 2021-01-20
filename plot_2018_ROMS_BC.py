@@ -223,7 +223,7 @@ ax3.set_ylabel('relative depth')
 ax3.set_xlabel('latitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold',va='top')
-ax3.text(0.9,0.1,'shape = ({:},{:})'.format(var_west_LV4.shape[0],var_west_LV4.shape[1]),transform=ax3.transAxes,fontweight='bold',ha='right')
+ax3.text(0.9,0.1,'shape = ({:},{:})'.format(var_west_LV4.shape[1],var_west_LV4.shape[2]),transform=ax3.transAxes,fontweight='bold',ha='right')
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
@@ -232,7 +232,7 @@ ax4.set_ylabel('relative depth')
 ax4.set_xlabel('longitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
-ax4.text(0.9,0.1,'shape = ({:},{:})'.format(var_south_LV4.shape[0],var_south_LV4.shape[1]),transform=ax4.transAxes,fontweight='bold',ha='right')
+ax4.text(0.9,0.1,'shape = ({:},{:})'.format(var_south_LV4.shape[1],var_south_LV4.shape[2]),transform=ax4.transAxes,fontweight='bold',ha='right')
 
 #compare horizontal resolution of LV3 and LV4
 ax5 = fig.add_subplot(gs[0,2])
@@ -240,7 +240,7 @@ ax5.plot(lat_lv3_west,var_lv3_west[-1,:],color='cornflowerblue',label='LV3')
 ax5.plot(latr_lv4[:,0],var_west_LV4[t4,-1,:],color='orange',label='LV4')
 ax5.set_xlabel('latitude')
 ax5.set_ylabel('temp (C)')
-ylim = ax5.get_ylim()
+# ylim = ax5.get_ylim()
 # ax5.text(0.1,0.9,'surface '+var_name+' snapshot along western boundary',transform=ax5.transAxes)
 
 #compare horizontal resolution of LV3 and LV4
@@ -249,7 +249,7 @@ ax6.plot(lon_lv3_south,var_lv3_south[-1,:],color='cornflowerblue',label='LV3')
 ax6.plot(lonr_lv4[0,:],var_south_LV4[t4,-1,:],color='orange',label='LV4')
 ax6.set_xlabel('longitude')
 ax6.set_ylabel('temp (C)')
-ax6.set_ylim(ylim)
+ax6.set_ylim([16,17])
 # ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
 
 # compare values in LV3 and LV4
@@ -264,10 +264,10 @@ for k in range(nz4):
 
 ax7.set_ylabel(var_name)
 ax7.set_xlabel('latitude')
-ylim = ax7.get_ylim()
+# ylim = ax7.get_ylim()
 ax8.set_ylabel(var_name)
 ax8.set_xlabel('longitude')
-ax8.set_ylim(ylim)
+ax8.set_ylim([16,17])
 
 #add map to make sure you're extracting correctly
 axmap = fig.add_subplot(gs[:2,-1])
