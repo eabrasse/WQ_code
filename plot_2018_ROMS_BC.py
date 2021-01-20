@@ -132,7 +132,7 @@ var_lv3_west = np.zeros((nz3,ny3))
 lat_lv3_west = np.zeros((ny3))
 for ji in range(ny3):
     j,i = LV3_ji_west[ji]
-    var_lv3_west[:,j,i] = var_lv3[t3,:,j,i]
+    var_lv3_west[:,j] = var_lv3[t3,:,j,i]
     lat_lv3_west[j] = latr_lv3[j,i]
 
 #repeat for southern edge
@@ -167,7 +167,7 @@ var_lv3_south = np.zeros((nz3,nx3))
 lon_lv3_south = np.zeros((nx3))
 for ji in range(nx3):
     j,i = LV3_ji_south[ji]
-    var_lv3_south[:,j,i] = var_lv3[t3,:,j,i]
+    var_lv3_south[:,i] = var_lv3[t3,:,j,i]
     lon_lv3_south[i] = lonr_lv3[j,i]
 
 
