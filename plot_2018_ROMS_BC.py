@@ -251,14 +251,16 @@ ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transfo
 
 # compare values in LV3 and LV4
 ax7 = fig.add_subplot(gs[0,3])
-ax7.scatter(lat_lv3_west,var_lv3_west,c='None',marker='o',edgecolors='cornflowerblue')
-ax7.scatter(latr_lv4[:,0],var_west[t4,:,:],c='orange',marker='x')
+ax8 = fig.add_subplot(gs[1,3])
+for k in range(nz3):
+    ax7.scatter(lat_lv3_west,var_lv3_west[k,:],c='None',marker='o',edgecolors='cornflowerblue')
+    ax8.scatter(lon_lv3_south,var_lv3_south[k,:],c='None',marker='o',edgecolors='cornflowerblue')
+for k in range(nz4):
+    ax7.scatter(latr_lv4[:,0],var_west[t4,k,:],c='orange',marker='x')
+    ax8.scatter(lonr_lv4[0,:],var_south[t4,k,:],c='orange',marker='x')
+
 ax7.set_ylabel(var_name)
 ax7.set_xlabel('latitude')
-
-ax8 = fig.add_subplot(gs[1,3])
-ax8.scatter(lon_lv3_south,var_lv3_south,c='None',marker='o',edgecolors='cornflowerblue')
-ax8.scatter(lonr_lv4[0,:],var_south[t4,:,:],c='orange',marker='x')
 ax8.set_ylabel(var_name)
 ax8.set_xlabel('longitude')
 
