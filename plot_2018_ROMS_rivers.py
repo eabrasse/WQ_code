@@ -35,9 +35,9 @@ def dar(ax):
     
 plt.close('all')
 
-# rivfn = '/data0/ebrasseale/NADB2018/Input/river_tracer_4river_NADB2017_0.nc'
+rivfn = '/data0/ebrasseale/NADB2018/Input/river_tracer_4river_NADB2017_0.nc'
 
-rivfn = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/LV4/River_input/NADB2017/river_tracer_4river_NADB2017_0.nc'
+# rivfn = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/LV4/River_input/NADB2017/river_tracer_4river_NADB2017_0.nc'
 
 dsriv = nc.Dataset(rivfn)
 
@@ -46,29 +46,30 @@ rt_list = []
 for t in rt:
     rt_list.append(datetime(1999,1,1)+timedelta(days=t))
     
-rQ = dsriv['river_transport'][:]
+# rQ = dsriv['river_transport'][:]
+rT = dsriv['river_temp'][:]
 
-nt,nriv = rQ.shape
+nt,nriv = rT.shape
 
 fig,ax=plt.subplots(4,1,sharex=True,figsize=(8,10))
 
-ax[0].plot(rt_list,-rQ[:,:5])
+ax[0].plot(rt_list,-rT[:,:5])
 ax[0].text(0.9,0.9,'Tijuana River Estuary (1–5)',transform=ax[0].transAxes,ha='right')
-ax[0].set_ylabel('transport m3s-1')
+ax[0].set_ylabel('temp (deg C)')
 ax[0].get_xaxis().set_visible("false")
 
-ax[1].plot(rt_list,-rQ[:,5])
-ax[1].set_ylabel('transport m3s-1')
+ax[1].plot(rt_list,-rT[:,5])
+ax[1].set_ylabel('temp (deg C)')
 ax[1].get_xaxis().set_visible("false")
 ax[1].text(0.9,0.9,'Punta Bandera (6)',transform=ax[1].transAxes,ha='right')
 
-ax[2].plot(rt_list,-rQ[:,6:8])
-ax[2].set_ylabel('transport m3s-1')
+ax[2].plot(rt_list,-rT[:,6:8])
+ax[2].set_ylabel('temp (deg C)')
 ax[2].get_xaxis().set_visible("false")
 ax[2].text(0.9,0.9,'Sweetwater (7–8)',transform=ax[2].transAxes,ha='right')
 
-ax[3].plot(rt_list,-rQ[:,8])
-ax[3].set_ylabel('transport m3s-1')
+ax[3].plot(rt_list,-rT[:,8])
+ax[3].set_ylabel('temp (deg C)')
 ax[3].get_xaxis().set_visible("false")
 ax[3].text(0.9,0.9,'Otay (9)',transform=ax[3].transAxes,ha='right')
 
@@ -81,6 +82,6 @@ dsriv.close()
 
 plt.tight_layout()
 
-# out_fn = '/data0/ebrasseale/WQ_plots/ROMS_rivertransport_2018.png'
-out_fn = '/data0/ebrasseale/WQ_plots/ROMS_rivertransport_2017.png'
+out_fn = '/data0/ebrasseale/WQ_plots/ROMS_rivertemp_2018.png'
+# out_fn = '/data0/ebrasseale/WQ_plots/ROMS_rivertransport_2017.png'
 plt.savefig(out_fn)
