@@ -50,6 +50,7 @@ rQ = dsriv['river_transport'][:]
 # rT = dsriv['river_temp'][:]
 
 # rT = np.mean(rT,axis=1)
+rQ = -rQ
 nt,nriv = rQ.shape
 
 fig,ax=plt.subplots(4,1,sharex=True,figsize=(8,10))
