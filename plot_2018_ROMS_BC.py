@@ -173,7 +173,7 @@ for ji in range(nx3):
 
 
 fig=plt.figure(figsize=(16,14))
-gs = GridSpec(3,5)
+gs = GridSpec(3,4)
 
 #plot LV3 on left
 # start with west boundary
@@ -237,7 +237,11 @@ ax4.text(0.1,0.1,'shape = ({:},{:})'.format(var_south_LV4.shape[1],var_south_LV4
 #compare horizontal resolution of LV3 and LV4
 ax5 = fig.add_subplot(gs[0,2])
 ax5.plot(lat_lv3_west,var_lv3_west[-1,:],color='cornflowerblue',label='LV3')
+ax5.plot(lat_lv3_west,var_lv3_west[0,:],color='cornflowerblue',label='LV3')
 ax5.plot(latr_lv4[:,0],var_west_LV4[t4,-1,:],color='orange',label='LV4')
+ax5.plot(latr_lv4[:,0],var_west_LV4[t4,0,:],color='orange',label='LV4')
+labeltext = var_name + ' @ surf & seafloor\nsnapshot\nwest'
+ax5.text(0.1,0.9,labeltext,transform=ax5.transAxes,fontweight='bold',va='top')
 ax5.set_xlabel('latitude')
 ax5.set_ylabel('temp (C)')
 # ylim = ax5.get_ylim()
@@ -246,28 +250,32 @@ ax5.set_ylabel('temp (C)')
 #compare horizontal resolution of LV3 and LV4
 ax6 = fig.add_subplot(gs[1,2])
 ax6.plot(lon_lv3_south,var_lv3_south[-1,:],color='cornflowerblue',label='LV3')
+ax6.plot(lon_lv3_south,var_lv3_south[0,:],color='cornflowerblue',label='LV3')
 ax6.plot(lonr_lv4[0,:],var_south_LV4[t4,-1,:],color='orange',label='LV4')
+ax6.plot(lonr_lv4[0,:],var_south_LV4[t4,0,:],color='orange',label='LV4')
+labeltext = var_name + ' @ surf & seafloor\nsnapshot\nsouth'
+ax6.text(0.1,0.9,labeltext,transform=ax6.transAxes,fontweight='bold',va='top')
 ax6.set_xlabel('longitude')
 ax6.set_ylabel('temp (C)')
 ax6.set_ylim([16.7,17])
 # ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
 
-# compare values in LV3 and LV4
-ax7 = fig.add_subplot(gs[0,3])
-ax8 = fig.add_subplot(gs[1,3])
-for k in range(nz3):
-    ax7.scatter(lat_lv3_west,var_lv3_west[k,:],c='None',marker='o',edgecolors='cornflowerblue')
-    ax8.scatter(lon_lv3_south,var_lv3_south[k,:],c='None',marker='o',edgecolors='cornflowerblue')
-for k in range(nz4):
-    ax7.scatter(latr_lv4[:,0],var_west_LV4[t4,k,:],c='orange',marker='x')
-    ax8.scatter(lonr_lv4[0,:],var_south_LV4[t4,k,:],c='orange',marker='x')
-
-ax7.set_ylabel(var_name)
-ax7.set_xlabel('latitude')
-# ylim = ax7.get_ylim()
-ax8.set_ylabel(var_name)
-ax8.set_xlabel('longitude')
-ax8.set_ylim([16,17])
+# # compare values in LV3 and LV4
+# ax7 = fig.add_subplot(gs[0,3])
+# ax8 = fig.add_subplot(gs[1,3])
+# for k in range(nz3):
+#     ax7.scatter(lat_lv3_west,var_lv3_west[k,:],c='None',marker='o',edgecolors='cornflowerblue')
+#     ax8.scatter(lon_lv3_south,var_lv3_south[k,:],c='None',marker='o',edgecolors='cornflowerblue')
+# for k in range(nz4):
+#     ax7.scatter(latr_lv4[:,0],var_west_LV4[t4,k,:],c='orange',marker='x')
+#     ax8.scatter(lonr_lv4[0,:],var_south_LV4[t4,k,:],c='orange',marker='x')
+#
+# ax7.set_ylabel(var_name)
+# ax7.set_xlabel('latitude')
+# # ylim = ax7.get_ylim()
+# ax8.set_ylabel(var_name)
+# ax8.set_xlabel('longitude')
+# ax8.set_ylim([16,17])
 
 #add map to make sure you're extracting correctly
 axmap = fig.add_subplot(gs[:2,-1])
