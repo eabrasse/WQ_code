@@ -257,7 +257,7 @@ labeltext = var_name + ' @ surf & seafloor\nsnapshot\nsouth'
 ax6.text(0.1,0.9,labeltext,transform=ax6.transAxes,fontweight='bold',va='top')
 ax6.set_xlabel('longitude')
 ax6.set_ylabel('temp (C)')
-ax6.set_ylim([16.0,17])
+ax6.set_ylim([15.5,18.5])
 # ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
 
 # # compare values in LV3 and LV4
