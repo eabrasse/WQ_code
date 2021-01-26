@@ -46,9 +46,9 @@ LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye
 #goes from Jan 1 2018 to Jan 16 2018
 # LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00037.nc'
 # #goes from Jun 1 2018 to Jun 15 2018
-LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
+# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
 # #goes from Jun 15 2018 to Jun 30 2018
-# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00051.nc'
+LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00051.nc'
 # #goes from Dec 15 2018 to Dec 31 2018
 
 dgrd = nc.Dataset(LV4_grid)
@@ -81,15 +81,15 @@ t_diff = np.abs(ot0_days-vart)
 print('t_diff min = {:0.4f}'.format(t_diff.min()))
 t40 = np.argmin(t_diff)
 
-# t3 = -1
-# ot = ott[t3]
-# date = datetime(1999,1,1)+timedelta(seconds=ot)
-# ot_days = ot/(24*60*60)
-#
-# t_diff = np.abs(ot_days-vart)
-# t4 = np.argmin(t_diff)
-t3 = t30
-t4 = t40
+t3 = -1
+ot = ott[t3]
+date = datetime(1999,1,1)+timedelta(seconds=ot)
+ot_days = ot/(24*60*60)
+
+t_diff = np.abs(ot_days-vart)
+t4 = np.argmin(t_diff)
+# t3 = t30
+# t4 = t40
 
 # extract relevant LV3 data along boundary
 # unfortunately, grids are tilted and not plaid
