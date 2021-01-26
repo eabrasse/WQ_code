@@ -42,9 +42,9 @@ LV4_BC_2018 = '/data0/ebrasseale/NADB2018/Input/BC_LV4_20171117_20180615_Nz10_dy
 # LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye.nc'
 # goes from May 1 2018 to Dec 31 2018
 
-LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00027.nc'
+# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00027.nc'
 #goes from Jan 1 2018 to Jan 16 2018
-# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00037.nc'
+LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00037.nc'
 # #goes from Jun 1 2018 to Jun 15 2018
 # LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
 # #goes from Jun 15 2018 to Jun 30 2018
@@ -257,7 +257,7 @@ labeltext = var_name + ' @ surf & seafloor\nsnapshot\nsouth'
 ax6.text(0.1,0.9,labeltext,transform=ax6.transAxes,fontweight='bold',va='top')
 ax6.set_xlabel('longitude')
 ax6.set_ylabel('temp (C)')
-ax6.set_ylim([16.7,17])
+ax6.set_ylim([16.0,17])
 # ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
 
 # # compare values in LV3 and LV4
