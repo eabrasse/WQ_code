@@ -37,16 +37,16 @@ plt.close('all')
 
 # LV4_grid = '/data0/ebrasseale/NADB2018/Input/GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
 LV4_grid = '/data0/NADB2017/NADB2017_0/Output/ocean_his_NADB_0_00020.nc'
-LV4_BC_2018 = '/data0/ebrasseale/NADB2018/Input/BC_LV4_20171117_20180615_Nz10_dye.nc'
+# LV4_BC_2018 = '/data0/ebrasseale/NADB2018/Input/BC_LV4_20171117_20180615_Nz10_dye.nc'
 # goes from Nov 17 2017 to June 15 2018
-# LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye.nc'
+LV4_BC_2018= '/data0/ebrasseale/NADB2018/Input/BC_LV4_20180501_20181231_Nz10_dye.nc'
 # goes from May 1 2018 to Dec 31 2018
 
 # LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00027.nc'
 #goes from Jan 1 2018 to Jan 16 2018
-LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00037.nc'
+# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00037.nc'
 # #goes from Jun 1 2018 to Jun 15 2018
-# LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
+LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00038.nc'
 # #goes from Jun 15 2018 to Jun 30 2018
 # LV3_BC_2018 = '/home/x1wu/SDTJRE_2018/LV3_RUNFILES/Run2018/ocean_his_LV3_EPA20172018_00051.nc'
 # #goes from Dec 15 2018 to Dec 31 2018
