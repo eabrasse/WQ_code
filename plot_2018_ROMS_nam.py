@@ -55,14 +55,14 @@ maskr_LV4 = dgrd['mask_rho'][:]
 dlv4 = nc.Dataset(LV4_nam_2018)
 uwind_LV4 = dlv4['Uwind'][:]
 vwind_LV4 = dlv4['Vwind'][:]
-pair_LV4 = dlv4['pair'][:]
+pair_LV4 = dlv4['Pair'][:]
 
 dlv3 = nc.Dataset(LV3_nam_2018)
 lonr_LV3 = dlv3['lon'][:]
 latr_LV3 = dlv3['lat'][:]
 uwind_LV3 = dlv3['Uwind'][:]
 vwind_LV3 = dlv3['Vwind'][:]
-pair_LV3 = dlv3['pair'][:]
+pair_LV3 = dlv3['Pair'][:]
 
 # now match time indexes between the two grids
 date0 = datetime(2018,1,1)
