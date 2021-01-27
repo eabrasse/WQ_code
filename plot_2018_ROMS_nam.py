@@ -36,14 +36,14 @@ def dar(ax):
 plt.close('all')
 dir0 = '/data0/ebrasseale/NADB2018/Input/'
 LV4_grid = dir0+'GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
-LV4_nam_2018 = dir0+'roms_nam_LV4_20171221_20180110.nc'
-# LV4_nam_2018 = dir0+'roms_nam_LV4_20180331_20180420.nc'
+# LV4_nam_2018 = dir0+'roms_nam_LV4_20171221_20180110.nc'
+LV4_nam_2018 = dir0+'roms_nam_LV4_20180331_20180420.nc'
 # LV4_nam_2018 = dir0+'roms_nam_LV4_20180818_20180907.nc'
 # LV4_nam_2018 = dir0+'roms_nam_LV4_20181216_20190101.nc'
 
 dir0_nam = '/home/x1wu/SDTJRE_2018/mfiles/NAM_data/LV3/'
-LV3_nam_2018 = dir0_nam+ 'roms_nam_LV3_20171221_20180120.nc'
-# LV3_nam_2018 = dir0_nam+ 'roms_nam_LV3_20180321_20180420.nc'
+# LV3_nam_2018 = dir0_nam+ 'roms_nam_LV3_20171221_20180120.nc'
+LV3_nam_2018 = dir0_nam+ 'roms_nam_LV3_20180321_20180420.nc'
 # LV3_nam_2018 = dir0_nam+ 'roms_nam_LV3_20180818_20180917.nc'
 # LV3_nam_2018 = dir0_nam+ 'roms_nam_LV3_20181216_20190115.nc'
 
@@ -65,7 +65,7 @@ vwind_LV3 = dlv3['Vwind'][:]
 pair_LV3 = dlv3['Pair'][:]
 
 # now match time indexes between the two grids
-date0 = datetime(2018,1,1)
+date0 = datetime(2018,4,1)
 
 wt3 = dlv3['wind_time'][:]
 wt3_list = []
