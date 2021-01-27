@@ -185,20 +185,33 @@ ax6.plot(wt3_list[t30:t31],uwind_LV3[t30:t31,j3,i3],color='cornflowerblue',label
 ax6.plot(wt4_list[t40:t41],uwind_LV4[t40:t41,j4,i4],color='orange',label='LV4')
 ax6.legend()
 ax6.text(0.1,0.1,'Uwind time series @ star',transform=ax6.transAxes)
+ax6.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
+plt.setp( ax6.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
+ax6.set_xlabel('Time')
+ax6.set_ylabel('wind velocity (m/s)')
 
 # vwind time compare
 ax7 = fig.add_subplot(gs[1,2])
 ax7.plot(wt3_list[t30:t31],vwind_LV3[t30:t31,j3,i3],color='cornflowerblue',label='LV3')
 ax7.plot(wt4_list[t40:t41],vwind_LV4[t40:t41,j4,i4],color='orange',label='LV4')
 ax7.legend()
-ax6.text(0.1,0.1,'Vwind time series @ star',transform=ax7.transAxes)
+ax7.text(0.1,0.1,'Vwind time series @ star',transform=ax7.transAxes)
+ax7.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
+plt.setp( ax7.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
+ax7.set_xlabel('Time')
+ax7.set_ylabel('wind velocity (m/s)')
+
 
 # pair time compare
 ax8 = fig.add_subplot(gs[2,2])
 ax8.plot(wt3_list[t30:t31],pair_LV3[t30:t31,j3,i3],color='cornflowerblue',label='LV3')
 ax8.plot(wt4_list[t40:t41],pair_LV4[t40:t41,j4,i4],color='orange',label='LV4')
 ax8.legend()
-ax6.text(0.1,0.1,'Pair time series @ star',transform=ax8.transAxes)
+ax8.text(0.1,0.1,'Pair time series @ star',transform=ax8.transAxes)
+ax8.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
+plt.setp( ax8.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
+ax8.set_xlabel('Time')
+ax8.set_ylabel('air pressure (Pa)')
 
 dlv3.close()
 dlv4.close()
