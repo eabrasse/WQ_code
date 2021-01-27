@@ -81,7 +81,7 @@ for t in wt4:
     wt4_list.append(date)
 t4 = wt4_list.index(date0)
 
-fig=plt.figure(figsize=(10,14))
+fig=plt.figure(figsize=(9,16))
 gs = GridSpec(3,2)
 
 #plot LV3 on left
@@ -90,7 +90,7 @@ vmin = -5
 vmax = 5
 ax0 = fig.add_subplot(gs[0,0])
 p=ax0.pcolormesh(lonr_LV3,latr_LV3,uwind_LV3[t3,:],cmap='BrBG',vmin=vmin,vmax=vmax)
-cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(-0.15,0.0,1,1))
+cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(0.15,0.0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
 cb.ax.set_ylabel('wind (ms-1)',rotation=90,labelpad=10,fontweight='bold')
 
@@ -109,11 +109,14 @@ ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold',va='top')
 
 # plot LV3 air pressure
 ax2 = fig.add_subplot(gs[2,0])
-ax2.pcolormesh(lonr_LV3,latr_LV3,pair_LV3[t3,:],cmap='RdPu',vmin=1013,vmax=1021)
+p2=ax2.pcolormesh(lonr_LV3,latr_LV3,pair_LV3[t3,:],cmap='RdPu',vmin=1013,vmax=1021)
 ax2.set_ylabel('latitude')
 ax2.set_xlabel('longitude')
 labeltext= 'LV3 \n'+date0.strftime("%m/%d/%Y") + '\nPair'
 ax2.text(0.1,0.9,labeltext,transform=ax2.transAxes,fontweight='bold',va='top')
+cbaxes = inset_axes(ax2, width="4%", height="40%", loc=4,bbox_transform=ax2.transAxes,bbox_to_anchor=(0.15,0.0,1,1))
+cb = fig.colorbar(p2, cax=cbaxes, orientation='vertical')
+cb.ax.set_ylabel('pressure (Pa)',rotation=90,labelpad=10,fontweight='bold')
 
 # LV4 uwind
 ax3 = fig.add_subplot(gs[0,1])
