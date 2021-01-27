@@ -65,7 +65,7 @@ vwind_LV3 = dlv3['Vwind'][:]
 pair_LV3 = dlv3['Pair'][:]
 
 # now match time indexes between the two grids
-date0 = datetime(2019,1,1)
+date0 = datetime(2018,12,31)
 
 wt3 = dlv3['wind_time'][:]
 wt3_list = []
