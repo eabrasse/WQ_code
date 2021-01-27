@@ -67,11 +67,11 @@ pair_LV3 = dlv3['Pair'][:]
 # choose a spatial reference index
 lonref=-117.2
 latref = 32.55
-latlondiff_LV3 = np.sqrt((latr_LV3-latref)**2 + (lonr_LV3-lonref)**2))
+latlondiff_LV3 = np.sqrt((latr_LV3-latref)**2 + (lonr_LV3-lonref)**2)
 i3 = np.where(lonlatdiff_LV3==lonlatdiff_LV3.min())[0][1]
 j3 = np.where(lonlatdiff_LV3==lonlatdiff_LV3.min())[0][0]
 
-latlondiff_LV4 = np.sqrt((latr_LV4-latref)**2 + (lonr_LV4-lonref)**2))
+latlondiff_LV4 = np.sqrt((latr_LV4-latref)**2 + (lonr_LV4-lonref)**2)
 i4 = np.where(lonlatdiff_LV4==lonlatdiff_LV4.min())[0][1]
 j4 = np.where(lonlatdiff_LV4==lonlatdiff_LV4.min())[0][0]
 
