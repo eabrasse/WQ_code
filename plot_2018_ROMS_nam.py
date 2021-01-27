@@ -68,12 +68,12 @@ pair_LV3 = dlv3['Pair'][:]
 lonref=-117.2
 latref = 32.55
 latlondiff_LV3 = np.sqrt((latr_LV3-latref)**2 + (lonr_LV3-lonref)**2)
-i3 = np.where(lonlatdiff_LV3==lonlatdiff_LV3.min())[0][1]
-j3 = np.where(lonlatdiff_LV3==lonlatdiff_LV3.min())[0][0]
+i3 = np.where(latlondiff_LV3==latlondiff_LV3.min())[0][1]
+j3 = np.where(latlondiff_LV3==latlondiff_LV3.min())[0][0]
 
 latlondiff_LV4 = np.sqrt((latr_LV4-latref)**2 + (lonr_LV4-lonref)**2)
-i4 = np.where(lonlatdiff_LV4==lonlatdiff_LV4.min())[0][1]
-j4 = np.where(lonlatdiff_LV4==lonlatdiff_LV4.min())[0][0]
+i4 = np.where(latlondiff_LV4==latlondiff_LV4.min())[0][1]
+j4 = np.where(latlondiff_LV4==latlondiff_LV4.min())[0][0]
 
 # now match time indexes between the two grids
 date0 = datetime(2018,8,18)
