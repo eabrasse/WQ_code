@@ -101,11 +101,14 @@ ax0.text(0.1,0.1,labeltext,transform=ax0.transAxes,fontweight='bold',va='top')
 
 # plot LV3 v wind
 ax1 = fig.add_subplot(gs[1,0])
-ax1.pcolormesh(lonr_LV3,latr_LV3,vwind_LV3[t3,:],cmap='BrBG',vmin=vmin,vmax=vmax,shading='auto')
+p=ax1.pcolormesh(lonr_LV3,latr_LV3,vwind_LV3[t3,:],cmap='BrBG',vmin=vmin,vmax=vmax,shading='auto')
 ax1.set_ylabel('latitude')
 ax1.set_xlabel('longitude')
 labeltext= 'LV3 \n'+wt3_list[t3].strftime("%m/%d/%Y") + '\nVwind'
 ax1.text(0.1,0.1,labeltext,transform=ax1.transAxes,fontweight='bold',va='top')
+cbaxes = inset_axes(ax1, width="4%", height="40%", loc=4,bbox_transform=ax1.transAxes,bbox_to_anchor=(0.15,0.0,1,1))
+cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
+cb.ax.set_ylabel('wind (ms-1)',rotation=90,labelpad=10,fontweight='bold')
 
 # plot LV3 air pressure
 ax2 = fig.add_subplot(gs[2,0])
@@ -120,27 +123,36 @@ cb.ax.set_ylabel('pressure (Pa)',rotation=90,labelpad=10,fontweight='bold')
 
 # LV4 uwind
 ax3 = fig.add_subplot(gs[0,1])
-ax3.pcolormesh(lonr_LV4,latr_LV4,uwind_LV4[t4,:],cmap='BrBG',vmin=vmin,vmax=vmax,shading='auto')
+p=ax3.pcolormesh(lonr_LV4,latr_LV4,uwind_LV4[t4,:],cmap='BrBG',vmin=vmin,vmax=vmax,shading='auto')
 ax3.set_ylabel('latitude')
 ax3.set_xlabel('longitude')
 labeltext= 'LV4 \n'+wt4_list[t4].strftime("%m/%d/%Y") + '\nUwind'
 ax3.text(0.1,0.1,labeltext,transform=ax3.transAxes,fontweight='bold',va='top')
+cbaxes = inset_axes(ax3, width="4%", height="40%", loc=4,bbox_transform=ax3.transAxes,bbox_to_anchor=(0.15,0.0,1,1))
+cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
+cb.ax.set_ylabel('wind (ms-1)',rotation=90,labelpad=10,fontweight='bold')
 
 # LV4 vwind
 ax4 = fig.add_subplot(gs[1,1])
-ax4.pcolormesh(lonr_LV4,latr_LV4,vwind_LV4[t4,:,:],cmap='BrBG',vmin=vmin,vmax=vmax,shading='auto')
+p=ax4.pcolormesh(lonr_LV4,latr_LV4,vwind_LV4[t4,:,:],cmap='BrBG',vmin=vmin,vmax=vmax,shading='auto')
 ax4.set_ylabel('latitude')
 ax4.set_xlabel('longitude')
 labeltext= 'LV4 \n'+wt4_list[t4].strftime("%m/%d/%Y") + '\nVwind'
 ax4.text(0.1,0.1,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
+cbaxes = inset_axes(ax4, width="4%", height="40%", loc=4,bbox_transform=ax4.transAxes,bbox_to_anchor=(0.15,0.0,1,1))
+cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
+cb.ax.set_ylabel('wind (ms-1)',rotation=90,labelpad=10,fontweight='bold')
 
 # LV4 air pressure
 ax5 = fig.add_subplot(gs[2,1])
-ax5.pcolormesh(lonr_LV4,latr_LV4,pair_LV4[t4,:],cmap='RdPu',vmin=1013,vmax=1021,shading='auto')
+p=ax5.pcolormesh(lonr_LV4,latr_LV4,pair_LV4[t4,:],cmap='RdPu',vmin=1013,vmax=1021,shading='auto')
 ax5.set_ylabel('latitude')
 ax5.set_xlabel('longitude')
 labeltext= 'LV4 \n'+wt4_list[t4].strftime("%m/%d/%Y") + '\nPair'
 ax5.text(0.1,0.1,labeltext,transform=ax5.transAxes,fontweight='bold',va='top')
+cbaxes = inset_axes(ax5, width="4%", height="40%", loc=4,bbox_transform=ax5.transAxes,bbox_to_anchor=(0.15,0.0,1,1))
+cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
+cb.ax.set_ylabel('pressure (Pa)',rotation=90,labelpad=10,fontweight='bold')
 
 for ax in ax0,ax1,ax2,ax3,ax4,ax5:
     ax.axis([lonr_LV4.min(),lonr_LV4.max(),latr_LV4.min(),latr_LV4.max()])
