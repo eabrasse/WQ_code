@@ -142,6 +142,7 @@ ax5.text(0.1,0.9,labeltext,transform=ax5.transAxes,fontweight='bold',va='top')
 for ax in ax0,ax1,ax2,ax3,ax4,ax5:
     ax.axis([lonr_LV4.min(),lonr_LV4.max(),latr_LV4.min(),latr_LV4.max()])
     ax.contour(lonr_LV4,latr_LV4,maskr_LV4,levels=[0.5],colors='k')
+    dar(ax)
 
 dlv3.close()
 dlv4.close()
@@ -149,5 +150,5 @@ dgrd.close
 
 plt.tight_layout()
 
-out_fn = '/data0/ebrasseale/WQ_plots/ROMS_2018_NAM_LV3_LV4_'+date.strftime("%Y.%m.%d")+'.png'
+out_fn = '/data0/ebrasseale/WQ_plots/ROMS_2018_NAM_LV3_LV4_'+date0.strftime("%Y.%m.%d")+'.png'
 plt.savefig(out_fn)
