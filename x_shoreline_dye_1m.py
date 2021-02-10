@@ -23,7 +23,7 @@ testing=True
 if testing:
     f_list = f_list[:3]
 
-ref_depth = 1
+ref_depth = 2
 
 nfiles = len(f_list)
 
@@ -164,5 +164,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_dye_depth_1m.p'
+outfn = home + 'WQ_data/shoreline_dye_depth_2m.p'
 pickle.dump(D,open(outfn,'wb'))
