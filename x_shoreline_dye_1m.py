@@ -80,8 +80,14 @@ for fn in f_list:
     NT += nt
     ds.close()
 
-dye_01 = np.zeros((NT,ny))
-dye_02 = np.zeros((NT,ny))
+#trim the top of the data, since it doesn't follow the shoreline
+#find where shoreline jumps
+x_diff = np.diff(shorelon)
+#identify largest jump
+cutoff = np.argmax(np.abs(x_diff))
+
+dye_01 = np.zeros((NT,cutoff))
+dye_02 = np.zeros((NT,cutoff))
 Dwave = np.zeros((NT))
 Hwave = np.zeros((NT))
 Lwave = np.zeros((NT))
@@ -105,29 +111,29 @@ for fn in f_list:
     Lwave0 = ds['Lwave'][:]
     zeta0 = ds['zeta'][:]
     
-    H = h0+zeta
+    H = h0+zeta0
 
     ocean_time = ds['ocean_time'][:]
     nt = ocean_time.shape[0]
 
     for t in range(nt):
-        for j in range(ny):
+        for j in range(cutoff):
             # find the edge of the mask
             # mask_diff = np.where(np.diff(wetdry_mask_rho[t,j,:]))[0]
-            mask_diff = np.where(np.diff(H[t,j,:]-ref_depth))[0]
+            x_1m_ind = np.argmin(np.abs(H[t,j,:]-ref_depth))
     
-            #if multiple edges, north of TJRE
-            if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
-                #look for the edge closest to the previously identified edge
-                x_1m_ind = mask_diff[np.argmin(np.abs(x_1m_ind-mask_diff))]
-        
-            #if multiple edges, south of TJRE
-            elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
-                #do outermost edge
-                x_1m_ind = mask_diff[0]
-        
-            elif len(mask_diff)==1:
-                x_1m_ind = mask_diff[0]
+            # #if multiple edges, north of TJRE
+            # if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
+            #     #look for the edge closest to the previously identified edge
+            #     x_1m_ind = mask_diff[np.argmin(np.abs(x_1m_ind-mask_diff))]
+            #
+            # #if multiple edges, south of TJRE
+            # elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
+            #     #do outermost edge
+            #     x_1m_ind = mask_diff[0]
+            #
+            # elif len(mask_diff)==1:
+            #     x_1m_ind = mask_diff[0]
 
             #go offshore of the wet/dry mask by a tad
             # x_wd_ind = x_wd_ind - 2
@@ -145,16 +151,12 @@ for fn in f_list:
     ds.close()
     tt+=1
 
-#trim the top of the data, since it doesn't follow the shoreline
-#find where shoreline jumps
-x_diff = np.diff(shorelon)
-#identify largest jump
-cutoff = np.argmax(np.abs(x_diff))
+
 #use that as a cutoff
 shorelon = shorelon[:cutoff]
 shorelat = shorelat[:cutoff]
-dye_01 = dye_01[:,:cutoff]
-dye_02 = dye_02[:,:cutoff]
+# dye_01 = dye_01[:,:cutoff]
+# dye_02 = dye_02[:,:cutoff]
 
 var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta','shorelon','shorelat']
 
