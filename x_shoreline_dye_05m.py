@@ -119,25 +119,30 @@ for fn in f_list:
     for t in range(nt):
         for j in range(cutoff):
             # find the edge of the mask
-            # mask_diff = np.where(np.diff(wetdry_mask_rho[t,j,:]))[0]
-            x_1m_ind = np.argmin(np.abs(H[t,j,:]-ref_depth))
+            wd_mask_diff = np.where(np.diff(wetdry_mask_rho[t,j,:]))[0]
+            #find where depth crosses from deeper than ref_depth to shallower
+            depth_diff = np.where(np.diff(np.sign(H[t,j,:]-ref_depth)))[0]
+            # x_1m_ind = np.argmin(np.abs(H[t,j,:]-ref_depth))
     
-            # #if multiple edges, north of TJRE
-            # if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
-            #     #look for the edge closest to the previously identified edge
-            #     x_1m_ind = mask_diff[np.argmin(np.abs(x_1m_ind-mask_diff))]
-            #
-            # #if multiple edges, south of TJRE
-            # elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
-            #     #do outermost edge
-            #     x_1m_ind = mask_diff[0]
-            #
-            # elif len(mask_diff)==1:
-            #     x_1m_ind = mask_diff[0]
+            #if multiple edges, north of TJRE
+            if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
+                #look for the edge closest to the previously identified edge
+                x_wd_ind = wd_mask_diff[np.argmin(np.abs(x_wd_ind-wd_mask_diff))]
+                x_1m_ind = depth_diff[np.argmin(np.abs(x_1m_ind-depth_diff))]
+
+            #if multiple edges, south of TJRE
+            elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
+                #do outermost edge
+                x_wd_ind = wd_mask_diff[0]
+                x_1m_ind = depth_diff[0]
+
+            elif len(mask_diff)==1:
+                x_wd_ind = wd_mask_diff[0]
+                x_1m_ind = depth_diff[0]
 
             #go offshore of the wet/dry mask by a tad
             # x_wd_ind = x_wd_ind - 2
-            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,j,int(x_1m_ind):])
+            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
             # dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,j,int(x_1m_ind):])
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
