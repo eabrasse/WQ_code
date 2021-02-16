@@ -19,7 +19,7 @@ f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
 
-testing=True
+testing=False
 if testing:
     f_list = f_list[:3]
 
@@ -143,7 +143,7 @@ for fn in f_list:
             #go offshore of the wet/dry mask by a tad
             # x_wd_ind = x_wd_ind - 2
             dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
-            # dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,j,int(x_1m_ind):])
+            dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
         
     Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
@@ -163,7 +163,7 @@ shorelat = shorelat[:cutoff]
 # dye_01 = dye_01[:,:cutoff]
 # dye_02 = dye_02[:,:cutoff]
 
-var_list = ['dye_01','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta','shorelon','shorelat']
+var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta','shorelon','shorelat']
 
 D = dict()
 for var in var_list:
