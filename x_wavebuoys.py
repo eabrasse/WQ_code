@@ -48,7 +48,7 @@ for fn in f_list:
             refgrid = np.abs(lon_rho-buoylon[b])+np.abs(lat_rho-buoylat[b])
             buoy_x[b] = np.where(refgrid==refgrid.min())[1][0]
             buoy_y[b] = np.where(refgrid==refgrid.min())[0][0]
-            h[b] = h0[buoy_y[b],buoy_x[b]]
+            h[b] = h0[int(buoy_y[b]),int(buoy_x[b])]
 
     else:
         nt = ds['ocean_time'].shape[0]
@@ -78,8 +78,8 @@ for fn in f_list:
     nt = ocean_time.shape[0]
 
     for b in range(nbuoys):
-        j = buoy_y[b]
-        i = buoy_x[b]
+        j = int(buoy_y[b])
+        i = int(buoy_x[b])
         Dwave[b,old_nt:old_nt+nt] = Dwave0[:,j,i]
         Hwave[b,old_nt:old_nt+nt] = Hwave0[:,j,i]
         Lwave[b,old_nt:old_nt+nt] = Lwave0[:,j,i]
@@ -92,7 +92,7 @@ for fn in f_list:
     tt+=1
 
 var_list = ['buoylon','buoylat','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta']
-
+#adding a note here to commit
 D = dict()
 for var in var_list:
     D[var]=locals()[var]
