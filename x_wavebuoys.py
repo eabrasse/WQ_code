@@ -50,7 +50,6 @@ for fn in f_list:
             buoy_x[b] = np.where(refgrid==refgrid.min())[1][0]
             buoy_y[b] = np.where(refgrid==refgrid.min())[0][0]
             h[b] = h0[int(buoy_y[b]),int(buoy_x[b])]
-
     NT += nt
     ds.close()
 
@@ -71,7 +70,7 @@ for fn in f_list:
     Dwave0 = ds['Dwave'][:]
     Hwave0 = ds['Hwave'][:]
     Lwave0 = ds['Lwave'][:]
-    
+    zeta0 = ds['zeta'][:]
 
     ocean_time = ds['ocean_time'][:]
     nt = ocean_time.shape[0]
