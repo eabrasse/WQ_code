@@ -37,6 +37,7 @@ h = np.zeros((nbuoys))
 NT = 0
 for fn in f_list:
     ds = nc.Dataset(dir0+fn)
+    nt = ds['ocean_time'].shape[0]
     if NT==0:
         
         lon_rho = ds['lon_rho'][:]
@@ -50,8 +51,6 @@ for fn in f_list:
             buoy_y[b] = np.where(refgrid==refgrid.min())[0][0]
             h[b] = h0[int(buoy_y[b]),int(buoy_x[b])]
 
-    else:
-        nt = ds['ocean_time'].shape[0]
     NT += nt
     ds.close()
 
