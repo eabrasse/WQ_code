@@ -56,10 +56,10 @@ for fn in f_list:
         ss2 = int(np.floor(ss/2))
         
         for b in range(nbuoys):
-            buoy_y[b] = b*ss+ss2
+            buoy_y[b] = int(b*ss+ss2)
             
             hvec = h0[b*ss+ss2,:]
-            buoy_x[b] = np.argmin(np.abs(hvec-href))
+            buoy_x[b] = int(np.argmin(np.abs(hvec-href)))
             
             buoylon[b]=lon_rho[buoy_y[b],buoy_x[b]]
             buoylat[b]=lat_rho[buoy_y[b],buoy_x[b]]
