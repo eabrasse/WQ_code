@@ -25,12 +25,18 @@ if testing:
 
 nfiles = len(f_list)
 
-buoylon = [-117.169,-117.15]
-buoylat = [32.570,32.446]
+# buoyname = ['TJRE','PB']
+# buoylon = [-117.169,-117.15]
+# buoylat = [32.570,32.446]
+href = 10
 
-nbuoys = len(buoylon)
+# nbuoys = len(buoylon)
+nbins=10
+nbuoys=nbins-1
 buoy_x = np.zeros((nbuoys))
 buoy_y = np.zeros((nbuoys))
+buoylon = np.zeros((nbuoys))
+buoylat = np.zeros((nbuoys))
 h = np.zeros((nbuoys))
 
 # Time steps are inconsistent across files, so first count 'em up
@@ -45,11 +51,19 @@ for fn in f_list:
         mask_rho = ds['mask_rho'][:]
         h0 = ds['h'][:]
         
+        ny = lat_rho.shape[0]
+        ss = int(np.floor(ny/nbins))
+        ss2 = int(np.floor(ss/2))
+        
         for b in range(nbuoys):
-            refgrid = np.abs(lon_rho-buoylon[b])+np.abs(lat_rho-buoylat[b])
-            buoy_x[b] = np.where(refgrid==refgrid.min())[1][0]
-            buoy_y[b] = np.where(refgrid==refgrid.min())[0][0]
-            h[b] = h0[int(buoy_y[b]),int(buoy_x[b])]
+            buoy_y[b] = b*ss+ss2
+            
+            hvec = h0[b*ss+ss2,:]
+            buoy_x[b] = np.argmin(np.abs(hvec-href))
+            
+            buoylon[b]=lon_rho[buoy_y[b],buoy_x[b]]
+            buoylat[b]=lat_rho[buoy_y[b],buoy_x[b]]
+            h[b] = h0[buoy_y[b],buoy_x[b]]
     NT += nt
     ds.close()
 
@@ -95,5 +109,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/wavebuoys_TJRE_PB.p'
+outfn = home + 'WQ_data/wavebuoys_{:d}buoys.p'.format(nbuoys)
 pickle.dump(D,open(outfn,'wb'))
