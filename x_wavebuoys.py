@@ -19,7 +19,7 @@ f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
 
-testing=True
+testing=False
 if testing:
     f_list = f_list[:3]
 
