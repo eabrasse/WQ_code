@@ -26,9 +26,9 @@ if testing:
 ref_depth = 5
 
 nfiles = len(f_list)
-
-buoylon = -117.169
-buoylat = 32.570
+#
+# buoylon = -117.169
+# buoylat = 32.570
 
 # Time steps are inconsistent across files, so first count 'em up
 NT = 0
@@ -46,10 +46,10 @@ for fn in f_list:
         mask_rho = ds['mask_rho'][:]
         h0 = ds['h'][:]
         
-        refgrid = np.abs(lon_rho-buoylon)+np.abs(lat_rho-buoylat)
-        buoy_x = np.where(refgrid==refgrid.min())[1][0]
-        buoy_y = np.where(refgrid==refgrid.min())[0][0]
-        h = h0[buoy_y,buoy_x]
+        # refgrid = np.abs(lon_rho-buoylon)+np.abs(lat_rho-buoylat)
+        # buoy_x = np.where(refgrid==refgrid.min())[1][0]
+        # buoy_y = np.where(refgrid==refgrid.min())[0][0]
+        # h = h0[buoy_y,buoy_x]
         
         for j in range(ny):
 
@@ -100,11 +100,11 @@ nj = len(j_inds)
 
 dye_01 = np.zeros((NT,nj))
 dye_02 = np.zeros((NT,nj))
-Dwave = np.zeros((NT))
-Hwave = np.zeros((NT))
-Lwave = np.zeros((NT))
-h = np.zeros((NT))
-zeta = np.zeros((NT))
+# Dwave = np.zeros((NT))
+# Hwave = np.zeros((NT))
+# Lwave = np.zeros((NT))
+# h = np.zeros((NT))
+# zeta = np.zeros((NT))
 ot = np.zeros((NT))
 
 # Now do the extraction and processing
@@ -118,9 +118,9 @@ for fn in f_list:
     wetdry_mask_rho = ds['wetdry_mask_rho'][:]
     dye_01_0 = ds['dye_01'][:]
     dye_02_0 = ds['dye_02'][:]
-    Dwave0 = ds['Dwave'][:]
-    Hwave0 = ds['Hwave'][:]
-    Lwave0 = ds['Lwave'][:]
+    # Dwave0 = ds['Dwave'][:]
+    # Hwave0 = ds['Hwave'][:]
+    # Lwave0 = ds['Lwave'][:]
     zeta0 = ds['zeta'][:]
     
     H = h0+zeta0
@@ -157,10 +157,10 @@ for fn in f_list:
             dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
             dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
         
-    Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
-    Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
-    Lwave[old_nt:old_nt+nt] = Lwave0[:,buoy_y,buoy_x]
-    zeta[old_nt:old_nt+nt] = zeta0[:,buoy_y,buoy_x]
+    # Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
+    # Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
+    # Lwave[old_nt:old_nt+nt] = Lwave0[:,buoy_y,buoy_x]
+    # zeta[old_nt:old_nt+nt] = zeta0[:,buoy_y,buoy_x]
     
     ot[old_nt:old_nt+nt] = ocean_time
     old_nt += nt
@@ -169,7 +169,7 @@ for fn in f_list:
     tt+=1
 
 
-var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta','shorelon','shorelat']
+var_list = ['dye_01','dye_02','ot','lon_rho','lat_rho','mask_rho','shorelon','shorelat']
 
 D = dict()
 for var in var_list:
