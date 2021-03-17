@@ -86,8 +86,16 @@ x_diff = np.diff(shorelon)
 #identify largest jump
 cutoff = np.argmax(np.abs(x_diff))
 
-dye_01 = np.zeros((NT,cutoff))
-dye_02 = np.zeros((NT,cutoff))
+#and remove TJRE mouth
+TJRE_inds = np.where(np.abs(x_diff[:cutoff])>0.0036)[0]
+TJ0 = TJRE_inds[0]
+TJ1 = TJRE_inds[-1]+1
+j_inds = list(range(TJ0))+list(range(TJ1,cutoff)))
+
+nj = len(j_inds)
+
+dye_01 = np.zeros((NT,nj))
+dye_02 = np.zeros((NT,nj))
 Dwave = np.zeros((NT))
 Hwave = np.zeros((NT))
 Lwave = np.zeros((NT))
@@ -117,7 +125,7 @@ for fn in f_list:
     nt = ocean_time.shape[0]
 
     for t in range(nt):
-        for j in range(cutoff):
+        for j in j_inds:
             # find the edge of the mask
             wd_mask_diff = np.where(np.diff(wetdry_mask_rho[t,j,:]))[0]
             #find where depth crosses from deeper than ref_depth to shallower
