@@ -65,14 +65,20 @@ for j in range(ny):
     # x_ind = x_ind0
 
 x_diff = np.diff(shorelon)
+#cutoff before jumping at mouth of San Diego bay
 cutoff = np.argmax(np.abs(x_diff))
+#find where mouth of TJRE is
+TJRE_inds = np.where(np.abs(x_diff[:cutoff])>0.0036)[0]
+TJ0 = TJRE_inds[0]
+TJ1 = TJRE_inds[-1]+1
 
 ds.close()
 
 fig = plt.figure(figsize=(6,8))
 ax5 = fig.gca()
 ax5.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
-ax5.scatter(shorelon[:cutoff],shorelat[:cutoff],color='cornflowerblue')
+ax5.scatter(shorelon[:TJ0],shorelat[:TJ0],color='cornflowerblue')
+ax5.scatter(shorelon[TJ1:cutoff],shorelat[TJ1:cutoff],color='cornflowerblue')
 yl = ax5.get_ylim()
 yav = (yl[0] + yl[1])/2
 ax5.set_aspect(1/np.sin(np.pi*yav/180))
