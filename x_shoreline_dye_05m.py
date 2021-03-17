@@ -90,7 +90,7 @@ cutoff = np.argmax(np.abs(x_diff))
 TJRE_inds = np.where(np.abs(x_diff[:cutoff])>0.0036)[0]
 TJ0 = TJRE_inds[0]
 TJ1 = TJRE_inds[-1]+1
-j_inds = list(range(TJ0))+list(range(TJ1,cutoff)))
+j_inds = list(range(TJ0))+list(range(TJ1,cutoff))
 
 nj = len(j_inds)
 
