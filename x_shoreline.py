@@ -14,7 +14,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-home = '/home/ebrasseale/'
+home = '/data0/ebrasseale/'
 
 dir0 = '/data0/NADB2017/NADB2017_0/Output/'
 
