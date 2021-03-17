@@ -129,6 +129,7 @@ for fn in f_list:
     nt = ocean_time.shape[0]
 
     for t in range(nt):
+        j_count=0
         for j in j_inds:
             # find the edge of the mask
             wd_mask_diff = np.where(np.diff(wetdry_mask_rho[t,j,:]))[0]
@@ -154,8 +155,10 @@ for fn in f_list:
 
             #go offshore of the wet/dry mask by a tad
             # x_wd_ind = x_wd_ind - 2
-            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
-            dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
+            dye_01[old_nt+t,j_count] = np.nanmean(dye_01_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
+            dye_02[old_nt+t,j_count] = np.nanmean(dye_02_0[t,:,j,int(x_1m_ind):int(x_wd_ind)])
+            
+            j_count+=1
         
     # Dwave[old_nt:old_nt+nt] = Dwave0[:,buoy_y,buoy_x]
     # Hwave[old_nt:old_nt+nt] = Hwave0[:,buoy_y,buoy_x]
