@@ -92,6 +92,10 @@ TJ0 = TJRE_inds[0]
 TJ1 = TJRE_inds[-1]+1
 j_inds = list(range(TJ0))+list(range(TJ1,cutoff))
 
+#trim shoreline data
+shorelon = shorelon[j_inds]
+shorelat = shorelat[j_inds]
+
 nj = len(j_inds)
 
 dye_01 = np.zeros((NT,nj))
@@ -164,12 +168,6 @@ for fn in f_list:
     ds.close()
     tt+=1
 
-
-#use that as a cutoff
-shorelon = shorelon[:cutoff]
-shorelat = shorelat[:cutoff]
-# dye_01 = dye_01[:,:cutoff]
-# dye_02 = dye_02[:,:cutoff]
 
 var_list = ['dye_01','dye_02','Dwave','Hwave','Lwave','ot','lon_rho','lat_rho','mask_rho','h','zeta','shorelon','shorelat']
 
