@@ -73,12 +73,12 @@ rt = dsriv['river_time'][:]
 #convert from days to seconds
 rt = rt *3600*24
 r0 = np.argmin(np.abs(rt-ot[0]))
-r1 = np.argmin(np.abs(rt-ot[-1]))
+r1 = np.argmin(np.abs(rt-otdb[-1]))
 rt_list = []
 for rtt in rt[r0:r1]:
     rt_list.append(datetime(1999,1,1,0,0) + timedelta(seconds=rtt))
 rQ = dsriv['river_transport'][:]
-axriv.plot(rt_list,rQ[r0:r1,:5])
+axriv.plot(rt_list,-rQ[r0:r1,:5])
 axriv.text(0.9,0.9,'Tijuana River Estuary input',transform=axriv.transAxes,ha='right')
 axriv.set_ylabel('transport m3s-1')
 axriv.set_xlabel('Time')
