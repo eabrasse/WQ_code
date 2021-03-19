@@ -20,6 +20,7 @@ home = '/data0/ebrasseale/'
 
 rst_fn = home+'/NADB2018/ocean_rst_NADB2018_r1.nc'
 his_fn = home+'/NADB2018/ocean_his_NADB2018_00007.nc'
+riv_fn = home+'/NADB2018/Input/river_tracer_4river_NADB2018.nc'
 
 dsr = nc.Dataset(rst_fn)
 otdb = dsr['ocean_time'][:]
@@ -30,15 +31,8 @@ uz = np.where(udb==udb.max())[2][0]
 uy = np.where(udb==udb.max())[3][0]
 ux = np.where(udb==udb.max())[4][0]
 
-zetadb = dsr['zeta'][:]
-zetat = np.where(zetadb==zetadb.max())[0][0]
-zetathree = np.where(zetadb==zetadb.max())[1][0]
-zetay = np.where(zetadb==zetadb.max())[2][0]
-zetax = np.where(zetadb==zetadb.max())[3][0]
-
 ds = nc.Dataset(his_fn)
 u = ds['u'][:]
-zeta = ds['zeta'][:]
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
@@ -59,9 +53,6 @@ axmap.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alph
 ucol='green'
 axmap.plot(lon_rho[uy,ux],lat_rho[uy,ux],'*',mfc=ucol,mec='black',markersize=10)
 axmap.text(lon_rho[uy,ux],lat_rho[uy,ux]+0.001,'max u',color=ucol,va='bottom',ha='center')
-zetacol='magenta'
-axmap.plot(lon_rho[zetay,zetax],lat_rho[zetay,zetax],'d',mfc=zetacol,mec='black',markersize=10)
-axmap.text(lon_rho[zetay,zetax],lat_rho[zetay,zetax]-0.001,'max SSH',color=zetacol,va='top',ha='center')
 
 yl = axmap.get_ylim()
 yav = (yl[0] + yl[1])/2
@@ -76,12 +67,21 @@ axu.set_title('u at location of blow up')
 axu.set_xlabel('time')
 axu.set_ylabel('velocity (m/s)')
 
-axzeta = fig.add_subplot(gs[1,1])
-axzeta.plot(dt_list,zeta[:,zetay,zetax])
-axzeta.plot(dt_listdb,zetadb[:,zetathree,zetay,zetax],linestyle='dashed')
-axzeta.set_title('zeta at location of blow up')
-axzeta.set_xlabel('time')
-axzeta.set_ylabel('SSH (m)')
+axriv = fig.add_subplot(gs[1,1])
+dsriv = nc.Dataset(riv_fn)
+rt = dsriv['river_time'][:]
+#convert from hours to seconds
+rt = rt *3600
+r0 = np.argmin(np.abs(rt-ot[0]))
+r1 = np.argmin(np.abs(rt-ot[1]))
+rt_list = []
+for rtt in rt[r0:r1]:
+    rt_list.append(datetime(1999,1,1,0,0) + timedelta(seconds=rtt))
+rQ = dsriv['river_transport'][:]
+axriv.plot(rt_list,rQ[r0:r1,:5])
+axriv.text(0.9,0.9,'Tijuana River Estuary input',transform=ax[0].transAxes,ha='right')
+axriv.set_ylabel('transport m3s-1')
+axriv.set_xlabel('Time')
 
 plt.tight_layout()
 
@@ -90,4 +90,5 @@ plt.savefig(outfn)
 plt.close('all')
 
 dsr.close()
+dsriv.close()
 ds.close()
