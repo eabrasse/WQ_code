@@ -22,16 +22,15 @@ fn = home+'/NADB2018/ocean_his_NADB2018_00007.nc'
 
 ds = nc.Dataset(fn)
 u = ds['u'][:]
-ut = np.where(u==u.max)[0][0]
-uz = np.where(u==u.max)[1][0]
-uy = np.where(u==u.max)[2][0]
-ux = np.where(u==u.max)[3][0]
+ut = np.where(u==u.max())[0][0]
+uz = np.where(u==u.max())[1][0]
+uy = np.where(u==u.max())[2][0]
+ux = np.where(u==u.max())[3][0]
 
 zeta = ds['zeta'][:]
-zetat = np.where(u==u.max)[0][0]
-zetaz = np.where(u==u.max)[1][0]
-zetay = np.where(u==u.max)[2][0]
-zetax = np.where(u==u.max)[3][0]
+zetat = np.where(zeta==zeta.max())[0][0]
+zetay = np.where(zeta==zeta.max())[1][0]
+zetax = np.where(zeta==zeta.max())[2][0]
 
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
@@ -69,10 +68,12 @@ axzeta = fig.add_subplots(gs[1,1])
 axzeta.plot(dt_list,zeta[:,zetay,zetax])
 axzeta.set_title('zeta at location of blow up')
 axzeta.set_xlabel('time')
-axzeta.set_ylaebl('SSH (m)')
+axzeta.set_ylabel('SSH (m)')
 
 plt.tight_layout()
 
 outfn = home + 'WQ_plots/debug.png'
 plt.savefig(outfn)
 plt.close('all')
+
+ds.close()
