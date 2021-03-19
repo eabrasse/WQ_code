@@ -22,21 +22,20 @@ rst_fn = home+'/NADB2018/ocean_rst_NADB2018_r1.nc'
 his_fn = home+'/NADB2018/ocean_his_NADB2018_00007.nc'
 
 dsr = nc.Dataset(rst_fn)
-u = dsr['u'][:]
-ut = np.where(u==u.max())[0][0]
-uz = np.where(u==u.max())[1][0]
-uy = np.where(u==u.max())[2][0]
-ux = np.where(u==u.max())[3][0]
+udb = dsr['u'][:]
+ut = np.where(udb==udb.max())[0][0]
+uz = np.where(udb==udb.max())[2][0]
+uy = np.where(udb==udb.max())[3][0]
+ux = np.where(udb==udb.max())[4][0]
 
-zeta = dsr['zeta'][:]
-zetat = np.where(zeta==zeta.max())[0][0]
-zetay = np.where(zeta==zeta.max())[1][0]
-zetax = np.where(zeta==zeta.max())[2][0]
-
-dsr.close()
+zetadb = dsr['zeta'][:]
+zetat = np.where(zetadb==zetadb.max())[0][0]
+zetay = np.where(zetadb==zetadb.max())[2][0]
+zetax = np.where(zetadb==zetadb.max())[3][0]
 
 ds = nc.Dataset(his_fn)
-
+u = ds['u'][:]
+zeta = ds['zeta'][:]
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
@@ -81,4 +80,5 @@ outfn = home + 'WQ_plots/debug.png'
 plt.savefig(outfn)
 plt.close('all')
 
+dsr.close()
 ds.close()
