@@ -18,19 +18,24 @@ from datetime import datetime, timedelta
 
 home = '/data0/ebrasseale/'
 
-fn = home+'/NADB2018/ocean_his_NADB2018_00007.nc'
+rst_fn = home+'/NADB2018/ocean_rst_NADB2018_r1.nc'
+his_fn = home+'/NADB2018/ocean_his_NADB2018_00007.nc'
 
-ds = nc.Dataset(fn)
-u = ds['u'][:]
+dsr = nc.Dataset(rst_fn)
+u = dsr['u'][:]
 ut = np.where(u==u.max())[0][0]
 uz = np.where(u==u.max())[1][0]
 uy = np.where(u==u.max())[2][0]
 ux = np.where(u==u.max())[3][0]
 
-zeta = ds['zeta'][:]
+zeta = dsr['zeta'][:]
 zetat = np.where(zeta==zeta.max())[0][0]
 zetay = np.where(zeta==zeta.max())[1][0]
 zetax = np.where(zeta==zeta.max())[2][0]
+
+dsr.close()
+
+ds = nc.Dataset(his_fn)
 
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
@@ -43,7 +48,7 @@ for ott in ot:
 
 fig = plt.figure(figsize=(12,10))
 gs = GridSpec(2,2)
-axmap = fig.add_subplot(gs[0,:])
+axmap = fig.add_subplot(gs[:,0])
 axmap.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
 ucol='green'
 axmap.plot(lon_rho[uy,ux],lat_rho[uy,ux],'*',mfc=ucol,mec='black',markersize=10)
@@ -58,7 +63,7 @@ axmap.set_aspect(1/np.cos(np.pi*yav/180))
 axmap.set_ylabel('Latitude')
 axmap.set_xlabel('Longitude')
 
-axu = fig.add_subplot(gs[1,0])
+axu = fig.add_subplot(gs[0,1])
 axu.plot(dt_list,u[:,uz,uy,ux])
 axu.set_title('u at location of blow up')
 axu.set_xlabel('time')
