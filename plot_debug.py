@@ -70,10 +70,10 @@ axu.set_ylabel('velocity (m/s)')
 axriv = fig.add_subplot(gs[1,1])
 dsriv = nc.Dataset(riv_fn)
 rt = dsriv['river_time'][:]
-#convert from hours to seconds
+#convert from days to seconds
 rt = rt *3600*24
 r0 = np.argmin(np.abs(rt-ot[0]))
-r1 = np.argmin(np.abs(rt-ot[1]))
+r1 = np.argmin(np.abs(rt-ot[-1]))
 rt_list = []
 for rtt in rt[r0:r1]:
     rt_list.append(datetime(1999,1,1,0,0) + timedelta(seconds=rtt))
