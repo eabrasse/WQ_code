@@ -22,6 +22,7 @@ rst_fn = home+'/NADB2018/ocean_rst_NADB2018_r1.nc'
 his_fn = home+'/NADB2018/ocean_his_NADB2018_00007.nc'
 
 dsr = nc.Dataset(rst_fn)
+otdb = dsr['ocean_time'][:]
 udb = dsr['u'][:]
 ut = np.where(udb==udb.max())[0][0]
 uz = np.where(udb==udb.max())[2][0]
@@ -44,6 +45,10 @@ ot = ds['ocean_time'][:]
 dt_list = []
 for ott in ot:
     dt_list.append(datetime(1999,1,1,0,0) + timedelta(seconds=ott))
+    
+dt_listdb = []
+for ott in otdb:
+    dt_listdb.append(datetime(1999,1,1,0,0) + timedelta(seconds=ott))
 
 fig = plt.figure(figsize=(12,10))
 gs = GridSpec(2,2)
@@ -64,12 +69,14 @@ axmap.set_xlabel('Longitude')
 
 axu = fig.add_subplot(gs[0,1])
 axu.plot(dt_list,u[:,uz,uy,ux])
+axu.plot(dt_listdb,udb[:,uz,uy,ux],linestyle='dashed')
 axu.set_title('u at location of blow up')
 axu.set_xlabel('time')
 axu.set_ylabel('velocity (m/s)')
 
 axzeta = fig.add_subplot(gs[1,1])
 axzeta.plot(dt_list,zeta[:,zetay,zetax])
+axzeta.plot(dt_listdb,zetadb[:,zetay,zetax],linestyle='dashed')
 axzeta.set_title('zeta at location of blow up')
 axzeta.set_xlabel('time')
 axzeta.set_ylabel('SSH (m)')
