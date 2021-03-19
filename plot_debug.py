@@ -43,7 +43,7 @@ for ott in ot:
 
 fig = plt.figure(figsize=(12,10))
 gs = GridSpec(2,2)
-axmap = fig.add_subplots(gs[0,:])
+axmap = fig.add_subplot(gs[0,:])
 axmap.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
 ucol='green'
 axmap.plot(lon_rho[uy,ux],lat_rho[uy,ux],'*',mfc=ucol,mec='black',markersize=10)
@@ -58,13 +58,13 @@ axmap.set_aspect(1/np.cos(np.pi*yav/180))
 axmap.set_ylabel('Latitude')
 axmap.set_xlabel('Longitude')
 
-axu = fig.add_subplots(gs[1,0])
+axu = fig.add_subplot(gs[1,0])
 axu.plot(dt_list,u[:,uz,uy,ux])
 axu.set_title('u at location of blow up')
 axu.set_xlabel('time')
 axu.set_ylabel('velocity (m/s)')
 
-axzeta = fig.add_subplots(gs[1,1])
+axzeta = fig.add_subplot(gs[1,1])
 axzeta.plot(dt_list,zeta[:,zetay,zetax])
 axzeta.set_title('zeta at location of blow up')
 axzeta.set_xlabel('time')
