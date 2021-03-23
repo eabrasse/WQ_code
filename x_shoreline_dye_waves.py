@@ -44,8 +44,8 @@ for fn in f_list:
         mask_rho = ds['mask_rho'][:]
         h0 = ds['h'][:]
 
-    else:
-        nt = ds['ocean_time'].shape[0]
+
+    nt = ds['ocean_time'].shape[0]
     NT += nt
     ds.close()
 
