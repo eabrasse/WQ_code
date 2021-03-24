@@ -93,7 +93,7 @@ for fn in f_list:
             # find the edge of the mask
             wd_mask_diff = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:]))[0]
             #find where depth crosses from deeper than ref_depth to shallower
-            depth_diff = np.where(np.diff(np.sign(H[t,j,:]-ref_depth)))[0]
+            depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:]-ref_depth)))[0]
     
             #if multiple edges, north of TJRE
             if (len(mask_diff)>1)&(lat_rho[jjs[j],0]>32.6):
