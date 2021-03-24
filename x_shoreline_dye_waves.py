@@ -43,7 +43,9 @@ for fn in f_list:
         lat_rho = ds['lat_rho'][:]
         mask_rho = ds['mask_rho'][:]
         h0 = ds['h'][:]
-        mask_diff = np.where(np.diff(mask_rho[jjs[j],:]))[0]
+        mask_diff = np.zeros((len(jjs)))
+        for j in range(len(jjs)):
+            mask_diff = np.where(np.diff(mask_rho[jjs[j],:]))[0]
 
 
     nt = ds['ocean_time'].shape[0]
