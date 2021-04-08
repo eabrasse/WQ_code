@@ -129,7 +129,7 @@ for fn in f_list:
     tt+=1
 
 
-var_list = ['dye_01','dye_02','ot','lon_rho','lat_rho','mask_rho','iis','jjs','iib','jjb','Dwave','Hwave','Lwave','zeta','h','shoreangle']
+var_list = ['dye_01','dye_02','ot','lon_rho','lat_rho','mask_rho','iis','jjs','iib','jjb','Dwave','Hwave','Lwave','zeta','shoreangle']
 
 D = dict()
 for var in var_list:
