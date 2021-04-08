@@ -24,7 +24,7 @@ f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
 
-testing=True
+testing=False
 if testing:
     f_list = f_list[:3]
 
@@ -60,7 +60,6 @@ dye_02 = np.zeros((NT,nj))
 Dwave = np.zeros((NT,nj))
 Hwave = np.zeros((NT,nj))
 Lwave = np.zeros((NT,nj))
-h = np.zeros((NT))
 zeta = np.zeros((NT,nj))
 ot = np.zeros((NT))
 
@@ -130,7 +129,7 @@ for fn in f_list:
     tt+=1
 
 
-var_list = ['dye_01','dye_02','ot','lon_rho','lat_rho','mask_rho','iis','jjs','iib','jjb','Dwave','Hwave','Lwave','zeta','h']
+var_list = ['dye_01','dye_02','ot','lon_rho','lat_rho','mask_rho','iis','jjs','iib','jjb','Dwave','Hwave','Lwave','zeta','h','shoreangle']
 
 D = dict()
 for var in var_list:
