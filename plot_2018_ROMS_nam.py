@@ -214,7 +214,7 @@ plt.setp( ax8.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode
 ax8.set_xlabel('Time')
 ax8.set_ylabel('air pressure (Pa)')
 
-dlv3.close()
+# dlv3.close()
 dlv4.close()
 dgrd.close
 
