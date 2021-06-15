@@ -76,7 +76,7 @@ i4 = np.where(latlondiff_LV4==latlondiff_LV4.min())[1][0]
 j4 = np.where(latlondiff_LV4==latlondiff_LV4.min())[0][0]
 
 # now match time indexes between the two grids
-date0 = datetime(2018,12,21)
+date0 = datetime(2018,12,16)
 date1 = datetime(2019,1,1)
 
 wt3 = dlv3['wind_time'][:]
