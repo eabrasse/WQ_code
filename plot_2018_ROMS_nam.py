@@ -65,8 +65,8 @@ pair_LV4 = dlv4['Pair'][:]
 # pair_LV3 = dlv3['Pair'][:]
 
 # # choose a spatial reference index
-# lonref=-117.2
-# latref = 32.55
+lonref=-117.2
+latref = 32.55
 # latlondiff_LV3 = np.sqrt((latr_LV3-latref)**2 + (lonr_LV3-lonref)**2)
 # i3 = np.where(latlondiff_LV3==latlondiff_LV3.min())[1][0]
 # j3 = np.where(latlondiff_LV3==latlondiff_LV3.min())[0][0]
@@ -100,8 +100,8 @@ gs = GridSpec(3,2)
 
 # #plot LV3 on left
 # # plot u wind
-# vmin = -5
-# vmax = 5
+vmin = -5
+vmax = 5
 # ax0 = fig.add_subplot(gs[0,0])
 # p=ax0.pcolormesh(lonr_LV3,latr_LV3,uwind_LV3[t30,:],cmap='BrBG',vmin=vmin,vmax=vmax,shading='auto')
 # cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(0.15,0.0,1,1))
