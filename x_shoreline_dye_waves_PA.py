@@ -13,7 +13,7 @@ import netCDF4 as nc
 
 home = '/data0/ebrasseale/'
 
-ind_fn = home+'WQ_data/shore_buoy_inds_sm100_PA.p'
+ind_fn = home+'WQ_data/shore_buoy_inds_sm100_SA.p'
 Dinds = pickle.load(open(ind_fn,'rb'))
 for var in Dinds.keys():
     locals()[var]=Dinds[var]
@@ -135,5 +135,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_dye_waves_05m_sm100_PA.p'
+outfn = home + 'WQ_data/shoreline_dye_waves_05m_sm100_SA.p'
 pickle.dump(D,open(outfn,'wb'))
