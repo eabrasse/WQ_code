@@ -101,7 +101,7 @@ ax_map.set_ylabel('latitude')
 # time series
 ax_ts = fig.add_subplot(gs[0,0])
 ax_ts.plot(CSIDE_time_list,CSIDE_ssh,label='CSIDE 2018')
-ax_ts.plot(NOAA_tide_gauge['time'],NOAA_tide_gauge_ssh,label='NOAA tide gauge 9410170 - San Diego, CA')
+ax_ts.plot(NOAA_tide_gauge_df['time'],NOAA_tide_gauge_ssh,label='NOAA tide gauge 9410170 - San Diego, CA')
 ax_ts.legend()
 ax_ts.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax_ts.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
