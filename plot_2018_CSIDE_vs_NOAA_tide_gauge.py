@@ -38,7 +38,7 @@ NOAA_tide_gauge_fname = '/data0/ebrasseale/WQ_data/2018validation/CO-OPS_9410170
 NOAA_tide_gauge_df = pd.read_csv(NOAA_tide_gauge_fname,parse_dates={ 'time' : ['Date','Time (GMT)']})
 NOAA_tide_gauge_df = NOAA_tide_gauge_df.set_index(NOAA_tide_gauge_df['time'])
 
-NOAA_tide_gauge_lon = -117.17
+NOAA_tide_gauge_lon = -117.18
 NOAA_tide_gauge_lat = 32.71
 
 NOAA_tide_gauge_ssh = NOAA_tide_gauge_df['Verified (m)'][:]
@@ -56,28 +56,32 @@ jref = np.where(latlondiff==latlondiff.min())[0][0]
 
 
 NT = 0
+CSIDE_time = np.array([])
+CSIDE_ssh = np.array([])
 for fname in f_list:
     ds = nc.Dataset(dir0+fname)
     nt = ds['ocean_time'].shape[0]
     NT +=nt
-    ds.close()
-
-CSIDE_time = np.zeros((NT))
-CSIDE_ssh = np.zeros((NT))
-old_nt = 0
-for fname in f_list:
-    
-    ds = nc.Dataset(dir0+fname)
-    
+#     ds.close()
+#
+#
+# old_nt = 0
+# for fname in f_list:
+#
+#     ds = nc.Dataset(dir0+fname)
+#
     ot = ds['ocean_time'][:]
     zeta = ds['zeta'][:]
     
-    nt = ot.shape[0]
-
-    CSIDE_time[old_nt:old_nt+nt] = ot
-    CSIDE_ssh[old_nt:old_nt+nt] = zeta[:,jref,iref]
-
-    old_nt += nt
+    CSIDE_time = np.append(CSIDE_time,ot)
+    CSIDE_ssh = np.append(CSIDE_ssh,zeta[:,jref,iref])
+#
+#     nt = ot.shape[0]
+#
+#     CSIDE_time[old_nt:old_nt+nt] = ot
+#     CSIDE_ssh[old_nt:old_nt+nt] = zeta[:,jref,iref]
+#
+#     old_nt += nt
     ds.close()
 
 
@@ -87,12 +91,12 @@ for t in CSIDE_time:
     CSIDE_time_list.append(date)
 
 
-fig=plt.figure(figsize=(12,16))
+fig=plt.figure(figsize=(12,8))
 gs = GridSpec(1,2)
 
 # plot location of tide gauge
 ax_map = fig.add_subplot(gs[0,1])
-ax_map.contour(lonr,latr,maskr,levels=[0.5])
+ax_map.contour(lonr,latr,maskr,levels=[0.5],colors='k')
 ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='*',markersize=15,mec='k',mfc='yellow')
 ax_map.set_xlabel('longitude')
 ax_map.set_ylabel('latitude')
