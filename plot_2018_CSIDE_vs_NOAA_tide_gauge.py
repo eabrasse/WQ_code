@@ -125,24 +125,24 @@ plt.setp( ax_ts2.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_m
 ax_ts2.set_xlabel('Time')
 ax_ts2.set_ylabel('SSH (m)')
 ax_ts2.set_title('De-meaned SSH at starred location')
-
-NOAA_tide_gauge_t0 = min(NOAA_tide_gauge_df['time'])
-CSIDE_t0 = min(CSIDE_time_list)
-later_t0 = max([NOAA_tide_gauge_t0,CSIDE_t0])
-
-NOAA_tide_gauge_t1 = max(NOAA_tide_gauge_df['time'])
-CSIDE_t1 = max(CSIDE_time_list)
-earlier_t1 = min([NOAA_tide_gauge_t1,CSIDE_t1])
-
-ssh1 = CSIDE_ssh[(CSIDE_time_list>later_t0)&(CSIDE_time_list<earlier_t1)]
-ssh2 = NOAA_tide_gauge_ssh[(NOAA_tide_gauge_df['time']>later_t0)&(NOAA_tide_gauge_df['time']<earlier_t1)]
-shared_time = CSIDE_time_list[(CSIDE_time_list>later_t0)&(CSIDE_time_list<earlier_t1)]
-ssh_diff = ssh1-ssh2
-
-ax_ts2_diff = ax_ts2.twinx()
-ax_ts2_diff.plot(ssh_diff,color='k',linestyle='dotted',label='difference between demeaned SSHs')
-ax_ts2_diff.legend()
-ax_ts2_diff.set_ylabel(r'$\Delta$ SSH (m)')
+#
+# NOAA_tide_gauge_t0 = min(NOAA_tide_gauge_df['time'])
+# CSIDE_t0 = min(CSIDE_time_list)
+# later_t0 = max([NOAA_tide_gauge_t0,CSIDE_t0])
+#
+# NOAA_tide_gauge_t1 = max(NOAA_tide_gauge_df['time'])
+# CSIDE_t1 = max(CSIDE_time_list)
+# earlier_t1 = min([NOAA_tide_gauge_t1,CSIDE_t1])
+#
+# ssh1 = CSIDE_ssh[(CSIDE_time_list>later_t0)&(CSIDE_time_list<earlier_t1)]
+# ssh2 = NOAA_tide_gauge_ssh[(NOAA_tide_gauge_df['time']>later_t0)&(NOAA_tide_gauge_df['time']<earlier_t1)]
+# shared_time = CSIDE_time_list[(CSIDE_time_list>later_t0)&(CSIDE_time_list<earlier_t1)]
+# ssh_diff = ssh1-ssh2
+#
+# ax_ts2_diff = ax_ts2.twinx()
+# ax_ts2_diff.plot(ssh_diff,color='k',linestyle='dotted',label='difference between demeaned SSHs')
+# ax_ts2_diff.legend()
+# ax_ts2_diff.set_ylabel(r'$\Delta$ SSH (m)')
 
 plt.tight_layout()
 
