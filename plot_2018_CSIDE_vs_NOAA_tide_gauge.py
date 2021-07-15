@@ -38,7 +38,7 @@ NOAA_tide_gauge_fname = '/data0/ebrasseale/WQ_data/2018validation/CO-OPS_9410170
 NOAA_tide_gauge_df = pd.read_csv(NOAA_tide_gauge_fname,parse_dates={ 'time' : ['Date','Time (GMT)']})
 NOAA_tide_gauge_df = NOAA_tide_gauge_df.set_index(NOAA_tide_gauge_df['time'])
 
-NOAA_tide_gauge_lon = -117.18
+NOAA_tide_gauge_lon = -117.17
 NOAA_tide_gauge_lat = 32.71
 
 NOAA_tide_gauge_ssh = NOAA_tide_gauge_df['Verified (m)'][:]
@@ -92,14 +92,16 @@ for t in CSIDE_time:
 
 
 fig=plt.figure(figsize=(12,8))
-gs = GridSpec(1,2)
+gs = GridSpec(2,2)
 
 # plot location of tide gauge
-ax_map = fig.add_subplot(gs[0,1])
+ax_map = fig.add_subplot(gs[:,1])
 ax_map.contour(lonr,latr,maskr,levels=[0.5],colors='k')
-ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='*',markersize=15,mec='k',mfc='yellow')
+ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='*',markersize=15,mec='o',mfc='None')
+ax_map.plot(lonr[jref,iref]-0.01,latr[jref,iref],marker='*',markersize=15,mec='k',mfc='yellow')
 ax_map.set_xlabel('longitude')
 ax_map.set_ylabel('latitude')
+dar(ax_map)
 
 
 # time series
@@ -111,6 +113,36 @@ ax_ts.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax_ts.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
 ax_ts.set_xlabel('Time')
 ax_ts.set_ylabel('SSH (m)')
+ax_ts.set_title('SSH at starred location')
+
+# demeaned time series
+ax_ts2 = fig.add_subplot(gs[1,0])
+ax_ts2.plot(CSIDE_time_list,CSIDE_ssh-CSIDE_ssh.mean(),label='CSIDE 2018')
+ax_ts2.plot(NOAA_tide_gauge_df['time'],NOAA_tide_gauge_ssh-NOAA_tide_gauge_ssh.mean(),label='NOAA tide gauge 9410170 - San Diego, CA')
+# ax_ts2.legend()
+ax_ts2.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
+plt.setp( ax_ts2.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
+ax_ts2.set_xlabel('Time')
+ax_ts2.set_ylabel('SSH (m)')
+ax_ts2.set_title('De-meaned SSH at starred location')
+
+NOAA_tide_gauge_t0 = min(NOAA_tide_gauge_df['time'])
+CSIDE_t0 = min(CSIDE_time_list)
+later_t0 = max([NOAA_tide_gauge_t0,CSIDE_t0])
+
+NOAA_tide_gauge_t1 = max(NOAA_tide_gauge_df['time'])
+CSIDE_t1 = max(CSIDE_time_list)
+earlier_t1 = min([NOAA_tide_gauge_t1,CSIDE_t1])
+
+ssh1 = CSIDE_ssh[(CSIDE_time_list>later_t0)&(CSIDE_time_list<earlier_t1)]
+ssh2 = NOAA_tide_gauge_ssh[(NOAA_tide_gauge_df['time']>later_t0)&(NOAA_tide_gauge_df['time']<earlier_t1)]
+shared_time = CSIDE_time_list[(CSIDE_time_list>later_t0)&(CSIDE_time_list<earlier_t1)]
+ssh_diff = ssh1-ssh2
+
+ax_ts2_diff = ax_ts2.twinx()
+ax_ts2_diff.plot(ssh_diff,color='k',linestyle='dotted',label='difference between demeaned SSHs')
+ax_ts2_diff.legend()
+ax_ts2_diff.set_ylabel(r'$\Delta$ SSH (m)')
 
 plt.tight_layout()
 
