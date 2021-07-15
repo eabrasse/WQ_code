@@ -91,7 +91,7 @@ fig=plt.figure(figsize=(12,16))
 gs = GridSpec(1,2)
 
 # plot location of tide gauge
-ax_map = gs[0,1]
+ax_map = fig.add_subplot(gs[0,1])
 ax_map.contour(lonr,latr,maskr,levels=[0.5])
 ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='*',markersize=15,mec='k',mfc='yellow')
 ax_map.set_xlabel('longitude')
