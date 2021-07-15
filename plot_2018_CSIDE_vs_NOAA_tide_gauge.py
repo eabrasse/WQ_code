@@ -32,7 +32,7 @@ plt.close('all')
 dir0 = '/data0/NADB2018/'
 f_list = os.listdir(dir0)
 f_list.sort()
-f_list = [x for x in f_list if x[:15]=='ocean_his_NADB_']
+f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
 
 NOAA_tide_gauge_fname = '/data0/ebrasseale/WQ_data/2018validation/CO-OPS_9410170_met.csv'
 NOAA_tide_gauge_df = pd.read_csv(NOAA_tide_gauge_fname,parse_dates={ 'time' : ['Date','Time (GMT)']})
