@@ -52,7 +52,7 @@ latr = ds['lat_rho'][:]
 maskr = ds['mask_rho'][:]
 
 
-latlondiff = np.sqrt((latr-NOAA_tide_gauge_lat)**2 + (lonr-NOAA_tide_gauge_lon+0.01)**2)
+latlondiff = np.sqrt((latr-NOAA_tide_gauge_lat)**2 + (lonr-NOAA_tide_gauge_lon+0.005)**2)
 iref = np.where(latlondiff==latlondiff.min())[1][0]
 jref = np.where(latlondiff==latlondiff.min())[0][0]
 
