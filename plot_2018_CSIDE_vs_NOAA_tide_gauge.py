@@ -19,6 +19,7 @@ import pandas as pd
 import matplotlib.transforms as mtrans
 from matplotlib.colors import LogNorm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+import pickle
 
 def dar(ax):
     """
