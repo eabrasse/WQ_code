@@ -37,14 +37,14 @@ plt.close('all')
 dir0 = '/data0/NADB2019/Input/'
 LV4_grid = dir0+'GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
 
-LV4_nam_2019 = dir0+'roms_nam_LV4_20181229_20190118.nc'
-# LV4_nam_2019 = dir0+'roms_nam_LV4_20190408_20190428.nc'
+# LV4_nam_2019 = dir0+'roms_nam_LV4_20181229_20190118.nc'
+LV4_nam_2019 = dir0+'roms_nam_LV4_20190408_20190428.nc'
 # LV4_nam_2019 = dir0+'roms_nam_LV4_20191005_20191025.nc'
 # LV4_nam_2019 = dir0+'roms_nam_LV4_20191224_20200102.nc'
 
 dir0_nam = '/home/x1wu/SDTJRE_2018/mfiles/NAM_data/LV3_2020/'
-LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20181216_20190115.nc'
-# LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20190415_20190515.nc'
+# LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20181216_20190115.nc'
+LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20190415_20190515.nc'
 # LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20191012_20191111.nc'
 # LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20191211_20200110.nc'
 
@@ -77,8 +77,8 @@ i4 = np.where(latlondiff_LV4==latlondiff_LV4.min())[1][0]
 j4 = np.where(latlondiff_LV4==latlondiff_LV4.min())[0][0]
 
 # now match time indexes between the two grids
-date0 = datetime(2018,12,30)
-date1 = datetime(2019,1,14)
+date0 = datetime(2019,4,16)
+date1 = datetime(2019,4,27)
 
 wt3 = dlv3['wind_time'][:]
 wt3_list = []
