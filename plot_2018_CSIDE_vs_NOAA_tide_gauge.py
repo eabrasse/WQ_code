@@ -30,66 +30,12 @@ def dar(ax):
 
 plt.close('all')
 dir0 = '/data0/NADB2018/'
-f_list = os.listdir(dir0)
-f_list.sort()
-f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
 
-NOAA_tide_gauge_fname = '/data0/ebrasseale/WQ_data/2018validation/CO-OPS_9410170_met.csv'
-NOAA_tide_gauge_df = pd.read_csv(NOAA_tide_gauge_fname,parse_dates={ 'time' : ['Date','Time (GMT)']})
-NOAA_tide_gauge_df = NOAA_tide_gauge_df.set_index(NOAA_tide_gauge_df['time'])
+data_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_NOAA_tide_gauge.p'
+D = pickle.load(open(data_fn,'wb'))
 
-NOAA_tide_gauge_lon = -117.17
-NOAA_tide_gauge_lat = 32.71
-
-NOAA_tide_gauge_ssh = NOAA_tide_gauge_df['Verified (m)'][:]
-
-
-ds = nc.Dataset(dir0+f_list[0])
-lonr = ds['lon_rho'][:]
-latr = ds['lat_rho'][:]
-maskr = ds['mask_rho'][:]
-
-
-latlondiff = np.sqrt((latr-NOAA_tide_gauge_lat)**2 + (lonr-NOAA_tide_gauge_lon)**2)
-iref = np.where(latlondiff==latlondiff.min())[1][0]
-jref = np.where(latlondiff==latlondiff.min())[0][0]
-
-
-NT = 0
-CSIDE_time = np.array([])
-CSIDE_ssh = np.array([])
-for fname in f_list:
-    ds = nc.Dataset(dir0+fname)
-    nt = ds['ocean_time'].shape[0]
-    NT +=nt
-#     ds.close()
-#
-#
-# old_nt = 0
-# for fname in f_list:
-#
-#     ds = nc.Dataset(dir0+fname)
-#
-    ot = ds['ocean_time'][:]
-    zeta = ds['zeta'][:]
-    
-    CSIDE_time = np.append(CSIDE_time,ot)
-    CSIDE_ssh = np.append(CSIDE_ssh,zeta[:,jref,iref])
-#
-#     nt = ot.shape[0]
-#
-#     CSIDE_time[old_nt:old_nt+nt] = ot
-#     CSIDE_ssh[old_nt:old_nt+nt] = zeta[:,jref,iref]
-#
-#     old_nt += nt
-    ds.close()
-
-
-CSIDE_time_list = []
-for t in CSIDE_time:
-    date = datetime(1999,1,1)+timedelta(seconds=t)
-    CSIDE_time_list.append(date)
-
+for var_name in D.keys():
+    locals()[var_name] = D[var_name]
 
 fig=plt.figure(figsize=(12,8))
 gs = GridSpec(2,2)
