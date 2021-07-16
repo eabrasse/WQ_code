@@ -97,7 +97,7 @@ t40 = wt4_list.index(date0)
 t41 = wt4_list.index(date1)
 
 fig=plt.figure(figsize=(12,16))
-gs = GridSpec(3,2)
+gs = GridSpec(3,3)
 
 # #plot LV3 on left
 # # plot u wind
@@ -182,7 +182,7 @@ for ax in ax0,ax1,ax2,ax3,ax4,ax5:
     dar(ax)
 
 # uwind time compare
-ax6 = fig.add_subplot(gs[0,1])
+ax6 = fig.add_subplot(gs[0,2])
 ax6.plot(wt3_list[t30:t31],uwind_LV3[t30:t31,j3,i3],color='cornflowerblue',label='LV3')
 ax6.plot(wt4_list[t40:t41],uwind_LV4[t40:t41,j4,i4],color='orange',label='LV4')
 ax6.legend()
@@ -193,7 +193,7 @@ ax6.set_xlabel('Time')
 ax6.set_ylabel('wind velocity (m/s)')
 
 # vwind time compare
-ax7 = fig.add_subplot(gs[1,1])
+ax7 = fig.add_subplot(gs[1,2])
 ax7.plot(wt3_list[t30:t31],vwind_LV3[t30:t31,j3,i3],color='cornflowerblue',label='LV3')
 ax7.plot(wt4_list[t40:t41],vwind_LV4[t40:t41,j4,i4],color='orange',label='LV4')
 ax7.legend()
@@ -205,7 +205,7 @@ ax7.set_ylabel('wind velocity (m/s)')
 
 
 # pair time compare
-ax8 = fig.add_subplot(gs[2,1])
+ax8 = fig.add_subplot(gs[2,2])
 ax8.plot(wt3_list[t30:t31],pair_LV3[t30:t31,j3,i3],color='cornflowerblue',label='LV3')
 ax8.plot(wt4_list[t40:t41],pair_LV4[t40:t41,j4,i4],color='orange',label='LV4')
 ax8.legend()
