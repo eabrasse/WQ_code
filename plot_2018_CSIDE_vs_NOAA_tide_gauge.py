@@ -44,7 +44,7 @@ gs = GridSpec(2,2)
 # plot location of tide gauge
 ax_map = fig.add_subplot(gs[:,1])
 ax_map.contour(lonr,latr,maskr,levels=[0.5],colors='k')
-ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='o',markersize=15,mec='k',mfc='None')
+ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='o',markersize=10,mec='k',mfc='None')
 ax_map.plot(lonr[jref,iref]-0.01,latr[jref,iref],marker='*',markersize=15,mec='k',mfc='yellow')
 ax_map.set_xlabel('longitude')
 ax_map.set_ylabel('latitude')
@@ -52,9 +52,12 @@ dar(ax_map)
 
 
 # time series
+lw0 = 1.0
+lw1 = 1.0
+
 ax_ts = fig.add_subplot(gs[0,0])
-ax_ts.plot(CSIDE_time_list,CSIDE_ssh,label='CSIDE 2018')
-ax_ts.plot(NOAA_tide_gauge_time,NOAA_tide_gauge_ssh,label='NOAA tide gauge 9410170 - San Diego, CA')
+ax_ts.plot(CSIDE_time_list,CSIDE_ssh,label='CSIDE 2018',lw=lw0)
+ax_ts.plot(NOAA_tide_gauge_time,NOAA_tide_gauge_ssh,label='NOAA tide gauge 9410170 - San Diego, CA',lw=lw0)
 ax_ts.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax_ts.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
 ax_ts.set_xlabel('Time')
@@ -63,8 +66,8 @@ ax_ts.set_title('SSH at starred location')
 
 # demeaned time series
 ax_ts2 = fig.add_subplot(gs[1,0])
-ax_ts2.plot(CSIDE_time_list,CSIDE_ssh-CSIDE_ssh.mean(),label='CSIDE 2018')
-ax_ts2.plot(NOAA_tide_gauge_time,NOAA_tide_gauge_ssh-NOAA_tide_gauge_ssh.mean(),label='NOAA tide gauge 9410170 - San Diego, CA')
+ax_ts2.plot(CSIDE_time_list,CSIDE_ssh-CSIDE_ssh.mean(),label='CSIDE 2018',lw=lw0)
+ax_ts2.plot(NOAA_tide_gauge_time,NOAA_tide_gauge_ssh-NOAA_tide_gauge_ssh.mean(),label='NOAA tide gauge 9410170 - San Diego, CA',lw=lw0)
 # ax_ts2.legend()
 ax_ts2.xaxis.set_major_formatter(mdates.DateFormatter("%b %d %Y"))
 plt.setp( ax_ts2.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
@@ -93,8 +96,8 @@ ssh_diff = ssh1-ssh2
 ssh_diff2 = (ssh1-CSIDE_ssh.mean())-(ssh2-NOAA_tide_gauge_ssh.mean())
 #
 # ax_ts2_diff = ax_ts2.twinx()
-ax_ts.plot(shared_time,ssh_diff,color='k',linestyle='dotted',label='difference between SSHs')
-ax_ts2.plot(shared_time,ssh_diff2,color='k',linestyle='dotted')
+ax_ts.plot(shared_time,ssh_diff,color='k',linestyle='solid',lw=lw1,label='difference between SSHs')
+ax_ts2.plot(shared_time,ssh_diff2,color='k',linestyle='solid',lw=lw1)
 # ax_ts2.legend()
 ax_ts.legend()
 # ax_ts2_diff.set_ylabel(r'$\Delta$ SSH (m)')
