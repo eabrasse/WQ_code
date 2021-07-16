@@ -44,7 +44,7 @@ gs = GridSpec(2,2)
 # plot location of tide gauge
 ax_map = fig.add_subplot(gs[:,1])
 ax_map.contour(lonr,latr,maskr,levels=[0.5],colors='k')
-ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='*',markersize=15,mec='o',mfc='None')
+ax_map.plot(lonr[jref,iref],latr[jref,iref],marker='o',markersize=15,mec='k',mfc='None')
 ax_map.plot(lonr[jref,iref]-0.01,latr[jref,iref],marker='*',markersize=15,mec='k',mfc='yellow')
 ax_map.set_xlabel('longitude')
 ax_map.set_ylabel('latitude')
