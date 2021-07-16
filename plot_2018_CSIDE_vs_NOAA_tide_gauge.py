@@ -33,7 +33,7 @@ plt.close('all')
 dir0 = '/data0/NADB2018/'
 
 data_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_NOAA_tide_gauge.p'
-D = pickle.load(open(data_fn,'wb'))
+D = pickle.load(open(data_fn,'rb'))
 
 for var_name in D.keys():
     locals()[var_name] = D[var_name]
