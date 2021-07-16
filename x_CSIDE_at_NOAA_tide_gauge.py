@@ -98,5 +98,5 @@ for var_name in var_list:
     D[var_name] = locals()[var_name]
 
 
-out_fn = '/data0/ebrasseale/WQ_plots/CSIDE_2018_at_NOAA_tide_gauge.p'
+out_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_NOAA_tide_gauge.p'
 pickle.dump(D,open(out_fn,'wb'))
