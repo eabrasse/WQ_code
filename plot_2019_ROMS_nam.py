@@ -34,7 +34,7 @@ def dar(ax):
 # with the LV3 files for 2018
     
 plt.close('all')
-dir0 = '/data0/ebrasseale/NADB2019/Input/'
+dir0 = '/data0/NADB2019/Input/'
 LV4_grid = dir0+'GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
 
 LV4_nam_2019 = dir0+'roms_nam_LV4_20181229_20190118.nc'
