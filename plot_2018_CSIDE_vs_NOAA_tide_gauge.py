@@ -87,8 +87,8 @@ t1 = min([NOAA_tide_gauge_t1,CSIDE_t1])
 #     t1 = t1.to_pydatetime()
 shared_time = [x for x in CSIDE_time_list if x>t0 and x<t1]
 
-ssh1 = [CSIDE_ssh[i] for i in range(len(CSIDE_time_list)) if CSIDE_time_list[i]>t0 and CSIDE_time_list[i]<t1]
-ssh2 = [NOAA_tide_gauge_ssh[i] for i in range(len(NOAA_tide_gauge_time)) if NOAA_tide_gauge_time[i]>t0 and NOAA_tide_gauge_time[i]<t1]
+ssh1 = np.array([CSIDE_ssh[i] for i in range(len(CSIDE_time_list)) if CSIDE_time_list[i]>t0 and CSIDE_time_list[i]<t1])
+ssh2 = np.array([NOAA_tide_gauge_ssh[i] for i in range(len(NOAA_tide_gauge_time)) if NOAA_tide_gauge_time[i]>t0 and NOAA_tide_gauge_time[i]<t1])
 
 ssh_diff = ssh1-ssh2
 #
