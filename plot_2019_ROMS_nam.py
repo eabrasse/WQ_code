@@ -46,7 +46,7 @@ dir0_nam = '/home/x1wu/SDTJRE_2018/mfiles/NAM_data/LV3_2020/'
 # LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20181216_20190115.nc'
 # LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20190415_20190515.nc'
 # LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20191012_20191111.nc'
-LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20191211_20200110.nc'
+LV3_nam_2019 = dir0_nam+ 'roms_nam_LV3_EXT20191211_20200113.nc'
 
 dgrd = nc.Dataset(LV4_grid)
 lonr_LV4 = dgrd['lon_rho'][:]
