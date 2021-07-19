@@ -42,9 +42,9 @@ LV4_BC_2019 = '/data0/NADB2019/Input/BC_LV4_20181227_20190625_Nz10_dye.nc'
 # LV4_BC_2019= '/data0/NADB2019/Input/BC_LV4_20190610_20200106_Nz10_dye.nc'
 # goes from Jun 10 2019 to Jan 6 2020
 
-LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00051.nc'
+# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00051.nc'
 #goes from Dec 27 2018 to Jan 11 2019
-# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00062.nc'
+LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00062.nc'
 # #goes from Jun 10 2019 to Jun 25 2019
 # LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00063.nc'
 # #goes from Jun 25 2019 to Jul 10 2019
@@ -284,14 +284,14 @@ ax6.set_ylim([Dvar['vmin'],Dvar['vmax']])
 #add map to make sure you're extracting correctly
 axmap = fig.add_subplot(gs[:2,-1])
 #plot coastline
-axmap.contour(lonr_lv3,latr_lv3,maskr_lv3,levels=[0.5])
+axmap.contour(lonr_lv3,latr_lv3,maskr_lv3,levels=[0.5],colors='k')
 for ji in LV3_ji_west:
     j,i = ji
     axmap.scatter(lonr_lv3[j,i],latr_lv3[j,i],c='green')
 for ji in LV3_ji_south:
     j,i = ji
     axmap.scatter(lonr_lv3[j,i],latr_lv3[j,i],c='magenta')
-axmap.plot(lonr_lv3[j0,i0],latr_lv3[j0,i0],marker='*',markerfacecolor='orange',markersize=15)
+axmap.plot(lonr_lv3[j0,i0],latr_lv3[j0,i0],marker='*',markerfacecolor='orange',mec='k',markersize=15)
 axmap.axis([-117.4,-117.05,32.3,32.8])
 dar(axmap)
 axmap.set_xlabel('longitude')
