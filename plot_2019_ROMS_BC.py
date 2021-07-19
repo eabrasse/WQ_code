@@ -64,7 +64,7 @@ latr_lv3 = dlv3['lat_rho'][:]
 sr_lv3 = dlv3['s_rho'][:]
 maskr_lv3 = dlv3['mask_rho'][:]
 
-Dsalt = {'var_name':'salt','axlabel':'salinity (psu)','vmin':33,'vmax':35}
+Dsalt = {'var_name':'salt','axlabel':'salinity (psu)','vmin':33.6,'vmax':33.8}
 Dtemp = {'var_name':'temp','axlabel':'temp (C)','vmin':16.5,'vmax':18}
 
 Dvar = Dsalt
@@ -184,7 +184,7 @@ gs = GridSpec(3,4)
 vmin = Dvar['vmin']
 vmax = Dvar['vmax']
 ax0 = fig.add_subplot(gs[0,0])
-p=ax0.pcolormesh(lat_lv3_west,sr_lv3,var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax)
+p=ax0.pcolormesh(lat_lv3_west,sr_lv3,var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
 cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(-0.15,0.0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
 cb.ax.set_ylabel(Dvar['axlabel'],rotation=90,labelpad=10,fontweight='bold')
@@ -197,7 +197,7 @@ ax0.text(0.1,0.1,'shape = ({:},{:})'.format(var_lv3_west.shape[0],var_lv3_west.s
 
 # next LV3 south boundary
 ax1 = fig.add_subplot(gs[1,0])
-ax1.pcolormesh(lon_lv3_south,sr_lv3,var_lv3_south,cmap='YlOrRd',vmin=vmin,vmax=vmax)
+ax1.pcolormesh(lon_lv3_south,sr_lv3,var_lv3_south,cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
 ax1.set_ylabel('relative depth')
 ax1.set_xlabel('longitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
@@ -222,7 +222,7 @@ ax2.set_xlabel('Time')
 
 # next LV4 west boundary
 ax3 = fig.add_subplot(gs[0,1])
-ax3.pcolormesh(latr_lv4[:,0],sr_lv4,var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
+ax3.pcolormesh(latr_lv4[:,0],sr_lv4,var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
 ax3.set_ylabel('relative depth')
 ax3.set_xlabel('latitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
@@ -231,7 +231,7 @@ ax3.text(0.1,0.1,'shape = ({:},{:})'.format(var_west_LV4.shape[1],var_west_LV4.s
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
-ax4.pcolormesh(lonr_lv4[0,:],sr_lv4,var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax)
+ax4.pcolormesh(lonr_lv4[0,:],sr_lv4,var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
 ax4.set_ylabel('relative depth')
 ax4.set_xlabel('longitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
