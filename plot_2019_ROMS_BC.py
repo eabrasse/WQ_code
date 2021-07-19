@@ -64,7 +64,7 @@ latr_lv3 = dlv3['lat_rho'][:]
 sr_lv3 = dlv3['s_rho'][:]
 maskr_lv3 = dlv3['mask_rho'][:]
 
-var_name = 'temp'
+var_name = 'salt'
 var_west_LV4 = dlv4[var_name+'_west'][:]
 var_south_LV4 = dlv4[var_name+'_south'][:]
 var_lv3 = dlv3[var_name]
