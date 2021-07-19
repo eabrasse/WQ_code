@@ -64,7 +64,11 @@ latr_lv3 = dlv3['lat_rho'][:]
 sr_lv3 = dlv3['s_rho'][:]
 maskr_lv3 = dlv3['mask_rho'][:]
 
-var_name = 'salt'
+Dsalt = {'var_name':'salt','axlabel':'salinity (psu)','vmin':25,'vmax':35}
+Dtemp = {'var_name':'temp','axlabel':'temp (C)','vmin':16.5,'vmax':18}
+
+Dvar = Dsalt
+var_name = Dvar['var_name'][:]
 var_west_LV4 = dlv4[var_name+'_west'][:]
 var_south_LV4 = dlv4[var_name+'_south'][:]
 var_lv3 = dlv3[var_name]
@@ -177,13 +181,13 @@ gs = GridSpec(3,4)
 
 #plot LV3 on left
 # start with west boundary
-vmin = 16.5
-vmax = 18
+vmin = Dvar['vmin'][:]
+vmax = Dvar['vmax'][:]
 ax0 = fig.add_subplot(gs[0,0])
 p=ax0.pcolormesh(lat_lv3_west,sr_lv3,var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax)
 cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(-0.15,0.0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
-cb.ax.set_ylabel('temp (C)',rotation=90,labelpad=10,fontweight='bold')
+cb.ax.set_ylabel(Dvar['axlabel'],rotation=90,labelpad=10,fontweight='bold')
 
 ax0.set_ylabel('relative depth')
 ax0.set_xlabel('latitude')
@@ -243,7 +247,7 @@ ax5.plot(latr_lv4[:,0],var_west_LV4[t4,0,:],color='orange',label='LV4')
 labeltext = var_name + ' @ surf & seafloor\nsnapshot\nwest'
 ax5.text(0.1,0.9,labeltext,transform=ax5.transAxes,fontweight='bold',va='top')
 ax5.set_xlabel('latitude')
-ax5.set_ylabel('temp (C)')
+ax5.set_ylabel(Dvar['axlabel'])
 # ylim = ax5.get_ylim()
 # ax5.text(0.1,0.9,'surface '+var_name+' snapshot along western boundary',transform=ax5.transAxes)
 
@@ -256,8 +260,8 @@ ax6.plot(lonr_lv4[0,:],var_south_LV4[t4,0,:],color='orange',label='LV4')
 labeltext = var_name + ' @ surf & seafloor\nsnapshot\nsouth'
 ax6.text(0.1,0.9,labeltext,transform=ax6.transAxes,fontweight='bold',va='top')
 ax6.set_xlabel('longitude')
-ax6.set_ylabel('temp (C)')
-ax6.set_ylim([15.5,18.5])
+ax6.set_ylabel(Dvar['axlabel'])
+ax6.set_ylim([Dvar['vmin'],Dvar['vmax']])
 # ax6.text(0.1,0.9,'surface '+var_name+' snapshot along southern boundary',transform=ax6.transAxes)
 
 # # compare values in LV3 and LV4
