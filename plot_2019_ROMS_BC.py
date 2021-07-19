@@ -181,8 +181,8 @@ gs = GridSpec(3,4)
 
 #plot LV3 on left
 # start with west boundary
-vmin = Dvar['vmin'][:]
-vmax = Dvar['vmax'][:]
+vmin = Dvar['vmin']
+vmax = Dvar['vmax']
 ax0 = fig.add_subplot(gs[0,0])
 p=ax0.pcolormesh(lat_lv3_west,sr_lv3,var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax)
 cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(-0.15,0.0,1,1))
