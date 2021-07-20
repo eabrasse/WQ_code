@@ -35,7 +35,7 @@ def dar(ax):
     
 plt.close('all')
 
-rivfn = '/data0/ebrasseale/NADB2018/Input/river_tracer_4river_NADB2017_0.nc'
+rivfn = '/data0/NADB2019/Input/river_tracer_4river_NADB2019_0.nc'
 
 # rivfn = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/LV4/River_input/NADB2017/river_tracer_4river_NADB2017_0.nc'
 
@@ -87,5 +87,5 @@ dsriv.close()
 plt.tight_layout()
 
 # out_fn = '/data0/ebrasseale/WQ_plots/ROMS_rivertemp_2018.png'
-out_fn = '/data0/ebrasseale/WQ_plots/ROMS_rivertransport_2018.png'
+out_fn = '/data0/ebrasseale/WQ_plots/ROMS_rivertransport_2019.png'
 plt.savefig(out_fn)
