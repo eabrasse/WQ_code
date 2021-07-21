@@ -67,7 +67,7 @@ maskr_lv3 = dlv3['mask_rho'][:]
 Dsalt = {'var_name':'salt','axlabel':'salinity (psu)','vmin':33.6,'vmax':33.8,'cmap':cmo.cm.haline}
 Dtemp = {'var_name':'temp','axlabel':'temp (C)','vmin':15,'vmax':20,'cmap':'YlOrRd_r'}
 
-Dvar = Dsalt
+Dvar = Dtemp
 var_name = Dvar['var_name'][:]
 var_west_LV4 = dlv4[var_name+'_west'][:]
 var_south_LV4 = dlv4[var_name+'_south'][:]
