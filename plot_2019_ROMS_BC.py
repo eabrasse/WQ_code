@@ -42,9 +42,9 @@ LV4_BC_2019 = '/data0/NADB2019/Input/BC_LV4_20181227_20190625_Nz10_dye.nc'
 # LV4_BC_2019= '/data0/NADB2019/Input/BC_LV4_20190610_20200106_Nz10_dye.nc'
 # goes from Jun 10 2019 to Jan 6 2020
 
-# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00051.nc'
+LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00051.nc'
 #goes from Dec 27 2018 to Jan 11 2019
-LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00062.nc'
+# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00062.nc'
 # #goes from Jun 10 2019 to Jun 25 2019
 # LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00063.nc'
 # #goes from Jun 25 2019 to Jul 10 2019
@@ -251,7 +251,7 @@ ax5.plot(latr_lv4[:,0],var_west_LV4[t4,0,:],color='orange',label='LV4')
 labeltext = var_name + ' @ surf & seafloor\nsnapshot\nwest'
 ax5.text(0.1,0.9,labeltext,transform=ax5.transAxes,fontweight='bold',va='top')
 ax5.set_xlabel('latitude')
-ax6.set_ylim([Dvar['vmin'],Dvar['vmax']])
+ax5.set_ylim([Dvar['vmin'],Dvar['vmax']])
 ax5.set_ylabel(Dvar['axlabel'])
 # ylim = ax5.get_ylim()
 # ax5.text(0.1,0.9,'surface '+var_name+' snapshot along western boundary',transform=ax5.transAxes)
