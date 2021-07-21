@@ -46,9 +46,9 @@ LV4_BC_2019= '/data0/NADB2019/Input/BC_LV4_20190610_20200106_Nz10_dye.nc'
 #goes from Dec 27 2018 to Jan 11 2019
 # LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00062.nc'
 # #goes from Jun 10 2019 to Jun 25 2019
-LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00063.nc'
+# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00063.nc'
 # #goes from Jun 25 2019 to Jul 10 2019
-# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00075.nc'
+LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00075.nc'
 # #goes from Dec 22 2019 to Jan 6 2020
 
 dgrd = nc.Dataset(LV4_grid)
