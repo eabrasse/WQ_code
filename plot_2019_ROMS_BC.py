@@ -37,16 +37,16 @@ plt.close('all')
 
 # LV4_grid = '/data0/NADB2019/Input/GRID_SDTJRE_LV4_ROTATE_rx020_hplus020_DK_4river_otaymk.nc'
 LV4_grid = '/data0/NADB2018/ocean_his_NADB2018_00001.nc'
-# LV4_BC_2019 = '/data0/NADB2019/Input/BC_LV4_20181227_20190625_Nz10_dye.nc'
+LV4_BC_2019 = '/data0/NADB2019/Input/BC_LV4_20181227_20190625_Nz10_dye.nc'
 # goes from Dec 27 2018 to June 25 2019
-LV4_BC_2019= '/data0/NADB2019/Input/BC_LV4_20190610_20200106_Nz10_dye.nc'
+# LV4_BC_2019= '/data0/NADB2019/Input/BC_LV4_20190610_20200106_Nz10_dye.nc'
 # goes from Jun 10 2019 to Jan 6 2020
 
 # LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00051.nc'
 #goes from Dec 27 2018 to Jan 11 2019
-# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00062.nc'
+LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00062.nc'
 # #goes from Jun 10 2019 to Jun 25 2019
-LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00063.nc'
+# LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00063.nc'
 # #goes from Jun 25 2019 to Jul 10 2019
 # LV3_BC_2019 = '/data0/SDTJRE_LV3/LV3_2016_2020/ocean_his_LV3_EXT_20172018_00075.nc'
 # #goes from Dec 22 2019 to Jan 6 2020
