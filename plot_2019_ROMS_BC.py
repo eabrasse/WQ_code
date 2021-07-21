@@ -64,8 +64,8 @@ latr_lv3 = dlv3['lat_rho'][:]
 sr_lv3 = dlv3['s_rho'][:]
 maskr_lv3 = dlv3['mask_rho'][:]
 
-Dsalt = {'var_name':'salt','axlabel':'salinity (psu)','vmin':33.6,'vmax':33.8}
-Dtemp = {'var_name':'temp','axlabel':'temp (C)','vmin':16.5,'vmax':18}
+Dsalt = {'var_name':'salt','axlabel':'salinity (psu)','vmin':33.6,'vmax':33.8,'cmap'='YlOrRd_r'}
+Dtemp = {'var_name':'temp','axlabel':'temp (C)','vmin':16.5,'vmax':18,'cmap'=cmo.cm.haline}
 
 Dvar = Dtemp
 var_name = Dvar['var_name'][:]
@@ -184,7 +184,7 @@ gs = GridSpec(3,4)
 vmin = Dvar['vmin']
 vmax = Dvar['vmax']
 ax0 = fig.add_subplot(gs[0,0])
-p=ax0.pcolormesh(lat_lv3_west,sr_lv3,var_lv3_west,cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
+p=ax0.pcolormesh(lat_lv3_west,sr_lv3,var_lv3_west,cmap=Dvar['cmap'],vmin=vmin,vmax=vmax,shading='nearest')
 cbaxes = inset_axes(ax0, width="4%", height="40%", loc=4,bbox_transform=ax0.transAxes,bbox_to_anchor=(-0.15,0.0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
 cb.ax.set_ylabel(Dvar['axlabel'],rotation=90,labelpad=10,fontweight='bold')
@@ -194,15 +194,17 @@ ax0.set_xlabel('latitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax0.text(0.1,0.9,labeltext,transform=ax0.transAxes,fontweight='bold',va='top')
 ax0.text(0.1,0.1,'shape = ({:},{:})'.format(var_lv3_west.shape[0],var_lv3_west.shape[1]),transform=ax0.transAxes,fontweight='bold',ha='left')
+ax0.set_ylim([-1,0])
 
 # next LV3 south boundary
 ax1 = fig.add_subplot(gs[1,0])
-ax1.pcolormesh(lon_lv3_south,sr_lv3,var_lv3_south,cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
+ax1.pcolormesh(lon_lv3_south,sr_lv3,var_lv3_south,cmap=Dvar['cmap'],vmin=vmin,vmax=vmax,shading='nearest')
 ax1.set_ylabel('relative depth')
 ax1.set_xlabel('longitude')
 labeltext= 'LV3 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax1.text(0.1,0.9,labeltext,transform=ax1.transAxes,fontweight='bold',va='top')
 ax1.text(0.1,0.1,'shape = ({:},{:})'.format(var_lv3_south.shape[0],var_lv3_south.shape[1]),transform=ax1.transAxes,fontweight='bold',ha='left')
+ax1.set_ylim([-1,0])
 
 #finally add time series at bottom of western boundary
 ax2 = fig.add_subplot(gs[2,:])
@@ -222,21 +224,23 @@ ax2.set_xlabel('Time')
 
 # next LV4 west boundary
 ax3 = fig.add_subplot(gs[0,1])
-ax3.pcolormesh(latr_lv4[:,0],sr_lv4,var_west_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
+ax3.pcolormesh(latr_lv4[:,0],sr_lv4,var_west_LV4[t4,:,:],cmap=Dvar['cmap'],vmin=vmin,vmax=vmax,shading='nearest')
 ax3.set_ylabel('relative depth')
 ax3.set_xlabel('latitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'west'
 ax3.text(0.1,0.9,labeltext,transform=ax3.transAxes,fontweight='bold',va='top')
 ax3.text(0.1,0.1,'shape = ({:},{:})'.format(var_west_LV4.shape[1],var_west_LV4.shape[2]),transform=ax3.transAxes,fontweight='bold',ha='left')
+ax3.set_ylim([-1,0])
 
 # next LV4 south boundary
 ax4 = fig.add_subplot(gs[1,1])
-ax4.pcolormesh(lonr_lv4[0,:],sr_lv4,var_south_LV4[t4,:,:],cmap='YlOrRd',vmin=vmin,vmax=vmax,shading='nearest')
+ax4.pcolormesh(lonr_lv4[0,:],sr_lv4,var_south_LV4[t4,:,:],cmap=Dvar['cmap'],vmin=vmin,vmax=vmax,shading='nearest')
 ax4.set_ylabel('relative depth')
 ax4.set_xlabel('longitude')
 labeltext= 'LV4 \n'+date.strftime("%m/%d/%Y") + '\n'+ var_name + '\n' + 'south'
 ax4.text(0.1,0.9,labeltext,transform=ax4.transAxes,fontweight='bold',va='top')
 ax4.text(0.1,0.1,'shape = ({:},{:})'.format(var_south_LV4.shape[1],var_south_LV4.shape[2]),transform=ax4.transAxes,fontweight='bold',ha='left')
+ax4.set_ylim([-1,0])
 
 #compare horizontal resolution of LV3 and LV4
 ax5 = fig.add_subplot(gs[0,2])
@@ -247,6 +251,7 @@ ax5.plot(latr_lv4[:,0],var_west_LV4[t4,0,:],color='orange',label='LV4')
 labeltext = var_name + ' @ surf & seafloor\nsnapshot\nwest'
 ax5.text(0.1,0.9,labeltext,transform=ax5.transAxes,fontweight='bold',va='top')
 ax5.set_xlabel('latitude')
+ax6.set_ylim([Dvar['vmin'],Dvar['vmax']])
 ax5.set_ylabel(Dvar['axlabel'])
 # ylim = ax5.get_ylim()
 # ax5.text(0.1,0.9,'surface '+var_name+' snapshot along western boundary',transform=ax5.transAxes)
