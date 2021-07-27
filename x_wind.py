@@ -14,7 +14,7 @@ import netCDF4 as nc
 home = '/data0/ebrasseale/'
 
 # dir0 = '/data0/NADB2017/NADB2017_0_NEW/'
-dir0 = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/NAM_forcing/LV4'
+dir0 = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/NAM_forcing/LV4/'
 
 f_list = os.listdir(dir0)
 f_list.sort()
