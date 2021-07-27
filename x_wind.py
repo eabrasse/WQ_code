@@ -34,7 +34,7 @@ for fn in f_list:
         lonr = ds['lon_rho'][:]
         latr = ds['lat_rho'][:]
         latlondiff = np.sqrt((lonr-buoylon)**2 + (latr-buoylat)**2)
-        iind = np.argwhere(latlondiff==latlondiff.min())[1][0]
+        iind = np.argwhere(latlondiff==latlondiff.min())[0][1]
         jind = np.argwhere(latlondiff==latlondiff.min())[0][0]
     nt = ds['ocean_time'].shape[0]
     NT += nt
