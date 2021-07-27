@@ -61,8 +61,8 @@ for fn in f_list:
     nt,ny,nx = Uwind0.shape
 
 
-    Uwind[old_nt:old_nt+nt] = Uwind0[jind,iind,:]
-    Vwind[old_nt:old_nt+nt] = Vwind0[jind,iind,:]
+    Uwind[old_nt:old_nt+nt] = Uwind0[:,jind,iind]
+    Vwind[old_nt:old_nt+nt] = Vwind0[:,jind,iind]
     ot[old_nt:old_nt+nt] = ds['ocean_time'][:]
     old_nt += nt
     
