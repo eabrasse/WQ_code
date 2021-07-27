@@ -13,11 +13,12 @@ import netCDF4 as nc
 
 home = '/data0/ebrasseale/'
 
-dir0 = '/data0/NADB2017/NADB2017_0_NEW/'
+# dir0 = '/data0/NADB2017/NADB2017_0_NEW/'
+dir0 = '/home/x1wu/SDTJRE_EPA/mfiles/Run2016_2017/NAM_forcing/LV4'
 
 f_list = os.listdir(dir0)
 f_list.sort()
-f_list = [x for x in f_list if x[:10]=='ocean_his_']
+f_list = [x for x in f_list if x[:13]=='roms_nam_LV4_']
 nfiles = len(f_list)
 
 # buoyname = ['TJRE','PB']
@@ -31,8 +32,8 @@ NT = 0
 for fn in f_list:
     ds = nc.Dataset(dir0+fn)
     if NT==0: #first index
-        lonr = ds['lon_rho'][:]
-        latr = ds['lat_rho'][:]
+        lonr = ds['lon'][:]
+        latr = ds['lat'][:]
         latlondiff = np.sqrt((lonr-buoylon)**2 + (latr-buoylat)**2)
         iind = np.argwhere(latlondiff==latlondiff.min())[0][1]
         jind = np.argwhere(latlondiff==latlondiff.min())[0][0]
@@ -55,13 +56,13 @@ for fn in f_list:
 
     # select wave direction and significant wave height
 
-    Uwind0 = ds['uwind'][:]
+    Uwind0 = ds['Uwind'][:]
     # Vwind0 = ds['vwind'][:]
     nt,ny,nx = Uwind.shape
 
 
     Uwind[old_nt:old_nt+nt] = Uwind0
-    Vwind[old_nt:old_nt+nt] = ds['vwind'][:]
+    Vwind[old_nt:old_nt+nt] = ds['Vwind'][:]
     ot[old_nt:old_nt+nt] = ds['ocean_time'][:]
     old_nt += nt
     
