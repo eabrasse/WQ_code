@@ -57,12 +57,12 @@ for fn in f_list:
     # select wave direction and significant wave height
 
     Uwind0 = ds['Uwind'][:]
-    # Vwind0 = ds['vwind'][:]
-    nt,ny,nx = Uwind.shape
+    Vwind0 = ds['Vwind'][:]
+    nt,ny,nx = Uwind0.shape
 
 
-    Uwind[old_nt:old_nt+nt] = Uwind0
-    Vwind[old_nt:old_nt+nt] = ds['Vwind'][:]
+    Uwind[old_nt:old_nt+nt] = Uwind0[jind,iind,:]
+    Vwind[old_nt:old_nt+nt] = Vwind0[jind,iind,:]
     ot[old_nt:old_nt+nt] = ds['ocean_time'][:]
     old_nt += nt
     
