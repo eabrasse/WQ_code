@@ -62,3 +62,6 @@ D['Jul11'] = Jul11
 
 outfn = home + 'WQ_data/surface_dye_01_July.p'
 pickle.dump(D,open(outfn,'wb'))
+
+ds0.close()
+ds1.close()
