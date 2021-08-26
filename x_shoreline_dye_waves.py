@@ -18,11 +18,13 @@ Dinds = pickle.load(open(ind_fn,'rb'))
 for var in Dinds.keys():
     locals()[var]=Dinds[var]
 
-dir0 = '/data0/NADB2017/NADB2017_0_NEW/'
+# dir0 = '/data0/NADB2017/NADB2017_0_NEW/'
+dir0 = '/data0/NADB2018/'
 
 f_list = os.listdir(dir0)
 f_list.sort()
-f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
+# f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
+f_list = [x for x in f_list if x[:17]=='ocean_his_NADB2018_']
 
 testing=False
 if testing:
@@ -135,5 +137,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_dye_waves_05m.p'
+outfn = home + 'WQ_data/shoreline_dye_waves_05m_2018.p'
 pickle.dump(D,open(outfn,'wb'))
