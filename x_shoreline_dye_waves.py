@@ -24,7 +24,7 @@ dir0 = '/data0/NADB2018/'
 f_list = os.listdir(dir0)
 f_list.sort()
 # f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
-f_list = [x for x in f_list if x[:17]=='ocean_his_NADB2018_']
+f_list = [x for x in f_list if x[:19]=='ocean_his_NADB2018_']
 
 testing=False
 if testing:
