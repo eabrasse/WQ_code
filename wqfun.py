@@ -5,28 +5,8 @@ Plot results of a particle tracking experime.
 """
 
 # setup
-import os
-import sys
-alp = os.path.abspath('/Users/elizabethbrasseale/LiveOcean/alpha')
-if alp not in sys.path:
-    sys.path.append(alp)
-import zfun
-import matplotlib
-matplotlib.use('macosx')
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-import cmocean as cmo
-import pickle
-import numpy as np
 
-from datetime import datetime, timedelta
-import matplotlib.dates as mdates
-import pandas
-import matplotlib.transforms as mtrans
-from matplotlib.colors import LogNorm
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from scipy.interpolate import interp1d
-import skill_metrics as sm
+import numpy as np
 
 
 def willmott(m,o):
