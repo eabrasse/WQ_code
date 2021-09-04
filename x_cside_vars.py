@@ -99,6 +99,8 @@ for fn in f_list:
     Hwave0 = ds['Hwave'][:]
     Lwave0 = ds['Lwave'][:]
     zeta0 = ds['zeta'][:]
+    u00 = ds['u'][:]
+    v00 = ds['v'][:]
     
     H = h0+zeta0
 
@@ -135,8 +137,8 @@ for fn in f_list:
             # x_wd_ind = x_wd_ind - 2
             dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
             dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
-            u0[old_nt+t,j] = np.nanmean(u0[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
-            v0[old_nt+t,j] = np.nanmean(v0[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
+            u0[old_nt+t,j] = np.nanmean(u00[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
+            v0[old_nt+t,j] = np.nanmean(v00[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
         
         #the wave extractions are from the same points in space no matter what the time
         #so they can exist outside of the loop
