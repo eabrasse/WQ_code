@@ -19,19 +19,26 @@ Dinds = pickle.load(open(ind_fn,'rb'))
 for var in Dinds.keys():
     locals()[var]=Dinds[var]
 
-year = '2017'
-if year=='2017':
-    dir0 = '/data0/NADB2017/NADB2017_0_NEW/'
-    f_list = os.listdir(dir0)
-    f_list.sort()
-    f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
-elif year=='2018':
-    dir0 = '/data0/NADB2018/'
-    f_list = os.listdir(dir0)
-    f_list.sort()
-    f_list = [x for x in f_list if x[:19]=='ocean_his_NADB2018_']
+# year = '2017'
+# if year=='2017':
+dir2017 = '/data0/NADB2017/NADB2017_0_NEW/'
+f_list2017 = os.listdir(dir2017)
+f_list2017.sort()
+f_list2017 = [x for x in f_list2017 if x[:17]=='ocean_his_NADB_0_']
+# elif year=='2018':
+dir2018 = '/data0/NADB2018/'
+f_list2018 = os.listdir(dir2018)
+f_list2018.sort()
+f_list2018 = [x for x in f_list2018 if x[:19]=='ocean_his_NADB2018_']
 
-testing=True
+f_list = []
+for fn in f_list2017:
+    f_list.append(dir2017+fn)
+for fn in f_list2018:
+    f_list.append(dir2018+fn)
+
+
+testing=False
 if testing:
     f_list = f_list[:1]
 
@@ -42,7 +49,7 @@ nfiles = len(f_list)
 # Time steps are inconsistent across files, so first count 'em up
 NT = 0
 for fn in f_list:
-    ds = nc.Dataset(dir0+fn)
+    ds = nc.Dataset(fn)
     if NT==0:
         # nt,nz,ny,nx = ds['salt'].shape
         
@@ -164,5 +171,5 @@ D = dict()
 for var in var_list:
     D[var]=locals()[var]
 
-outfn = home + 'WQ_data/shoreline_variables_2017.p'
+outfn = home + 'WQ_data/shoreline_variables_2017–2018.p'
 pickle.dump(D,open(outfn,'wb'))
