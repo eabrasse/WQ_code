@@ -96,7 +96,7 @@ tt=0
 old_nt = 0
 for fn in f_list:
     print('file {:d} of {:d}'.format(tt,nfiles))
-    ds = nc.Dataset(dir0+fn)
+    ds = nc.Dataset(fn)
 
     # select wave direction and significant wave height
     wetdry_mask_rho = ds['wetdry_mask_rho'][:]
