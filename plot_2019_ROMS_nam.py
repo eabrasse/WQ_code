@@ -55,8 +55,8 @@ ts3 = {}
 ts3['LV4_nam_2019'] = dir0+'roms_nam_LV4_20191206_20191226.nc'
 ts3['LV3_nam_2019'] = dir0_nam+ 'roms_nam_LV3_20191211_20200101.nc'
 # now match time indexes between the two grids
-ts3['date0'] = datetime(2019,12,25)
-ts3['date1'] = datetime(2020,1,1)
+ts3['date0'] = datetime(2019,12,11)
+ts3['date1'] = datetime(2020,12,26)
 
 ts_list = ts0,ts1,ts2,ts3
 count = 0
