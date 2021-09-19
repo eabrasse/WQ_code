@@ -62,7 +62,7 @@ ts_list = ts0,ts1,ts2,ts3
 count = 0
 print('Choose time series to plot based on start time (return=0)')
 for ts in ts_list:
-    print('{d}. '.format(count)+ts['date0'].strftime("%Y.%m.%d"))
+    print('{}. '.format(count)+ts['date0'].strftime("%Y.%m.%d"))
     count+=1
 user_input = input()
 if len(user_input)==0:
