@@ -47,13 +47,13 @@ ts1['date1'] = datetime(2019,1,15)
 
 ts2 = {}
 ts2['LV4_nam_2019'] = dir0+'roms_nam_LV4_20190430_20190520.nc'
-ts2['LV3_nam_2019'] = dir0_nam+ 'roms_nam_LV3_EXT20190415_20190515.nc'
+ts2['LV3_nam_2019'] = dir0_nam+ 'roms_nam_LV3_20190415_20190515.nc'
 ts2['date0'] = datetime(2019,4,30)
 ts2['date1'] = datetime(2019,5,15)
 
 ts3 = {}
 ts3['LV4_nam_2019'] = dir0+'roms_nam_LV4_20191206_20191226.nc'
-ts3['LV3_nam_2019'] = dir0_nam+ 'roms_nam_LV3_EXT20191211_20200110.nc'
+ts3['LV3_nam_2019'] = dir0_nam+ 'roms_nam_LV3_20191211_20200101.nc'
 # now match time indexes between the two grids
 ts3['date0'] = datetime(2019,12,25)
 ts3['date1'] = datetime(2020,1,1)
