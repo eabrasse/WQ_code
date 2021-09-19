@@ -7,6 +7,7 @@ Plot results of a particle tracking experime.
 # setup
 
 import numpy as np
+import pickle
 
 
 def willmott(m,o):
@@ -28,6 +29,15 @@ def willmott(m,o):
         WS = 1 - MSE/denom
     
     return WS
+
+def smooth(vec,window_width):
+    half_window = int(window_width/2)
+    # cumsum_vec = np.cumsum(np.insert(vec, 0, 0))
+    # vec_padded = np.pad(vec, (half_window, window_width-1-half_window), mode='edge')
+    vec_padded = np.pad(vec, (half_window, window_width-1-half_window), mode='constant',constant_values=(np.mean(vec[:10]),np.mean(vec[-10:])))
+    cumsum_vec = np.cumsum(np.insert(vec_padded,0,0))
+    new_vec = (cumsum_vec[window_width:] - cumsum_vec[:-window_width]) / window_width
+    return new_vec
 
 def earth_rad(lat_deg):
     """
@@ -65,7 +75,42 @@ def dar(ax):
     yl = ax.get_ylim()
     yav = (yl[0] + yl[1])/2
     ax.set_aspect(1/np.sin(np.pi*yav/180))
+
+def get_beach_location(beach_name_list):
     
+    dir0 = '/Users/elizabethbrasseale/Projects/Water quality/WQ_data/'
+    fn = dir0 + 'extractions2017/shoreline_variables_2017.p'
+    
+    D = pickle.load(open(fn,'rb'))
+    lonshore = D['lonshore'][:]
+    latshore = D['latshore'][:]
+    xshore = D['xshore'][:]
+    yshore = D['yshore'][:]
+    lon_rho = D['lon_rho'][:]
+    lat_rho = D['lat_rho'][:]
+    
+    
+    # Identify some points of interest on the map
+    PB = {'lat':32.446, 'name':'Punta Bandera'}
+    TJRE = {'lat':32.553, 'name':'Tijuana River Estuary'}
+    PT = {'lat':32.518, 'name':'Playas Tijuana'}
+    IBP = {'lat':32.579, 'name':'Imperial Beach Pier'}
+    SSSB = {'lat':32.632, 'name':'Silver Strand State Beach'}
+    HdC = {'lat':32.678, 'name':'Hotel del Coronado'}
+
+    beach_list = {}
+
+    for var in beach_name_list:
+        beach_list[var] = locals()[var]
+
+    for beach in beach_list:
+        y_ind = np.argmin(np.abs(latshore-beach['lat']))
+        beach['lon'] = lonshore[y_ind]
+        beach['x'] = xshore[y_ind]
+        beach['y'] = yshore[y_ind]
+        
+    return(beach_list)
+   
 def get_shoreline_models(model_name_list):
 
     dir0 = '/Users/elizabethbrasseale/Projects/Water quality/WQ_data/'
@@ -85,7 +130,7 @@ def get_shoreline_models(model_name_list):
     CSIDE_SAsm10['label']='CSIDE extracted data'# (rotated using\nsmoothed shoreangle (window=10))'
 
     CSIDE_PAsm100 = {}
-    CSIDE_PAsm100['dye'] = Dcside['dye_01'][:]
+    CSIDE_PAsm100['dye'] = Dcside['dye_01'][:,1:-1]
     CSIDE_PAsm100['y'] = Dcside['rshore'][:]
     cside_uv_fn = dir0 + 'extractions2017/shoreline_uv_05m_interp_sm100_PA.p'
     Duv = pickle.load(open(cside_uv_fn,'rb'))
@@ -93,11 +138,11 @@ def get_shoreline_models(model_name_list):
     CSIDE_PAsm100['label']='CSIDE extracted data (rotated using\nsmoothed principle axis (window=100))'
 
     CSIDE_SAsm100 = {}
-    CSIDE_SAsm100['dye'] = Dcside['dye_01'][:]
-    CSIDE_SAsm100['y'] = Dcside['rshore'][:]
+    CSIDE_SAsm100['dye'] = Dcside['dye_01'][:,1:-1]
+    CSIDE_SAsm100['y'] = Dcside['rshore'][1:-1]
     cside_uv_fn = dir0 + 'extractions2017/shoreline_uv_05m_interp_sm100_SA.p'
     Duv = pickle.load(open(cside_uv_fn,'rb'))
-    CSIDE_SAsm100['v'] = Duv['v'][:]
+    CSIDE_SAsm100['v'] = Duv['v'][:,1:-1]
     CSIDE_SAsm100['label']='CSIDE extracted data'
 
     #adv-diff model wtih resolved alongshore-varying velocity w/ no smoothing
@@ -119,13 +164,22 @@ def get_shoreline_models(model_name_list):
     AV_SAsm100_tuned['label'] = 'Adv-Diff model with alongshore-varying input'#'\nusing smoothed shoreangle (window=10)'
 
     #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
+    AV_SAsm100_0km_tuned = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_alongshore_varying_sm100_SA_0km_tuned.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    AV_SAsm100_0km_tuned['dye'] = da_model['c'][:]
+    AV_SAsm100_0km_tuned['y'] = da_model['y'][1:-1]
+    AV_SAsm100_0km_tuned['v'] = da_model['v'][:]
+    AV_SAsm100_0km_tuned['label'] = 'Adv-Diff model with 0 km running average'#'\nusing smoothed shoreangle (window=100)'
+
+    #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
     AV_SAsm100_3km_tuned = {}
     model_fn=dir0+'adv_diff_model/CSIDE_alongshore_varying_sm100_SA_3km_tuned.p'
     da_model = pickle.load(open(model_fn,'rb'))
     AV_SAsm100_3km_tuned['dye'] = da_model['c'][:]
     AV_SAsm100_3km_tuned['y'] = da_model['y'][1:-1]
     AV_SAsm100_3km_tuned['v'] = da_model['v'][:]
-    AV_SAsm100_3km_tuned['label'] = 'Adv-Diff model with alongshore-varying input, 3 km running average'#'\nusing smoothed shoreangle (window=10)'
+    AV_SAsm100_3km_tuned['label'] = 'Adv-Diff model with 3 km running average'#'\nusing smoothed shoreangle (window=100)'
     
     #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
     AV_SAsm100_4km_tuned = {}
@@ -134,7 +188,7 @@ def get_shoreline_models(model_name_list):
     AV_SAsm100_4km_tuned['dye'] = da_model['c'][:]
     AV_SAsm100_4km_tuned['y'] = da_model['y'][1:-1]
     AV_SAsm100_4km_tuned['v'] = da_model['v'][:]
-    AV_SAsm100_4km_tuned['label'] = 'Adv-Diff model with alongshore-varying input, 4 km running average'#'\nusing smoothed shoreangle (window=10)'
+    AV_SAsm100_4km_tuned['label'] = 'Adv-Diff model with 4 km running average'#'\nusing smoothed shoreangle (window=100)'
     
     #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
     AV_SAsm100_5km_tuned = {}
@@ -143,7 +197,7 @@ def get_shoreline_models(model_name_list):
     AV_SAsm100_5km_tuned['dye'] = da_model['c'][:]
     AV_SAsm100_5km_tuned['y'] = da_model['y'][1:-1]
     AV_SAsm100_5km_tuned['v'] = da_model['v'][:]
-    AV_SAsm100_5km_tuned['label'] = 'Adv-Diff model with alongshore-varying input, 5 km running average'#'\nusing smoothed shoreangle (window=10)'
+    AV_SAsm100_5km_tuned['label'] = 'Adv-Diff model with 5 km running average'#'\nusing smoothed shoreangle (window=100)'
     
     #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
     AV_SAsm100_6km_tuned = {}
@@ -152,15 +206,42 @@ def get_shoreline_models(model_name_list):
     AV_SAsm100_6km_tuned['dye'] = da_model['c'][:]
     AV_SAsm100_6km_tuned['y'] = da_model['y'][1:-1]
     AV_SAsm100_6km_tuned['v'] = da_model['v'][:]
-    AV_SAsm100_6km_tuned['label'] = 'Adv-Diff model with alongshore-varying input, 6 km running average'#'\nusing smoothed shoreangle (window=10)'
+    AV_SAsm100_6km_tuned['label'] = 'Adv-Diff model with 6 km running average'#'\nusing smoothed shoreangle (window=100)'
+    
+    #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
+    AV_SAsm100_7km_tuned = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_alongshore_varying_sm100_SA_7km_tuned.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    AV_SAsm100_7km_tuned['dye'] = da_model['c'][:]
+    AV_SAsm100_7km_tuned['y'] = da_model['y'][1:-1]
+    AV_SAsm100_7km_tuned['v'] = da_model['v'][:]
+    AV_SAsm100_7km_tuned['label'] = 'Adv-Diff model with 7 km running average'#'\nusing smoothed shoreangle (window=100)'
+    
+    #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
+    AV_SAsm100_8km_tuned = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_alongshore_varying_sm100_SA_8km_tuned.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    AV_SAsm100_8km_tuned['dye'] = da_model['c'][:]
+    AV_SAsm100_8km_tuned['y'] = da_model['y'][1:-1]
+    AV_SAsm100_8km_tuned['v'] = da_model['v'][:]
+    AV_SAsm100_8km_tuned['label'] = 'Adv-Diff model with 8 km running average'#'\nusing smoothed shoreangle (window=100)'
+    
+    #adv-diff model wtih resolved alongshore-varying velocity, rotated using SA sm100 and tuned
+    AV_SAsm100_10km_tuned = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_alongshore_varying_sm100_SA_10km_tuned.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    AV_SAsm100_10km_tuned['dye'] = da_model['c'][:]
+    AV_SAsm100_10km_tuned['y'] = da_model['y'][1:-1]
+    AV_SAsm100_10km_tuned['v'] = da_model['v'][:]
+    AV_SAsm100_10km_tuned['label'] = 'Adv-Diff model with 10 km running average'#'\nusing smoothed shoreangle (window=100)'
 
     #adv-diff model with CSIDE-extracted velocity input
     AV_recycled_tuned = {}
     model_fn=dir0+'adv_diff_model/CSIDE_recycled_input_tuned.p'
     da_model = pickle.load(open(model_fn,'rb'))
-    AV_recycled_tuned['y'] = da_model['y'][:]
-    AV_recycled_tuned['dye']  = da_model['c'][:]
-    AV_recycled_tuned['v']  = da_model['v'][:]
+    AV_recycled_tuned['y'] = da_model['y'][1:-1]
+    AV_recycled_tuned['dye']  = da_model['c'][:,1:-1]
+    AV_recycled_tuned['v']  = da_model['v'][:,1:-1]
     AV_recycled_tuned['label'] = 'Adv-Diff model with velocity directly from CSIDE'
 
     #adv-diff model with 3km binned velocity
@@ -204,8 +285,8 @@ def get_shoreline_models(model_name_list):
     U_tuned = {}
     model_fn2=dir0+'adv_diff_model/CSIDE_tuning_kd_-2.67E-05.p'
     da_model2 = pickle.load(open(model_fn2,'rb'))
-    U_tuned['y']= da_model2['y'][:]
-    U_tuned['dye'] = da_model2['c'][:]
+    U_tuned['y']= da_model2['y'][1:-1]
+    U_tuned['dye'] = da_model2['c'][:,1:-1]
     v00 = da_model2['v'][:]
     nt,nj = U_tuned['dye'].shape
     v00 = np.reshape(v00,(nt,1))
@@ -285,6 +366,32 @@ def get_shoreline_models(model_name_list):
     v0 = np.tile(v00,(1,nj))
     U_Kyy07['v'] = v0
     U_Kyy07['label'] = r'Adv-Diff model alongshore diffusion $Kyy = 7 m^{2}s^{-1}$'
+    
+    #alongshore diffusion model
+    U_Kyy08 = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_PB_Kyy08_tuned.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_Kyy08['dye'] = da_model['c'][:,1:-1]
+    U_Kyy08['y'] = da_model['y'][1:-1]
+    v00 = da_model2['v'][:]
+    nt,nj = U_Kyy08['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_Kyy08['v'] = v0
+    U_Kyy08['label'] = r'Adv-Diff model alongshore diffusion $Kyy = 8 m^{2}s^{-1}$'
+    
+    #alongshore diffusion model
+    U_Kyy09 = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_PB_Kyy09_tuned.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_Kyy09['dye'] = da_model['c'][:,1:-1]
+    U_Kyy09['y'] = da_model['y'][1:-1]
+    v00 = da_model2['v'][:]
+    nt,nj = U_Kyy09['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_Kyy09['v'] = v0
+    U_Kyy09['label'] = r'Adv-Diff model alongshore diffusion $Kyy = 9 m^{2}s^{-1}$'
     
     #alongshore diffusion model
     U_Kyy10 = {}
