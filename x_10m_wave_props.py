@@ -10,7 +10,6 @@ import pickle
 import numpy as np
 import netCDF4 as nc
 
-plt.close('all')
 
 ll_fn = home + 'WQ_data/extractions2017/shoreline_variables_2017.p'
 D=pickle.load(open(ll_fn,'rb'))
