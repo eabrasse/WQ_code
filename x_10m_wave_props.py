@@ -11,7 +11,7 @@ import numpy as np
 import netCDF4 as nc
 
 
-ll_fn = '/data0/ebrasseale/WQ_data/extractions2017/shoreline_variables_2017.p'
+ll_fn = '/data0/ebrasseale/WQ_data/shoreline_variables_2017.p'
 D=pickle.load(open(ll_fn,'rb'))
 var_list = ['x_rho','y_rho','mask_rho','yshore','xshore','rshore','x10m','y10m','h','rshore','lon_rho','lat_rho','iis','iib','jjs','jjb']
 for var in var_list:
