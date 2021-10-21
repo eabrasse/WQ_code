@@ -19,7 +19,7 @@ for var in var_list:
 
 fname = '/data0/NADB2017/NADB2017_0_NEW/ocean_his_NADB_0_new_00001.nc'
 ds = nc.Dataset(fname)
-nt = ds['ocean_time'][:].shape
+nt = ds['ocean_time'][:].shape[0]
 Hwave = ds['Hwave'][:]
 Dwave = ds['Dwave'][:]
 zeta = ds['zeta']
