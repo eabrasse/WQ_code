@@ -58,6 +58,6 @@ for ref in r_refs:
         D[ref]['zeta_vec'][:,ii] = zeta[:,jvec[jjind],iib[j]+ii]
 
 outfn = '/data0/ebrasseale/WQ_data/10m_wave_props.p'
-pickle.dump(D,outfn)
+pickle.dump(D,open(outfn,'wb'))
 
 ds.close()
