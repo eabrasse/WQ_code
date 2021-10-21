@@ -5,22 +5,10 @@ Plot results of a particle tracking experiment.
 """
 
 # setup
-import os
-import sys
-alp = os.path.abspath('/Users/elizabethbrasseale/LiveOcean/alpha')
-if alp not in sys.path:
-    sys.path.append(alp)
-import zfun
+
 import pickle
 import numpy as np
 import netCDF4 as nc
-import matplotlib
-matplotlib.use('macosx')
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import math
-import time
-tic = time.perf_counter()
 
 plt.close('all')
 
