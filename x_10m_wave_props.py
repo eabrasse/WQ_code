@@ -23,6 +23,7 @@ nt = ds['ocean_time'][:].shape[0]
 Hwave = ds['Hwave'][:]
 Dwave = ds['Dwave'][:]
 zeta = ds['zeta']
+h = ds['h']
 
 r_refs = [9000,12500,17000]
 D = {}
