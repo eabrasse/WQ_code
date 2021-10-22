@@ -36,6 +36,7 @@ for ref in r_refs:
     ni = iis[j]-iib[j]
     
     D[ref]['rdist'] = np.zeros((ni))
+    D[ref]['hvec'] = np.zeros((ni))
     D[ref]['Hwave_vec'] = np.zeros((nt,ni))
     D[ref]['Dwave_vec'] = np.zeros((nt,ni))
     D[ref]['zeta_vec'] = np.zeros((nt,ni))
@@ -50,7 +51,7 @@ for ref in r_refs:
         angle_diff = np.abs(local_angle-shoreangle[j])
         jjind = np.argmin(angle_diff)
         
-        # hvec[ii] = -h[jvec[jjind],iib[j]+ii]
+        D[ref]['hvec'][ii] = -h[jvec[jjind],iib[j]+ii]
         D[ref]['rdist'][ii] = np.sqrt((x_rho[jvec[jjind],iib[j]+ii]-xshore[j])**2+(y_rho[jvec[jjind],iib[j]+ii]-yshore[j])**2)
 
         D[ref]['Hwave_vec'][:,ii] = Hwave[:,jvec[jjind],iib[j]+ii]
