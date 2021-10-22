@@ -17,7 +17,7 @@ var_list = ['x_rho','y_rho','mask_rho','yshore','xshore','rshore','lon_rho','lat
 for var in var_list:
     locals()[var] = D[var]
 
-fname = '/data0/NADB2017/NADB2017_0_NEW/ocean_his_NADB_0_new_00001.nc'
+fname = '/data0/NADB2017/NADB2017_0_NEW/ocean_his_NADB_0_new_00002.nc'
 ds = nc.Dataset(fname)
 nt = ds['ocean_time'][:].shape[0]
 Hwave = ds['Hwave'][:]
