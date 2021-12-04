@@ -24,6 +24,8 @@ Hwave = ds['Hwave'][:]
 Dwave = ds['Dwave'][:]
 zeta = ds['zeta']
 h = ds['h']
+ubar = ds['ubar'][:]
+vbar = ds['vbar'][:]
 
 r_refs = [9000,12500,17000]
 D = {}
@@ -41,6 +43,8 @@ for ref in r_refs:
     D[ref]['Hwave_vec'] = np.zeros((nt,ni))
     D[ref]['Dwave_vec'] = np.zeros((nt,ni))
     D[ref]['zeta_vec'] = np.zeros((nt,ni))
+    D[ref]['ubar_vec'] = np.zeros((nt,ni))
+    D[ref]['vbar_vec'] = np.zeros((nt,ni))
     #look at each x index between the buoy and the shore
     for ii in range(ni):
         xvec = x_rho[jvec,iib[j]+ii]
@@ -57,6 +61,8 @@ for ref in r_refs:
 
         D[ref]['Hwave_vec'][:,ii] = Hwave[:,jvec[jjind],iib[j]+ii]
         D[ref]['Dwave_vec'][:,ii] = Dwave[:,jvec[jjind],iib[j]+ii]
+        D[ref]['ubar_vec'][:,ii] = ubar[:,jvec[jjind],iib[j]+ii]
+        D[ref]['vbar_vec'][:,ii] = vbar[:,jvec[jjind],iib[j]+ii]
         D[ref]['zeta_vec'][:,ii] = zeta[:,jvec[jjind],iib[j]+ii]
 
 outfn = '/data0/ebrasseale/WQ_data/10m_wave_props.p'
