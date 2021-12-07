@@ -21,6 +21,7 @@ fname = '/data0/NADB2017/NADB2017_0_NEW/ocean_his_NADB_0_new_00002.nc'
 ds = nc.Dataset(fname)
 nt = ds['ocean_time'][:].shape[0]
 Hwave = ds['Hwave'][:]
+Lwave = ds['Lwave'][:]
 Dwave = ds['Dwave'][:]
 zeta = ds['zeta']
 h = ds['h']
@@ -41,6 +42,7 @@ for ref in r_refs:
     D[ref]['rdist'] = np.zeros((ni))
     D[ref]['hvec'] = np.zeros((ni))
     D[ref]['Hwave_vec'] = np.zeros((nt,ni))
+    D[ref]['Lwave_vec'] = np.zeros((nt,ni))
     D[ref]['Dwave_vec'] = np.zeros((nt,ni))
     D[ref]['zeta_vec'] = np.zeros((nt,ni))
     D[ref]['ubar_vec'] = np.zeros((nt,ni))
@@ -60,6 +62,7 @@ for ref in r_refs:
         D[ref]['rdist'][ii] = np.sqrt((x_rho[jvec[jjind],iib[j]+ii]-xshore[j])**2+(y_rho[jvec[jjind],iib[j]+ii]-yshore[j])**2)
 
         D[ref]['Hwave_vec'][:,ii] = Hwave[:,jvec[jjind],iib[j]+ii]
+        D[ref]['Lwave_vec'][:,ii] = Lwave[:,jvec[jjind],iib[j]+ii]
         D[ref]['Dwave_vec'][:,ii] = Dwave[:,jvec[jjind],iib[j]+ii]
         D[ref]['ubar_vec'][:,ii] = ubar[:,jvec[jjind],iib[j]+ii]
         D[ref]['vbar_vec'][:,ii] = vbar[:,jvec[jjind],iib[j]+ii]
