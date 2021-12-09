@@ -37,7 +37,7 @@ lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
 
 ot = ds['ocean_time'][:]
-NT = np.shape(ot)
+NT = np.shape(ot)[0]
 nj = len(jjs)
 
 lonshore = np.zeros((nj))
