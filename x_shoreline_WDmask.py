@@ -95,38 +95,90 @@ hb = Hwave0[:,bj,bi]/0.78 # from Hwave = gamma * depth, gamma = 0.78 from McCowa
 # because the land value of H is 0.25 m...
 hb[hb<0.5] = 0.5
 
-count_wd_mask_diff_rho = 0
-count_wd_mask_diff_u = 0
-count_wd_mask_diff_v = 0
+# count_wd_mask_diff_rho = 0
+# count_wd_mask_diff_u = 0
+# count_wd_mask_diff_v = 0
 
 count_depth_diff = 0
 
 y_lim_list = [[32.45,32.5],[32.525,32.575],[32.6,32.65],[32.65,32.7]]
 x_lim_list = [[-117.15,-117.1],[-117.15,-117.1],[-117.17,-117.12],[-117.25,-117.125]]
 
+WD_rho = {}
+WD_rho['data'] = wetdry_mask_rho
+WD_rho['ind'] = 0
+WD_rho['count'] = 0
+WD_u = {}
+WD_u['data'] = wetdry_mask_u
+WD_u['ind'] = 0
+WD_u['count'] = 0
+WD_v = {}
+WD_v['data'] = wetdry_mask_v
+WD_v['ind'] = 0
+WD_v['count'] = 0
+
+# WD_list = WD_rho,WD_u,WD_v
+SZ = {}
+SZ['ind'] = 0
+SZ['count'] = 0
+# SZ['data'] = wetdry_mask_rho
+
 for t in range(NT):
     #loop through time steps, 
     # because extraction indexes depend on time-varying wetdry mask
+    
     for j in range(nj):
         # find the edge of the mask
-        wd_mask_diff_rho = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:(iis[j]+2)]))[0]
-        wd_mask_diff_u = np.where(np.diff(wetdry_mask_u[t,jjs[j],:(iis[j]+2)]))[0]
-        wd_mask_diff_v = np.where(np.diff(wetdry_mask_v[t,jjs[j],:(iis[j]+2)]))[0]
+
+        for WD in WD_rho,WD_u,WD_v:
+            WD['diff'] = np.where(np.diff(WD['data'][t,jjs[j],:(iis[j]+2)]))[0]
+        # wd_mask_diff_rho = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:(iis[j]+2)]))[0]
+        # wd_mask_diff_u = np.where(np.diff(wetdry_mask_u[t,jjs[j],:(iis[j]+2)]))[0]
+        # wd_mask_diff_v = np.where(np.diff(wetdry_mask_v[t,jjs[j],:(iis[j]+2)]))[0]
         
         
         #find where depth crosses from deeper than ref_depth to shallower
-        depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:(iis[j]+2)]-hb[t])))[0]
+        SZ['diff'] = np.where(np.diff(np.sign(H[t,jjs[j],:(iis[j]+2)]-hb[t])))[0]
         
         
-        
-        if len(wd_mask_diff_rho)>1:
-            count_wd_mask_diff_rho += 1
-        if len(wd_mask_diff_u)>1:
-            count_wd_mask_diff_u += 1
-        if len(wd_mask_diff_v)>1:
-            count_wd_mask_diff_v += 1
-        if len(depth_diff)>1:
-            count_depth_diff += 1
+        for DD in WD_rho,WD_u,WD_v,SZ:
+            if len(DD['diff'])==1:
+                DD['ind'] = DD['diff'][0]
+            elif len(DD['diff'])>1:
+                DD['count']+=1
+                if lat_rho[jjs[j],0]>32.6:
+                    DD['ind'] = DD['diff'][np.argmin(np.abs(DD['diff']-DD['ind']))]
+                else:
+                    DD['ind'] = DD['diff'][0]
+                
+        # if len(wd_mask_diff_rho)>1:
+        #     count_wd_mask_diff_rho += 1
+        #     if lat_rho[jjs[j],0]>32.6:
+        #         x_wd_ind_rho = wd_mask_diff_rho[np.argmin(np.abs(x_wd_ind-wd_mask_diff_rho))]
+        #     else:
+        #         x_wd_ind_rho = wd_mask_diff_rho[0]
+        #
+        # if len(wd_mask_diff_u)>1:
+        #     count_wd_mask_diff_u += 1
+        #     if lat_rho[jjs[j],0]>32.6:
+        #         x_wd_ind_u = wd_mask_diff_u[np.argmin(np.abs(x_wd_ind-wd_mask_diff_u))]
+        #     else:
+        #         x_wd_ind_u = wd_mask_diff_u[0]
+        #
+        # if len(wd_mask_diff_v)>1:
+        #     count_wd_mask_diff_v += 1
+        #     if lat_rho[jjs[j],0]>32.6:
+        #         x_wd_ind_v = wd_mask_diff_v[np.argmin(np.abs(x_wd_ind-wd_mask_diff_v))]
+        #     else:
+        #         x_wd_ind_v = wd_mask_diff_v[0]
+        #
+        # if len(depth_diff)>1:
+        #     count_depth_diff += 1
+            
+            # if lat_rho[jjs[j],0]>32.6:
+            #     x_sz_ind = depth_diff[np.argmin(np.abs(x_sz_ind-depth_diff))]
+            # else:
+            #     x_sz_ind = depth_diff[0]
 
         # #if multiple edges, north of TJRE
         # if (len(mask_diff[j])>1)&(lat_rho[jjs[j],0]>32.6):
@@ -146,32 +198,38 @@ for t in range(NT):
         #
         # elif len(mask_diff[j])==1:
         
-        x_wd_ind_rho = wd_mask_diff_rho[0]
-        x_wd_ind_u = wd_mask_diff_u[0]
-        x_wd_ind_v = wd_mask_diff_v[0]
-        x_wd_ind = np.min([x_wd_ind_rho,x_wd_ind_u,x_wd_ind_v])
+        # x_wd_ind_rho = wd_mask_diff_rho[0]
+        # x_wd_ind_u = wd_mask_diff_u[0]
+        # x_wd_ind_v = wd_mask_diff_v[0]
         
-        if len(depth_diff)==0:
-            x_sz_ind = x_wd_ind-2
-        else:
-            x_sz_ind = depth_diff[0]
+        # x_wd_ind = np.min([x_wd_ind_rho,x_wd_ind_u,x_wd_ind_v])
+        WD_ind = np.min([WD_rho['ind'],WD_u['ind'],WD_v['ind']])
+        
+        # if len(depth_diff)==0:
+        #     x_sz_ind = x_wd_ind-2
+        # else:
+        #     x_sz_ind = depth_diff[0]
+        if len(SZ['diff'])==0:
+            SZ['ind'] = WD_ind-2
             
-        if (x_wd_ind-x_sz_ind)<2:
-            x_sz_ind = x_wd_ind-2
+        # if (x_wd_ind-x_sz_ind)<2:
+        #     x_sz_ind = x_wd_ind-2
+        if (WD_ind-SZ['ind'])<2:
+            SZ['ind'] = WD_ind-2
             
 
         # u0[t,j] = np.nanmean(u00[t,:,jjs[j],int(x_sz_ind):int(x_wd_ind)])
         # v0[t,j] = np.nanmean(v00[t,:,jjs[j],int(x_sz_ind):int(x_wd_ind)])
         
         # calculate surfzone width
-        Lsz_x = x_rho[jjs[j],int(x_wd_ind)]-x_rho[jjs[j],int(x_sz_ind)]
-        Lsz_y = y_rho[jjs[j],int(x_wd_ind)]-y_rho[jjs[j],int(x_sz_ind)]
+        Lsz_x = x_rho[jjs[j],int(WD_ind)]-x_rho[jjs[j],int(SZ['ind'])]
+        Lsz_y = y_rho[jjs[j],int(WD_ind)]-y_rho[jjs[j],int(SZ['ind'])]
         Lsz[t,j] = np.sqrt(Lsz_x**2+Lsz_y**2)
         
-        lon_sz[t,j] = lon_rho[jjs[j],x_sz_ind]
-        lat_sz[t,j] = lat_rho[jjs[j],x_sz_ind]
-        lon_wd[t,j] = lon_rho[jjs[j],x_wd_ind]
-        lat_wd[t,j] = lat_rho[jjs[j],x_wd_ind]
+        lon_sz[t,j] = lon_rho[jjs[j],SZ['ind']]
+        lat_sz[t,j] = lat_rho[jjs[j],SZ['ind']]
+        lon_wd[t,j] = lon_rho[jjs[j],WD_ind]
+        lat_wd[t,j] = lat_rho[jjs[j],WD_ind]
 
 
     fig,axs = plt.subplots(1,len(y_lim_list),figsize=(12,5))
@@ -200,7 +258,7 @@ var_list = ['lon_rho','lat_rho','mask_rho','lonshore','latshore','h0',\
 'buoylon','buoylat','bi','bj',\
 'Hwave','zeta',\
 'Lsz','hb','ot',\
-'count_wd_mask_diff_rho','count_wd_mask_diff_u','count_wd_mask_diff_v','count_depth_diff']
+'WD_rho','WD_u','WD_v','SZ']
 
 D = dict()
 for var in var_list:
