@@ -64,11 +64,11 @@ for fn in f_list:
         lat_rho = ds['lat_rho'][:]
         mask_rho = ds['mask_rho'][:]
         h0 = ds['h'][:]
-        mask_diff = {}
+        # mask_diff = {}
         lonshore = np.zeros((len(jjs)))
         latshore = np.zeros((len(jjs)))
         for j in range(len(jjs)):
-            mask_diff[j] = np.where(np.diff(mask_rho[jjs[j],:]))[0]
+            # mask_diff[j] = np.where(np.diff(mask_rho[jjs[j],:]))[0]
             lonshore[j] = lon_rho[jjs[j],iis[j]]
             latshore[j] = lat_rho[jjs[j],iis[j]]
             
@@ -109,6 +109,22 @@ Lsz = np.zeros((NT,nj)) # width of surf zone
 
 # time
 ot = np.zeros((NT)) # time
+
+#prepare index finding dictionaries
+WD_rho = {}
+WD_rho['data'] = wetdry_mask_rho
+WD_rho['ind'] = 0
+
+WD_u = {}
+WD_u['data'] = wetdry_mask_u
+WD_u['ind'] = 0
+
+WD_v = {}
+WD_v['data'] = wetdry_mask_v
+WD_v['ind'] = 0
+
+SZ = {}
+SZ['ind'] = 0
 
 # Now do the extraction and processing
 tt=0
@@ -151,55 +167,40 @@ for fn in f_list:
     for j in range(nj):
         #loop through time steps, 
         # because extraction indexes depend on time-varying wetdry mask
+        north_of_TJRE = lat_rho[jjs[j],0]>32.6
         for t in range(nt):
-            # find the edge of the mask
-            wd_mask_diff_rho = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:]))[0]
-            wd_mask_diff_u = np.where(np.diff(wetdry_mask_u[t,jjs[j],:]))[0]
-            wd_mask_diff_v = np.where(np.diff(wetdry_mask_v[t,jjs[j],:]))[0]
             
+            for WD in WD_rho,WD_u,WD_v:
+                WD['diff'] = np.where(np.diff(WD['data'][t,jjs[j],:(iis[j]+2)]))[0]
             
-            #find where depth crosses from deeper than ref_depth to shallower
-            depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:]-hb0[t])))[0]
-    
-            #if multiple edges, north of TJRE
-            if (len(mask_diff[j])>1)&(lat_rho[jjs[j],0]>32.6):
-                #look for the edge closest to the previously identified edge
-                x_wd_ind_rho = wd_mask_diff_rho[np.argmin(np.abs(x_wd_ind-wd_mask_diff_rho))]
-                x_wd_ind_u = wd_mask_diff_u[np.argmin(np.abs(x_wd_ind-wd_mask_diff_u))]
-                x_wd_ind_v = wd_mask_diff_v[np.argmin(np.abs(x_wd_ind-wd_mask_diff_v))]
-                x_sz_ind = depth_diff[np.argmin(np.abs(x_sz_ind-depth_diff))]
+            SZ['diff'] = np.where(np.diff(np.sign(H[t,jjs[j],:(iis[j]+2)]-hb[t])))[0]
+        
+        
+            for DD in WD_rho,WD_u,WD_v,SZ:
+                if len(DD['diff'])==1:
+                    DD['ind'] = DD['diff'][0]
+                elif len(DD['diff'])>1:
+                    if north_of_TJRE:
+                        DD['ind'] = DD['diff'][np.argmin(np.abs(DD['diff']-DD['ind']))]
+                    else:
+                        DD['ind'] = DD['diff'][0]
 
-            #if multiple edges, south of TJRE
-            elif (len(mask_diff[j])>1)&(lat_rho[jjs[j],0]<32.6):
-                #do outermost edge
-                x_wd_ind_rho = wd_mask_diff_rho[0]
-                x_wd_ind_u = wd_mask_diff_u[0]
-                x_wd_ind_v = wd_mask_diff_v[0]
-                x_sz_ind = depth_diff[0]
-
-            elif len(mask_diff[j])==1:
-                x_wd_ind_rho = wd_mask_diff_rho[0]
-                x_wd_ind_u = wd_mask_diff_u[0]
-                x_wd_ind_v = wd_mask_diff_v[0]
-                x_sz_ind = depth_diff[0]
+            WD_ind = np.min([WD_rho['ind'],WD_u['ind'],WD_v['ind']])
+        
+            if len(SZ['diff'])==0:
+                SZ['ind'] = WD_ind-2
+            
+            if (WD_ind-SZ['ind'])<2:
+                SZ['ind'] = WD_ind-2
                 
-            x_wd_ind = np.min([x_wd_ind_rho,x_wd_ind_u,x_wd_ind_v])
-
-            if (x_wd_ind-x_sz_ind)<2:
-                x_sz_ind = x_wd_ind-2
-                
-            
-            
-            #go offshore of the wet/dry mask by a tad
-            # x_wd_ind = x_wd_ind - 2
-            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(x_sz_ind):int(x_wd_ind)])
-            dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,jjs[j],int(x_sz_ind):int(x_wd_ind)])
-            u0[old_nt+t,j] = np.nanmean(u00[t,:,jjs[j],int(x_sz_ind):int(x_wd_ind)])
-            v0[old_nt+t,j] = np.nanmean(v00[t,:,jjs[j],int(x_sz_ind):int(x_wd_ind)])
+            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(SZ['ind']:int(WD_ind)])
+            dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,jjs[j],int(SZ['ind']):int(WD_ind)])
+            u0[old_nt+t,j] = np.nanmean(u00[t,:,jjs[j],int(SZ['ind']):int(WD_ind)])
+            v0[old_nt+t,j] = np.nanmean(v00[t,:,jjs[j],int(SZ['ind']):int(WD_ind)])
             
             # calculate surfzone width
-            Lsz_x = x_rho[jjs[j],int(x_wd_ind)]-x_rho[jjs[j],int(x_sz_ind)]
-            Lsz_y = y_rho[jjs[j],int(x_wd_ind)]-y_rho[jjs[j],int(x_sz_ind)]
+            Lsz_x = x_rho[jjs[j],int(WD_ind)]-x_rho[jjs[j],int(SZ['ind'])]
+            Lsz_y = y_rho[jjs[j],int(WD_ind)]-y_rho[jjs[j],int(SZ['ind'])]
             Lsz[old_nt+t,j] = np.sqrt(Lsz_x**2+Lsz_y**2)
     
     ot[old_nt:old_nt+nt] = ocean_time
