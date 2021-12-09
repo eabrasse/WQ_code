@@ -186,7 +186,7 @@ var_list = ['lon_rho','lat_rho','mask_rho','lonshore','latshore','h0',\
 'iis','jjs','shoreangle',\
 'buoylon','buoylat','bi','bj',\
 'Hwave','zeta',\
-'Lsz','hb','ot',/
+'Lsz','hb','ot',\
 'count_wd_mask_diff_rho','count_wd_mask_diff_u','count_wd_mask_diff_v','count_depth_diff']
 
 D = dict()
