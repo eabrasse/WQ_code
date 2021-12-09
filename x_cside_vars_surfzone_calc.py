@@ -142,6 +142,8 @@ for fn in f_list:
     
     # calculate wave breaking depth based on wave height at buoy
     hb0 = Hwave0[:,bj,bi]/0.78 # from Hwave = gamma * depth, gamma = 0.78 from McCowan (1984) [section 5.7.3 of Kumar CEE 473
+    # because the land value of H is 0.25 m...
+    hb0[hb0<0.25] = 0.26
     hb[old_nt:old_nt+nt] = hb0
 
     for j in range(nj):
