@@ -167,7 +167,7 @@ for fn in f_list:
                 x_wd_ind_rho = wd_mask_diff_rho[np.argmin(np.abs(x_wd_ind_rho-wd_mask_diff_rho))]
                 x_wd_ind_u = wd_mask_diff_u[np.argmin(np.abs(x_wd_ind_u-wd_mask_diff_u))]
                 x_wd_ind_v = wd_mask_diff_v[np.argmin(np.abs(x_wd_ind_v-wd_mask_diff_v))]
-                x_sz_ind = depth_diff[np.argmin(np.abs(x_5m_ind-depth_diff))]
+                x_sz_ind = depth_diff[np.argmin(np.abs(x_sz_ind-depth_diff))]
 
             #if multiple edges, south of TJRE
             elif (len(mask_diff[j])>1)&(lat_rho[jjs[j],0]<32.6):
