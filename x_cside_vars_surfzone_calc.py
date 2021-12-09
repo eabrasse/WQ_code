@@ -171,6 +171,9 @@ for fn in f_list:
                 x_wd_ind = wd_mask_diff[0]
                 x_sz_ind = depth_diff[0]
 
+            if x_sz_ind==x_wd_ind:
+                x_sz_ind = x_sz_ind-1
+            
             #go offshore of the wet/dry mask by a tad
             # x_wd_ind = x_wd_ind - 2
             dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(x_sz_ind):int(x_wd_ind)])
