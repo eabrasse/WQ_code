@@ -93,7 +93,7 @@ zeta = zeta0[:,bj,bi]
 # calculate wave breaking depth based on wave height at buoy
 hb = Hwave0[:,bj,bi]/0.78 # from Hwave = gamma * depth, gamma = 0.78 from McCowan (1984) [section 5.7.3 of Kumar CEE 473
 # because the land value of H is 0.25 m...
-hb[hb<0.25] = 0.26
+hb[hb<0.5] = 0.5
 
 count_wd_mask_diff_rho = 0
 count_wd_mask_diff_u = 0
