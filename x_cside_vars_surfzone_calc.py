@@ -64,11 +64,9 @@ for fn in f_list:
         lat_rho = ds['lat_rho'][:]
         mask_rho = ds['mask_rho'][:]
         h0 = ds['h'][:]
-        # mask_diff = {}
         lonshore = np.zeros((len(jjs)))
         latshore = np.zeros((len(jjs)))
         for j in range(len(jjs)):
-            # mask_diff[j] = np.where(np.diff(mask_rho[jjs[j],:]))[0]
             lonshore[j] = lon_rho[jjs[j],iis[j]]
             latshore[j] = lat_rho[jjs[j],iis[j]]
             
