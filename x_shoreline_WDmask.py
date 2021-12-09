@@ -174,13 +174,15 @@ for t in range(NT):
     fig = plt.figure(figsize=(6,8))
     ax = fig.gca()
     ax.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
-    ax.scatter(lon_sz[t,:],lat_sz[t,:],marker='>',c='m')
-    ax.scatter(lon_wd[t,:],lat_wd[t,:],marker='<',c='g')
+    ax.scatter(lon_sz[t,:],lat_sz[t,:],marker='o',c='m',s=0.5)
+    ax.scatter(lon_wd[t,:],lat_wd[t,:],marker='o',c='g',s=0.5)
     ax.set_ylim([latshore.min(),latshore.max()])
     ax.set_xlim([-117.225,-117.075])
     wqfun.dar(ax)
     ax.set_ylabel('Latitude')
     ax.set_xlabel('Longitude')
+    ax.text(0.1,0.2,'surf zone location',color='m',transform=ax.transAxes)
+    ax.text(0.1,0.2,'\nwet-dry mask location',color='g',transform=ax.transAxes)
 
     outfn = home + f'WQ_plots/shoreline_wd_sz/figure{t:03}.png'
     plt.savefig(outfn)
