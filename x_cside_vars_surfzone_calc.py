@@ -191,7 +191,7 @@ for fn in f_list:
             if (WD_ind-SZ['ind'])<2:
                 SZ['ind'] = WD_ind-2
                 
-            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(SZ['ind']:int(WD_ind)])
+            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(SZ['ind']):int(WD_ind)])
             dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,jjs[j],int(SZ['ind']):int(WD_ind)])
             u0[old_nt+t,j] = np.nanmean(u00[t,:,jjs[j],int(SZ['ind']):int(WD_ind)])
             v0[old_nt+t,j] = np.nanmean(v00[t,:,jjs[j],int(SZ['ind']):int(WD_ind)])
