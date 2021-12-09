@@ -179,7 +179,7 @@ for t in range(NT):
         ax.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
         ax.scatter(lon_sz[t,:],lat_sz[t,:],marker='o',c='m',s=0.5)
         ax.scatter(lon_wd[t,:],lat_wd[t,:],marker='o',c='g',s=0.5)
-        ax.set_ylim(y_lims_list[i])
+        ax.set_ylim(y_lim_list[i])
         ax.set_xlim([-117.15,-117.1])
         wqfun.dar(ax)
         ax.set_ylabel('Latitude')
