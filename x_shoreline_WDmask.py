@@ -177,7 +177,7 @@ for t in range(NT):
     ax.scatter(lon_sz[t,:],lat_sz[t,:],marker='>',c='m')
     ax.scatter(lon_wd[t,:],lat_wd[t,:],marker='<',c='g')
     ax.set_ylim([latshore.min(),latshore.max()])
-    ax.set_xlim([[-117.225,-117.075]])
+    ax.set_xlim([-117.225,-117.075])
     wqfun.dar(ax)
     ax.set_ylabel('Latitude')
     ax.set_xlabel('Longitude')
