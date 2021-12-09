@@ -165,10 +165,10 @@ for t in range(NT):
         Lsz_y = y_rho[jjs[j],int(x_wd_ind)]-y_rho[jjs[j],int(x_sz_ind)]
         Lsz[t,j] = np.sqrt(Lsz_x**2+Lsz_y**2)
         
-        lon_sz[t,j] = lon_rho[jjs[j],iis[j]]
-        lat_sz[t,j] = lat_rho[jjs[j],iis[j]]
-        lon_wd[t,j] = lon_rho[jjs[j],iis[j]]
-        lat_wd[t,j] = lat_rho[jjs[j],iis[j]]
+        lon_sz[t,j] = lon_rho[jjs[j],x_sz_ind]
+        lat_sz[t,j] = lat_rho[jjs[j],x_sz_ind]
+        lon_wd[t,j] = lon_rho[jjs[j],x_wd_ind]
+        lat_wd[t,j] = lat_rho[jjs[j],x_wd_ind]
 
 
     fig = plt.figure(figsize=(6,8))
