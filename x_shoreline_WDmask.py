@@ -43,7 +43,7 @@ nj = len(jjs)
 lonshore = np.zeros((nj))
 latshore = np.zeros((nj))
 for j in range(nj):
-    mask_diff[j] = np.where(np.diff(mask_rho[jjs[j],:]))[0]
+    # mask_diff[j] = np.where(np.diff(mask_rho[jjs[j],:]))[0]
     lonshore[j] = lon_rho[jjs[j],iis[j]]
     latshore[j] = lat_rho[jjs[j],iis[j]]
 
