@@ -164,9 +164,9 @@ for fn in f_list:
             #if multiple edges, north of TJRE
             if (len(mask_diff[j])>1)&(lat_rho[jjs[j],0]>32.6):
                 #look for the edge closest to the previously identified edge
-                x_wd_ind_rho = wd_mask_diff_rho[np.argmin(np.abs(x_wd_ind_rho-wd_mask_diff_rho))]
-                x_wd_ind_u = wd_mask_diff_u[np.argmin(np.abs(x_wd_ind_u-wd_mask_diff_u))]
-                x_wd_ind_v = wd_mask_diff_v[np.argmin(np.abs(x_wd_ind_v-wd_mask_diff_v))]
+                x_wd_ind_rho = wd_mask_diff_rho[np.argmin(np.abs(x_wd_ind-wd_mask_diff_rho))]
+                x_wd_ind_u = wd_mask_diff_u[np.argmin(np.abs(x_wd_ind-wd_mask_diff_u))]
+                x_wd_ind_v = wd_mask_diff_v[np.argmin(np.abs(x_wd_ind-wd_mask_diff_v))]
                 x_sz_ind = depth_diff[np.argmin(np.abs(x_sz_ind-depth_diff))]
 
             #if multiple edges, south of TJRE
