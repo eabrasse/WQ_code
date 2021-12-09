@@ -110,15 +110,15 @@ ot = np.zeros((NT)) # time
 
 #prepare index finding dictionaries
 WD_rho = {}
-WD_rho['data'] = wetdry_mask_rho
+# WD_rho['data'] = wetdry_mask_rho
 WD_rho['ind'] = 0
 
 WD_u = {}
-WD_u['data'] = wetdry_mask_u
+# WD_u['data'] = wetdry_mask_u
 WD_u['ind'] = 0
 
 WD_v = {}
-WD_v['data'] = wetdry_mask_v
+# WD_v['data'] = wetdry_mask_v
 WD_v['ind'] = 0
 
 SZ = {}
@@ -132,9 +132,9 @@ for fn in f_list:
     ds = nc.Dataset(fn)
 
     # select wave direction and significant wave height
-    wetdry_mask_rho = ds['wetdry_mask_rho'][:]
-    wetdry_mask_u = ds['wetdry_mask_u'][:]
-    wetdry_mask_v = ds['wetdry_mask_v'][:]
+    WD_rho['data'] = ds['wetdry_mask_rho'][:]
+    WD_u['data'] = ds['wetdry_mask_u'][:]
+    WD_v['data'] = ds['wetdry_mask_v'][:]
     dye_01_0 = ds['dye_01'][:]
     dye_02_0 = ds['dye_02'][:]
     Dwave0 = ds['Dwave'][:]
