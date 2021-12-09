@@ -169,7 +169,7 @@ for fn in f_list:
         for t in range(nt):
             
             for WD in WD_rho,WD_u,WD_v:
-                WD['diff'] = np.where(np.diff(WD['data'][t,jjs[j],:(iis[j]+2)]))[0]
+                WD['diff'] = np.where(np.diff(WD['data'][t,jjs[j],:(iis[j]+2)])<0)[0]
             
             SZ['diff'] = np.where(np.diff(np.sign(H[t,jjs[j],:(iis[j]+2)]-hb[t])))[0]
         
