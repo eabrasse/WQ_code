@@ -183,7 +183,7 @@ for fn in f_list:
                 x_wd_ind_v = wd_mask_diff_v[0]
                 x_sz_ind = depth_diff[0]
                 
-            wd_mask_ind = np.min([wd_mask_ind_rho,wd_mask_ind_u,wd_mask_ind_v])
+            x_wd_ind = np.min([x_wd_ind_rho,x_wd_ind_u,x_wd_ind_v])
 
             if (x_wd_ind-x_sz_ind)<2:
                 x_sz_ind = x_wd_ind-2
