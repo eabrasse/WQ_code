@@ -68,7 +68,7 @@ for fn in f_list:
         lonshore = np.zeros((len(jjs)))
         latshore = np.zeros((len(jjs)))
         for j in range(len(jjs)):
-            mask_diff = np.where(np.diff(mask_rho[jjs[j],:]))[0]
+            mask_diff[j] = np.where(np.diff(mask_rho[jjs[j],:]))[0]
             lonshore[j] = lon_rho[jjs[j],iis[j]]
             latshore[j] = lat_rho[jjs[j],iis[j]]
             
@@ -119,6 +119,8 @@ for fn in f_list:
 
     # select wave direction and significant wave height
     wetdry_mask_rho = ds['wetdry_mask_rho'][:]
+    wetdry_mask_u = ds['wetdry_mask_u'][:]
+    wetdry_mask_v = ds['wetdry_mask_v'][:]
     dye_01_0 = ds['dye_01'][:]
     dye_02_0 = ds['dye_02'][:]
     Dwave0 = ds['Dwave'][:]
@@ -151,28 +153,42 @@ for fn in f_list:
         # because extraction indexes depend on time-varying wetdry mask
         for t in range(nt):
             # find the edge of the mask
-            wd_mask_diff = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:]))[0]
+            wd_mask_diff_rho = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:]))[0]
+            wd_mask_diff_u = np.where(np.diff(wetdry_mask_u[t,jjs[j],:]))[0]
+            wd_mask_diff_v = np.where(np.diff(wetdry_mask_v[t,jjs[j],:]))[0]
+            
+            
             #find where depth crosses from deeper than ref_depth to shallower
             depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:]-hb0[t])))[0]
     
             #if multiple edges, north of TJRE
-            if (len(mask_diff)>1)&(lat_rho[jjs[j],0]>32.6):
+            if (len(mask_diff[j])>1)&(lat_rho[jjs[j],0]>32.6):
                 #look for the edge closest to the previously identified edge
-                x_wd_ind = wd_mask_diff[np.argmin(np.abs(x_wd_ind-wd_mask_diff))]
+                x_wd_ind_rho = wd_mask_diff_rho[np.argmin(np.abs(x_wd_ind_rho-wd_mask_diff_rho))]
+                x_wd_ind_u = wd_mask_diff_u[np.argmin(np.abs(x_wd_ind_u-wd_mask_diff_u))]
+                x_wd_ind_v = wd_mask_diff_v[np.argmin(np.abs(x_wd_ind_v-wd_mask_diff_v))]
                 x_sz_ind = depth_diff[np.argmin(np.abs(x_5m_ind-depth_diff))]
 
             #if multiple edges, south of TJRE
-            elif (len(mask_diff)>1)&(lat_rho[jjs[j],0]<32.6):
+            elif (len(mask_diff[j])>1)&(lat_rho[jjs[j],0]<32.6):
                 #do outermost edge
-                x_wd_ind = wd_mask_diff[0]
+                x_wd_ind_rho = wd_mask_diff_rho[0]
+                x_wd_ind_u = wd_mask_diff_u[0]
+                x_wd_ind_v = wd_mask_diff_v[0]
                 x_sz_ind = depth_diff[0]
 
-            elif len(mask_diff)==1:
-                x_wd_ind = wd_mask_diff[0]
+            elif len(mask_diff[j])==1:
+                x_wd_ind_rho = wd_mask_diff_rho[0]
+                x_wd_ind_u = wd_mask_diff_u[0]
+                x_wd_ind_v = wd_mask_diff_v[0]
                 x_sz_ind = depth_diff[0]
+                
+            wd_mask_ind = np.min([wd_mask_ind_rho,wd_mask_ind_u,wd_mask_ind_v])
 
             if (x_wd_ind-x_sz_ind)<2:
                 x_sz_ind = x_wd_ind-2
+                
+            
             
             #go offshore of the wet/dry mask by a tad
             # x_wd_ind = x_wd_ind - 2
