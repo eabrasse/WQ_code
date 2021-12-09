@@ -106,13 +106,13 @@ for t in range(NT):
     # because extraction indexes depend on time-varying wetdry mask
     for j in range(nj):
         # find the edge of the mask
-        wd_mask_diff_rho = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:iis[j]]))[0]
-        wd_mask_diff_u = np.where(np.diff(wetdry_mask_u[t,jjs[j],:iis[j]]))[0]
-        wd_mask_diff_v = np.where(np.diff(wetdry_mask_v[t,jjs[j],:iis[j]]))[0]
+        wd_mask_diff_rho = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:(iis[j]+1)]))[0]
+        wd_mask_diff_u = np.where(np.diff(wetdry_mask_u[t,jjs[j],:(iis[j]+1)]))[0]
+        wd_mask_diff_v = np.where(np.diff(wetdry_mask_v[t,jjs[j],:(iis[j]+1)]))[0]
         
         
         #find where depth crosses from deeper than ref_depth to shallower
-        depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:iis[j]]-hb[t])))[0]
+        depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:(iis[j]+1)]-hb[t])))[0]
         
         if len(wd_mask_diff_rho)>1:
             count_wd_mask_diff_rho += 1
