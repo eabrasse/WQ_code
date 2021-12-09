@@ -178,7 +178,18 @@ for fn in f_list:
                 if len(DD['diff'])==1:
                     DD['ind'] = DD['diff'][0]
                 elif len(DD['diff'])>1:
+                    # south of TJRE, just choose the most western point
+                    # north of TJRE, San Diego Bay and Pt Loma get tricky
                     if north_of_TJRE:
+                        # to avoid a weird problem where sometimes the wetdry mask leaves an isolated wet
+                        # spot in an otherwise dry tidal zone, make sure we're only considering wet areas with 2 wet indexes west
+                        # of them
+                        if DD in [WD_rho,WD_u,WD_v]:
+                            new_diff_list = []
+                            for ind_diff in DD['diff']:
+                                if ~np.any(WD['data'][t,jjs[j],(ind_diff-2):ind_diff]==0):
+                                    new_diff_list.append(ind_diff)
+                            DD['diff'] = new_diff_list
                         DD['ind'] = DD['diff'][np.argmin(np.abs(DD['diff']-DD['ind']))]
                     else:
                         DD['ind'] = DD['diff'][0]
