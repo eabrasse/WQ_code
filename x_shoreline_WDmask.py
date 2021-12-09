@@ -32,6 +32,7 @@ f_list = [x for x in f_list if x[:17]=='ocean_his_NADB_0_']
 fn = f_list[0]
 ds = nc.Dataset(dir0+fn)
 
+h0 = ds['h'][:]
 lon_rho = ds['lon_rho'][:]
 lat_rho = ds['lat_rho'][:]
 mask_rho = ds['mask_rho'][:]
