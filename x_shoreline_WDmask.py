@@ -114,6 +114,8 @@ for t in range(NT):
         #find where depth crosses from deeper than ref_depth to shallower
         depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:(iis[j]+2)]-hb[t])))[0]
         
+        
+        
         if len(wd_mask_diff_rho)>1:
             count_wd_mask_diff_rho += 1
         if len(wd_mask_diff_u)>1:
@@ -144,10 +146,13 @@ for t in range(NT):
         x_wd_ind_rho = wd_mask_diff_rho[0]
         x_wd_ind_u = wd_mask_diff_u[0]
         x_wd_ind_v = wd_mask_diff_v[0]
-        x_sz_ind = depth_diff[0]
-            
         x_wd_ind = np.min([x_wd_ind_rho,x_wd_ind_u,x_wd_ind_v])
-
+        
+        if len(depth_diff)==0:
+            x_sz_ind = x_wd_ind-2
+        else:
+            x_sz_ind = depth_diff[0]
+            
         if (x_wd_ind-x_sz_ind)<2:
             x_sz_ind = x_wd_ind-2
             
