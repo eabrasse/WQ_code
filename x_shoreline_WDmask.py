@@ -101,6 +101,8 @@ count_wd_mask_diff_v = 0
 
 count_depth_diff = 0
 
+y_lim_list = [[32.45,32.5],[32.525,32.575],[32.6,32.65]]
+
 for t in range(NT):
     #loop through time steps, 
     # because extraction indexes depend on time-varying wetdry mask
@@ -171,18 +173,19 @@ for t in range(NT):
         lat_wd[t,j] = lat_rho[jjs[j],x_wd_ind]
 
 
-    fig = plt.figure(figsize=(6,8))
-    ax = fig.gca()
-    ax.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
-    ax.scatter(lon_sz[t,:],lat_sz[t,:],marker='o',c='m',s=0.5)
-    ax.scatter(lon_wd[t,:],lat_wd[t,:],marker='o',c='g',s=0.5)
-    ax.set_ylim([32.45,32.5])
-    ax.set_xlim([-117.15,-117.1])
-    wqfun.dar(ax)
-    ax.set_ylabel('Latitude')
-    ax.set_xlabel('Longitude')
-    ax.text(0.1,0.2,'surf zone location',color='m',transform=ax.transAxes)
-    ax.text(0.1,0.1,'\nwet-dry mask location',color='g',transform=ax.transAxes)
+    fig,axs = plt.subplots(1,len(y_lim_list),figsize=(12,7))
+    for i in range(len(y_lim_list)):
+        ax = axs[i]
+        ax.contour(lon_rho,lat_rho,mask_rho,colors='k',levels=[1],linewidths=0.5,alpha=1.0)
+        ax.scatter(lon_sz[t,:],lat_sz[t,:],marker='o',c='m',s=0.5)
+        ax.scatter(lon_wd[t,:],lat_wd[t,:],marker='o',c='g',s=0.5)
+        ax.set_ylim(y_lims_list[i])
+        ax.set_xlim([-117.15,-117.1])
+        wqfun.dar(ax)
+        ax.set_ylabel('Latitude')
+        ax.set_xlabel('Longitude')
+        ax.text(0.1,0.2,'surf zone location',color='m',transform=ax.transAxes)
+        ax.text(0.1,0.1,'\nwet-dry mask location',color='g',transform=ax.transAxes)
 
     outfn = home + f'WQ_plots/shoreline_wd_sz/figure{t:03}.png'
     plt.savefig(outfn)
