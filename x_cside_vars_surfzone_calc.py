@@ -223,9 +223,9 @@ for fn in f_list:
 var_list = ['lon_rho','lat_rho','mask_rho','lonshore','latshore','h0',\
 'x_rho','y_rho','xshore','yshore','rshore',\
 'iis','jjs','shoreangle',\
-'buoylon','buoylat','bi','bj'\
+'buoylon','buoylat','bi','bj',\
 'Dwave','Hwave','Lwave','zeta',\
-'Lsz','hb','ot'\
+'Lsz','hb','ot',\
 'dye_01','dye_02','u0','v0']
 
 D = dict()
