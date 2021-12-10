@@ -43,7 +43,7 @@ for fn in f_list2018:
     f_list.append(dir2018+fn)
 
 
-testing=True
+testing=False
 if testing:
     f_list = f_list[:1]
 
