@@ -128,7 +128,7 @@ SZ['ind'] = 0
 tt=0
 old_nt = 0
 for fn in f_list:
-    print('file {:d} of {:d}'.format(tt,nfiles))
+    print(f'file {(tt+1):d} of {nfiles:d}')
     ds = nc.Dataset(fn)
 
     # select wave direction and significant wave height
@@ -163,6 +163,7 @@ for fn in f_list:
     hb[old_nt:old_nt+nt] = hb0
 
     for j in range(nj):
+        print(f'j = {(j+1)} of {nj}')
         #loop through time steps, 
         # because extraction indexes depend on time-varying wetdry mask
         north_of_TJRE = lat_rho[jjs[j],0]>32.6
@@ -187,7 +188,7 @@ for fn in f_list:
                         if DD in [WD_rho,WD_u,WD_v]:
                             new_diff_list = []
                             for ind_diff in DD['diff']:
-                                if ~np.any(WD['data'][t,jjs[j],(ind_diff-2):ind_diff]==0):
+                                if ~np.any(DD['data'][t,jjs[j],(ind_diff-2):ind_diff]==0):
                                     new_diff_list.append(ind_diff)
                             DD['diff'] = new_diff_list
                         DD['ind'] = DD['diff'][np.argmin(np.abs(DD['diff']-DD['ind']))]
