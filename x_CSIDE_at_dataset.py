@@ -127,7 +127,13 @@ for fname in f_list:
     
     for var_name in data_dict['var_list']:
         var = ds[var_list_roms[var_name]][:]
-        CSIDE[var_name] = np.append(CSIDE[var_name],var[:,jref,iref])
+        if len(var.shape)==3:
+            #2d variable
+            CSIDE[var_name] = np.append(CSIDE[var_name],var[:,jref,iref])
+        elif len(var.shape)==4:
+            #3d variable
+            # in this case, use surface value only
+            CSIDE[var_name] = np.append(CSIDE[var_name],var[:,-1,jref,iref])
 
     ds.close()
 
