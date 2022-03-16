@@ -46,7 +46,7 @@ if station=='NOAA':
     data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/CO-OPS_9410170_met.csv'
     data_dict['df'] = pd.read_csv(data_dict['fname'],parse_dates={ 'time' : ['Date','Time (GMT)']})
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
-    data_dict['time'] = data_dict_df['time']
+    data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.17
     data_dict['lat'] = 32.71
     data_dict['var_list'] = 'ssh'
