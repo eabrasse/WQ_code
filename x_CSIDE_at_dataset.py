@@ -40,12 +40,9 @@ f_list.sort()
 f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
 
 
-station = NOAA
-
-if station==NOAA:
+if station=='NOAA':
     data_dict = {}
     data_dict['dataset_name'] = 'NOAA tide gauge 9410170 - San Diego, CA'
-    data_dict['outname'] = 'data_dict'
     data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/CO-OPS_9410170_met.csv'
     data_dict['df'] = pd.read_csv(data_dict['fname'],parse_dates={ 'time' : ['Date','Time (GMT)']})
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
@@ -60,10 +57,9 @@ if station==NOAA:
     for var_name in data_dict['var_list']:
         data_dict[var_name] = data_dict['df'][var_list_df[var_name]]
 
-if station==CDIP:
+if station=='CDIP':
     data_dict = {}
     data_dict['dataset_name'] = 'NOAA tide gauge 9410170 - San Diego, CA'
-    data_dict['outname'] = 'data_dict'
     data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/pm191p1p1_201801-201812_new.csv'
     data_dict['df'] = pd.read_csv(data_dict['fname'],parse_dates={ 'time' : ['Date','Time (GMT)']})
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
@@ -84,10 +80,9 @@ if station==CDIP:
     for var_name in data_dict['var_list']:
         data_dict[var_name] = data_dict['df'][var_list_df[var_name]]
         
-if station==SBOO:
+if station=='SBOO':
     data_dict = {}
     data_dict['dataset_name'] = 'South Bay Ocean Outfall mooring'
-    data_dict['outname'] = 'data_dict'
     data_dict['fname_salt'] = '/data0/ebrasseale/WQ_data/2018validation/SBOO_sal_QC.csv'
     data_dict['fname_temp'] = '/data0/ebrasseale/WQ_data/2018validation/SBOO_temp_QC.csv'
     df_salt = pd.read_csv(data_dict['fname_salt'],parse_dates={  time : ['DateTime_PST']})
@@ -149,5 +144,5 @@ for var_name in var_list:
     D[var_name] = locals()[var_name]
 
 
-out_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_'+data_dict['outname']+'.p'
+out_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_'+station+'.p'
 pickle.dump(D,open(out_fn,'wb'))
