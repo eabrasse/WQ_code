@@ -149,5 +149,5 @@ for var_name in var_list:
     D[var_name] = locals()[var_name]
 
 
-out_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_'+data_dict['outname']'.p'
+out_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_'+data_dict['outname']+'.p'
 pickle.dump(D,open(out_fn,'wb'))
