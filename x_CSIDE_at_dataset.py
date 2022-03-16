@@ -49,7 +49,7 @@ if station=='NOAA':
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.17
     data_dict['lat'] = 32.71
-    data_dict['var_list'] = ['ssh']
+    data_dict['var_list'] = ['SSH']
     var_list_df = {}
     var_list_df['SSH'] = 'Verified (m)'
     var_list_roms = {}
