@@ -5,31 +5,35 @@ compare CSIDE output with NOAA tide gauge
 """
 
 # setup
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-import cmocean as cmo
 import netCDF4 as nc
 import numpy as np
 import os
+import argparse
 from datetime import datetime, timedelta
-import matplotlib.dates as mdates
 import pandas as pd
-import matplotlib.transforms as mtrans
-from matplotlib.colors import LogNorm
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import pickle
 
-def dar(ax):
-    """
-    Fixes the plot aspect ratio to be locally Cartesian.
-    """
-    yl = ax.get_ylim()
-    yav = (yl[0] + yl[1])/2
-    ax.set_aspect(1/np.sin(np.pi*yav/180))
+parser = argparse.ArgumentParser()
+parser.add_argument('-st', '--station', nargs='?', type=str, default='NOAA')
+args = parser.parse_args()
 
-plt.close('all')
+# choose which station to extract
+if len(args.station) == 0:
+    print(30*'*' + ' x_CSIDE_at_dataset.py ' + 30*'*')
+    print('\n%s\n' % '** Choose station (return for NOAA) **')
+    st_list = ['NOAA', 'CDIP', 'SBOO']
+    Nst = len(st_list)
+    st_dict = dict(zip(range(Nst), st_list))
+    for nst in range(Nst):
+        print(str(nst) + ': ' + st_list[nst])
+    my_nst = input('-- Input number -- ')
+    if len(my_nst)==0:
+        station = 'NOAA'
+    else:
+        station = st_dict[int(my_nst)]
+else:
+    station = args.station
+
 dir0 = '/data0/NADB2018/'
 f_list = os.listdir(dir0)
 f_list.sort()
