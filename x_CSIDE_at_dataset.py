@@ -14,7 +14,7 @@ import pandas as pd
 import pickle
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-st', '--station', nargs='?', type=str, default='NOAA')
+parser.add_argument('-st', '--station', nargs='?', type=str, default='')
 args = parser.parse_args()
 
 # choose which station to extract
