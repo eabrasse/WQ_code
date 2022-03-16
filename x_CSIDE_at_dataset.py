@@ -49,7 +49,7 @@ if station=='NOAA':
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.17
     data_dict['lat'] = 32.71
-    data_dict['var_list'] = 'ssh'
+    data_dict['var_list'] = ['ssh']
     var_list_df = {}
     var_list_df['SSH'] = 'Verified (m)'
     var_list_roms = {}
@@ -66,7 +66,7 @@ if station=='CDIP':
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.17
     data_dict['lat'] = 32.71
-    data_dict['var_list'] = 'Hs','Tp','Dp','temp'
+    data_dict['var_list'] = ['Hs','Tp','Dp','temp']
     var_list_df = {}
     var_list_df['Hs'] = 'Hs (m)'
     var_list_df['Tp'] = 'Tp (sec)'
@@ -92,7 +92,7 @@ if station=='SBOO':
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.18612
     data_dict['lat'] = 32.53166
-    data_dict['var_list'] = 'SST','SSS'
+    data_dict['var_list'] = ['SST','SSS']
     var_list_df = {}
     var_list_df['SST'] = 'T_C_1m'
     var_list_df['SSS'] = 'S_1m'
