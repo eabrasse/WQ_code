@@ -85,8 +85,8 @@ if station=='SBOO':
     data_dict['dataset_name'] = 'South Bay Ocean Outfall mooring'
     data_dict['fname_salt'] = '/data0/ebrasseale/WQ_data/2018validation/SBOO_sal_QC.csv'
     data_dict['fname_temp'] = '/data0/ebrasseale/WQ_data/2018validation/SBOO_temp_QC.csv'
-    df_salt = pd.read_csv(data_dict['fname_salt'],parse_dates={  time : ['DateTime_PST']})
-    df_temp = pd.read_csv(data_dict['fname_temp'],parse_dates={  time : ['DateTime_PST']})
+    df_salt = pd.read_csv(data_dict['fname_salt'],parse_dates={  'time' : ['DateTime_PST']})
+    df_temp = pd.read_csv(data_dict['fname_temp'],parse_dates={  'time' : ['DateTime_PST']})
     data_dict['df'] = pd.concat([df_salt, df_temp])
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
     data_dict['time'] = data_dict['df']['time']
