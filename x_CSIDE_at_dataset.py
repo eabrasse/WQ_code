@@ -49,34 +49,34 @@ if station=='NOAA':
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.17
     data_dict['lat'] = 32.71
-    data_dict['var_list'] = ['SSH']
+    data_dict['var_list'] = ['SSH (m)']
     var_list_df = {}
-    var_list_df['SSH'] = 'Verified (m)'
+    var_list_df['SSH (m)'] = 'Verified (m)'
     var_list_roms = {}
-    var_list_roms['SSH'] = 'zeta'
+    var_list_roms['SSH (m)'] = 'zeta'
     for var_name in data_dict['var_list']:
         data_dict[var_name] = data_dict['df'][var_list_df[var_name]]
 
 if station=='CDIP':
     data_dict = {}
-    data_dict['dataset_name'] = 'NOAA tide gauge 9410170 - San Diego, CA'
-    data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/pm191p1p1_201801-201812_new.csv'
+    data_dict['dataset_name'] = '155 - Imperial Beach Nearshore Buoy (NDBC 46235)'
+    data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/pm155p1p1_197501-202212.csv'
     data_dict['df'] = pd.read_csv(data_dict['fname'],parse_dates={ 'time' : ['Date','Time (GMT)']})
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.17
     data_dict['lat'] = 32.71
-    data_dict['var_list'] = ['Hs','Tp','Dp','temp']
+    data_dict['var_list'] = ['Hs (m)','Tp (s)','Dp (deg)','SST (C)']
     var_list_df = {}
-    var_list_df['Hs'] = 'Hs (m)'
-    var_list_df['Tp'] = 'Tp (sec)'
-    var_list_df['Dp'] = 'Dp (deg)'
-    var_list_df['temp'] = 'Temp (Sfc (C))'
+    var_list_df['Hs (m)'] = 'Hs (m)'
+    var_list_df['Tp (s)'] = 'Tp (sec)'
+    var_list_df['Dp (deg)'] = 'Dp (deg)'
+    var_list_df['SST (C)'] = 'Temp (Sfc (C))'
     var_list_roms = {}
-    var_list_roms['Hs'] = 'Hwave'
-    var_list_roms['Tp'] = 'Pwave_top'
-    var_list_roms['Dp'] = 'Dwave'
-    var_list_roms['temp'] = 'temp'
+    var_list_roms['Hs (m)'] = 'Hwave'
+    var_list_roms['Tp (s)'] = 'Pwave_top'
+    var_list_roms['Dp (deg)'] = 'Dwave'
+    var_list_roms['SST (C)'] = 'temp'
     for var_name in data_dict['var_list']:
         data_dict[var_name] = data_dict['df'][var_list_df[var_name]]
         
@@ -92,15 +92,16 @@ if station=='SBOO':
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.18612
     data_dict['lat'] = 32.53166
-    data_dict['var_list'] = ['SST','SSS']
+    data_dict['var_list'] = ['SST (C)','SSS (psu)']
     var_list_df = {}
-    var_list_df['SST'] = 'T_C_1m'
-    var_list_df['SSS'] = 'S_1m'
+    var_list_df['SST (C)'] = 'T_C_1m'
+    var_list_df['SSS (psu)'] = 'S_1m'
     var_list_roms = {}
-    var_list_roms['SST'] = 'temp'
-    var_list_roms['SSS'] = 'salt'
+    var_list_roms['SST (C)'] = 'temp'
+    var_list_roms['SSS (psu)'] = 'salt'
     for var_name in data_dict['var_list']:
         data_dict[var_name] = data_dict['df'][var_list_df[var_name]]
+data_dict['station'] = station
 
 ds = nc.Dataset(dir0+f_list[0])
 lonr = ds['lon_rho'][:]
@@ -115,7 +116,7 @@ jref = np.where(latlondiff==latlondiff.min())[0][0]
 
 NT = 0
 CSIDE = {}
-CSIDE['time'] = np.array([])
+CSIDE['ot'] = np.array([])
 for var_name in data_dict['var_list']:
     CSIDE[var_name] = np.array([])
     
@@ -123,7 +124,7 @@ for fname in f_list:
     ds = nc.Dataset(dir0+fname)
 
     ot = ds['ocean_time'][:]
-    CSIDE['time'] = np.append(CSIDE['time'],ot)
+    CSIDE['ot'] = np.append(CSIDE['ot'],ot)
     
     for var_name in data_dict['var_list']:
         var = ds[var_list_roms[var_name]][:]
@@ -138,10 +139,10 @@ for fname in f_list:
     ds.close()
 
 
-CSIDE['time_list'] = []
-for t in CSIDE['time']:
+CSIDE['time'] = []
+for t in CSIDE['ot']:
     date = datetime(1999,1,1)+timedelta(seconds=t)
-    CSIDE['time_list'].append(date)
+    CSIDE['time'].append(date)
 
 D = {}
 # var_list = ['CSIDE_time_list','CSIDE_ssh','data_dict_ssh','data_dict_time','data_dict_lat','data_dict_lon','iref','jref','lonr','latr','maskr']
