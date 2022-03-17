@@ -119,8 +119,11 @@ CSIDE = {}
 CSIDE['ot'] = np.array([])
 for var_name in data_dict['var_list']:
     CSIDE[var_name] = np.array([])
-    
+
+nf = len(f_list)
+count=1
 for fname in f_list:
+    print(f'Working on file {count:d} of {nf:d}')
     ds = nc.Dataset(dir0+fname)
 
     ot = ds['ocean_time'][:]
@@ -137,6 +140,7 @@ for fname in f_list:
             CSIDE[var_name] = np.append(CSIDE[var_name],var[:,-1,jref,iref])
 
     ds.close()
+    count+=1
 
 
 CSIDE['time'] = []
