@@ -69,10 +69,10 @@ if station=='CDIP':
     data_dict['lat'] = 32.71
     data_dict['var_list'] = ['Hs (m)','Tp (s)','Dp (deg)','SST (C)']
     var_list_df = {}
-    var_list_df['Hs (m)'] = 'Hs (m)'
-    var_list_df['Tp (s)'] = 'Tp (sec)'
-    var_list_df['Dp (deg)'] = 'Dp (deg)'
-    var_list_df['SST (C)'] = 'Temp (Sfc (C))'
+    var_list_df['Hs (m)'] = 'Hs'
+    var_list_df['Tp (s)'] = 'Tp'
+    var_list_df['Dp (deg)'] = 'Dp'
+    var_list_df['SST (C)'] = 'Ta' # bc both delimiters and missing data are spaces, it's hard to parse across empty columns
     var_list_roms = {}
     var_list_roms['Hs (m)'] = 'Hwave'
     var_list_roms['Tp (s)'] = 'Pwave_top'
