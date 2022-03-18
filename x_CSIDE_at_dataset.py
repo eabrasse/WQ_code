@@ -87,8 +87,8 @@ if station=='CDIP':
     data_dict['df'] = pd.read_csv(data_dict['fname'],delim_whitespace=True,skiprows=[1],parse_dates={'time':['YEAR','MO','DY','HR','MN']},date_parser=dateparse)
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
     data_dict['time'] = data_dict['df']['time']
-    data_dict['lon'] = -117.17
-    data_dict['lat'] = 32.71
+    data_dict['lon'] = -117.16880
+    data_dict['lat'] = 32.56957
     data_dict['var_list'] = ['Hs (m)','Tp (s)','Dp (deg)','SST (C)']
     var_list_df = {}
     var_list_df['Hs (m)'] = 'Hs'
