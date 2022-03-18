@@ -25,7 +25,7 @@ if len(args.station) == 0:
     yr_list = ['2018', '2019']
     Nyr = len(yr_list)
     yr_dict = dict(zip(range(Nyr), yr_list))
-    for nst in range(Nyr):
+    for nyr in range(Nyr):
         print(str(nyr) + ': ' + yr_list[nyr])
     my_nyr = input('-- Input number -- ')
     if len(my_nyr)==0:
