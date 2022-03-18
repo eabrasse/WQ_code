@@ -15,11 +15,29 @@ import pickle
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-st', '--station', nargs='?', type=str, default='')
+parser.add_argument('-yr', '--year', nargs='?', type=str, default='')
 args = parser.parse_args()
+
+# choose which year to extract
+if len(args.station) == 0:
+    print(30*'*' + ' x_CSIDE_at_dataset.py ' + 30*'*')
+    print('\n%s\n' % '** Choose year (return for 2018) **')
+    yr_list = ['2018', '2019']
+    Nyr = len(yr_list)
+    yr_dict = dict(zip(range(Nyr), yr_list))
+    for nst in range(Nyr):
+        print(str(nyr) + ': ' + yr_list[nyr])
+    my_nyr = input('-- Input number -- ')
+    if len(my_nyr)==0:
+        year = '2018'
+    else:
+        year = yr_dict[int(my_nyr)]
+else:
+    year = args.year
 
 # choose which station to extract
 if len(args.station) == 0:
-    print(30*'*' + ' x_CSIDE_at_dataset.py ' + 30*'*')
+    print(90*'*')
     print('\n%s\n' % '** Choose station (return for NOAA) **')
     st_list = ['NOAA', 'CDIP', 'SBOO']
     Nst = len(st_list)
@@ -34,7 +52,8 @@ if len(args.station) == 0:
 else:
     station = args.station
 
-dir0 = '/data0/NADB2018/'
+
+dir0 = '/data0/NADB+'year'/'
 f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
@@ -43,7 +62,10 @@ f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
 if station=='NOAA':
     data_dict = {}
     data_dict['dataset_name'] = 'NOAA tide gauge 9410170 - San Diego, CA'
-    data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/CO-OPS_9410170_met.csv'
+    if year=='2018':
+        data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/CO-OPS_9410170_met_2018.csv'
+    elif year=='2019':
+        data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/CO-OPS_9410170_met_2019.csv'
     data_dict['df'] = pd.read_csv(data_dict['fname'],parse_dates={ 'time' : ['Date','Time (GMT)']})
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
     data_dict['time'] = data_dict['df']['time']
@@ -60,7 +82,7 @@ if station=='NOAA':
 if station=='CDIP':
     data_dict = {}
     data_dict['dataset_name'] = '155 - Imperial Beach Nearshore Buoy (NDBC 46235)'
-    data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/pm155p1p1_197501-202212.csv'
+    data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/pm155p1p1_197501-202212.csv'
     dateparse = lambda x: datetime.strptime(x, '%Y %m %d %H %M')
     data_dict['df'] = pd.read_csv(data_dict['fname'],delim_whitespace=True,skiprows=[1],parse_dates={'time':['YEAR','MO','DY','HR','MN']},date_parser=dateparse)
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
@@ -84,8 +106,8 @@ if station=='CDIP':
 if station=='SBOO':
     data_dict = {}
     data_dict['dataset_name'] = 'South Bay Ocean Outfall mooring'
-    data_dict['fname_salt'] = '/data0/ebrasseale/WQ_data/2018validation/SBOO_sal_QC.csv'
-    data_dict['fname_temp'] = '/data0/ebrasseale/WQ_data/2018validation/SBOO_temp_QC.csv'
+    data_dict['fname_salt'] = '/data0/ebrasseale/WQ_data/validation/SBOO_sal_QC.csv'
+    data_dict['fname_temp'] = '/data0/ebrasseale/WQ_data/validation/SBOO_temp_QC.csv'
     df_salt = pd.read_csv(data_dict['fname_salt'],parse_dates={  'time' : ['DateTime_PST']})
     df_temp = pd.read_csv(data_dict['fname_temp'],parse_dates={  'time' : ['DateTime_PST']})
     data_dict['df'] = pd.concat([df_salt, df_temp])
@@ -156,5 +178,5 @@ for var_name in var_list:
     D[var_name] = locals()[var_name]
 
 
-out_fn = '/data0/ebrasseale/WQ_data/CSIDE_2018_at_'+station+'.p'
+out_fn = '/data0/ebrasseale/WQ_data/CSIDE_'+year'_at_'+station+'.p'
 pickle.dump(D,open(out_fn,'wb'))
