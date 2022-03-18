@@ -61,7 +61,8 @@ if station=='CDIP':
     data_dict = {}
     data_dict['dataset_name'] = '155 - Imperial Beach Nearshore Buoy (NDBC 46235)'
     data_dict['fname'] = '/data0/ebrasseale/WQ_data/2018validation/pm155p1p1_197501-202212.csv'
-    data_dict['df'] = pd.read_csv(data_dict['fname'],parse_dates={ 'time' : ['Date','Time (GMT)']})
+    dateparse = lambda x: datetime.strptime(x, '%Y %m %d %H %M')
+    data_dict['df'] = pd.read_csv(data_dict['fname'],delim_whitespace=True,skiprows=[1],parse_dates={'time':['YEAR','MO','DY','HR','MN']},date_parser=dateparse)
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.17
