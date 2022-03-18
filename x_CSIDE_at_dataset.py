@@ -53,7 +53,7 @@ else:
     station = args.station
 
 
-dir0 = '/data0/NADB+'year'/'
+dir0 = '/data0/NADB+'year+'/'
 f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
@@ -62,10 +62,11 @@ f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
 if station=='NOAA':
     data_dict = {}
     data_dict['dataset_name'] = 'NOAA tide gauge 9410170 - San Diego, CA'
-    if year=='2018':
-        data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/CO-OPS_9410170_met_2018.csv'
-    elif year=='2019':
-        data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/CO-OPS_9410170_met_2019.csv'
+    # if year=='2018':
+        # data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/CO-OPS_9410170_met_2018.csv'
+    # elif year=='2019':
+        # data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/CO-OPS_9410170_met_2019.csv'
+    data_dict['fname'] = '/data0/ebrasseale/WQ_data/validation/CO-OPS_9410170_met_'+year+'.csv'
     data_dict['df'] = pd.read_csv(data_dict['fname'],parse_dates={ 'time' : ['Date','Time (GMT)']})
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
     data_dict['time'] = data_dict['df']['time']
