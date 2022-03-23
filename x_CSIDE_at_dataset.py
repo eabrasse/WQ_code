@@ -166,7 +166,7 @@ CSIDE['ot'] = np.array([])
 for var_name in data_dict['var_list']:
     if station=='SBOO': # note: all variables for SBOO are defined at multiple depths
         CSIDE[var_name] = {}
-        for z in z_list
+        for z in z_list:
             CSIDE[var_name][z] = np.array([])
     else:
         CSIDE[var_name] = np.array([])
