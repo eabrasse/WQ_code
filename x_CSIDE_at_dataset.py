@@ -57,7 +57,9 @@ dir0 = '/data0/NADB'+year+'/'
 f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
-
+testing=True
+if testing:
+    f_list = f_list[:3]
 
 if station=='NOAA':
     data_dict = {}
@@ -225,7 +227,7 @@ for t in CSIDE['ot']:
 
 D = {}
 # var_list = ['CSIDE_time_list','CSIDE_ssh','data_dict_ssh','data_dict_time','data_dict_lat','data_dict_lon','iref','jref','lonr','latr','maskr']
-var_list = ['CSIDE','data_dict','lonr','latr','maskr','iref','jref']
+var_list = ['CSIDE','data_dict','lon_rho','lat_rho','mask_rho','iref','jref']
 for var_name in var_list:
     D[var_name] = locals()[var_name]
 
