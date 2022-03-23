@@ -148,7 +148,7 @@ for var in var_list:
 latlondiff = np.sqrt((lat_rho-data_dict['lat'])**2 + (lon_rho-data_dict['lon'])**2)
 #mask latlondiff before finding min
 latlondiff[mask_rho==0] = np.nan
-lld_nanmin = np.where(latlondiff==np.nanmin(latlondiff)
+lld_nanmin = np.where(latlondiff==np.nanmin(latlondiff))
 iref = lld_nanmin[1][0]
 jref = lld_nanmin[0][0]
 
