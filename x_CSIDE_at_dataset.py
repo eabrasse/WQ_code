@@ -105,6 +105,8 @@ if station=='CDIP':
         data_dict[var_name] = data_dict['df'][var_list_df[var_name]]
         
 if station=='SBOO':
+    z_list = [1,10,18,26]
+    ndepths = len(z_list)
     data_dict = {}
     data_dict['dataset_name'] = 'South Bay Ocean Outfall mooring'
     data_dict['fname_salt'] = '/data0/ebrasseale/WQ_data/validation/SBOO_sal_QC.csv'
@@ -116,33 +118,58 @@ if station=='SBOO':
     data_dict['time'] = data_dict['df']['time']
     data_dict['lon'] = -117.18612
     data_dict['lat'] = 32.53166
-    data_dict['var_list'] = ['SST (C)','SSS (psu)']
+    data_dict['var_list'] = ['Temp (C)','Salt (psu)']
     var_list_df = {}
-    var_list_df['SST (C)'] = 'T_C_1m'
-    var_list_df['SSS (psu)'] = 'S_1m'
+    var_list_df['Temp (C)'] = ['T_C_1m','T_C_10m','T_C_18m','T_C_26m']
+    var_list_df['Salt (psu)'] = ['S_1m','S_10m','S_18m','S_26m']
     var_list_roms = {}
-    var_list_roms['SST (C)'] = 'temp'
-    var_list_roms['SSS (psu)'] = 'salt'
+    var_list_roms['Temp (C)'] = 'temp'
+    var_list_roms['Salt (psu)'] = 'salt'
     for var_name in data_dict['var_list']:
-        data_dict[var_name] = data_dict['df'][var_list_df[var_name]]
+        data_dict[var_name] = {}
+        for depth in range(ndepths):
+            # first, nan out any bad data
+            # find QC info for that variable/depth combo
+            qname = 'Qual_'+var_list_df[var_name][depth]
+            # set the variable/depth to nan everywhere the QC isn't 1
+            data_dict['df'][var_list_df[var_name][depth]][data_dict['df'][qname]>1]=np.nan
+            # read the resulting dataset into the dict entry for that depth
+            data_dict[var_name][z_list[depth]] = data_dict['df'][var_list_df[var_name][depth]]
 data_dict['station'] = station
 
 ds = nc.Dataset(dir0+f_list[0])
-lonr = ds['lon_rho'][:]
-latr = ds['lat_rho'][:]
-maskr = ds['mask_rho'][:]
+var_list = ['lon_rho','lat_rho','mask_rho']
+if station=='SBOO':
+    var_list.extend(['h','s_rho','Cs_r','Vtransform','hc'])
+for var in var_list:
+    locals()[var] = ds[var][:]
+
+#note add new modifier to keep form extracting on land for NOAA tide gauge - don't universally shift by 0.005!
+latlondiff = np.sqrt((lat_rho-data_dict['lat'])**2 + (lon_rho-data_dict['lon'])**2)
+#mask latlondiff before finding min
+latlondiff[mask_rho==0] = np.nan
+lld_nanmin = np.where(latlondiff==np.nanmin(latlondiff)
+iref = lld_nanmin[1][0]
+jref = lld_nanmin[0][0]
 
 
-latlondiff = np.sqrt((latr-data_dict['lat'])**2 + (lonr-data_dict['lon']+0.005)**2)
-iref = np.where(latlondiff==latlondiff.min())[1][0]
-jref = np.where(latlondiff==latlondiff.min())[0][0]
-
+if station=='SBOO':
+    #calculate vertical stretching array to help identify depths
+    h0 = h[jref,iref]
+    zr0 = (s_rho*hc + Cs_r*h0) / (hc + h0)
+    nz = zr0.shape[0]
+    zr0_rs = np.reshape(zr0,(1,nz))
 
 NT = 0
 CSIDE = {}
 CSIDE['ot'] = np.array([])
 for var_name in data_dict['var_list']:
-    CSIDE[var_name] = np.array([])
+    if station=='SBOO': # note: all variables for SBOO are defined at multiple depths
+        CSIDE[var_name] = {}
+        for z in z_list
+            CSIDE[var_name][z] = np.array([])
+    else:
+        CSIDE[var_name] = np.array([])
 
 nf = len(f_list)
 count=1
@@ -153,6 +180,27 @@ for fname in f_list:
     ot = ds['ocean_time'][:]
     CSIDE['ot'] = np.append(CSIDE['ot'],ot)
     
+    if station=='SBOO':
+        #calculate z coordinates at mooring
+        # adapated from Parker's zrfun.get_Z() using a priori info about the ROMS output I'm working with
+        zeta0 = ds['zeta'][:] #always splice netcdf4 data after reading in
+        zeta = zeta0[:,jref,iref]
+        
+        #nt is same for all but the last file. Calculate it once for the first N-1 files,
+        # then calculate it again for the last file
+        if fname==f_list[0] or f_list[-1]:
+            nt = zeta.shape[0]
+            zr0_tile = np.tile(zr0_rs,(nt,1))
+        
+        zeta_rs = np.reshape(zeta,(nt,1))
+        zeta_tile = np.tile(zeta_rs,(1,nz))
+        z_rho = zeta_tile + (zeta_tile + h0)*zr0_tile
+        
+        kref = np.zeros(nt,ndepth)
+        for depth in range(ndepth):
+            zref = z_list[depth] #note: these are positive, z_rho is negative
+            kref[:,depth] = np.argmin(np.abs(z_rho+zref),axis=1)
+    
     for var_name in data_dict['var_list']:
         var = ds[var_list_roms[var_name]][:]
         if len(var.shape)==3:
@@ -160,6 +208,9 @@ for fname in f_list:
             CSIDE[var_name] = np.append(CSIDE[var_name],var[:,jref,iref])
         elif len(var.shape)==4:
             #3d variable
+            if station=='SBOO': # note all variables at SBOO are 3d
+                for depth in ndepth:
+                    CSIDE[var_name][z_list[depth]] = np.append(CSIDE[var_name][z_list[depth]],var[:,kref[:,depth],jref,iref])
             # in this case, use surface value only
             CSIDE[var_name] = np.append(CSIDE[var_name],var[:,-1,jref,iref])
 
