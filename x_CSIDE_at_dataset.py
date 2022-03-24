@@ -12,6 +12,7 @@ import argparse
 from datetime import datetime, timedelta
 import pandas as pd
 import pickle
+import pytz
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-st', '--station', nargs='?', type=str, default='')
@@ -118,6 +119,7 @@ if station=='SBOO':
     data_dict['df'] = pd.concat([df_salt, df_temp])
     data_dict['df'] = data_dict['df'].set_index(data_dict['df']['time'])
     data_dict['time'] = data_dict['df']['time']
+    data_dict['time'] = data_dict['time'].tz_localize(pytz.timezone("America/Los_Angeles"),ambiguous=False).tz_convert(pytz.utc)
     data_dict['lon'] = -117.18612
     data_dict['lat'] = 32.53166
     data_dict['var_list'] = ['Temp (C)','Salt (psu)']
