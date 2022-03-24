@@ -198,9 +198,9 @@ for fname in f_list:
         zeta_tile = np.tile(zeta_rs,(1,nz))
         z_rho = zeta_tile + (zeta_tile + h0)*zr0_tile
         
-        kref = np.zeros(nt,ndepth)
-        for depth in range(ndepth):
-            zref = z_list[depth] #note: these are positive, z_rho is negative
+        kref = np.zeros(nt,ndepths)
+        for depth in range(ndepths):
+            zref = z_list[depths] #note: these are positive, z_rho is negative
             kref[:,depth] = np.argmin(np.abs(z_rho+zref),axis=1)
     
     for var_name in data_dict['var_list']:
@@ -211,7 +211,7 @@ for fname in f_list:
         elif len(var.shape)==4:
             #3d variable
             if station=='SBOO': # note all variables at SBOO are 3d
-                for depth in ndepth:
+                for depth in ndepths:
                     CSIDE[var_name][z_list[depth]] = np.append(CSIDE[var_name][z_list[depth]],var[:,kref[:,depth],jref,iref])
             # in this case, use surface value only
             CSIDE[var_name] = np.append(CSIDE[var_name],var[:,-1,jref,iref])
