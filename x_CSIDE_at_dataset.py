@@ -202,7 +202,7 @@ for fname in f_list:
         
         kref = np.zeros((nt,ndepths))
         for depth in range(ndepths):
-            zref = z_list[depths] #note: these are positive, z_rho is negative
+            zref = z_list[depth] #note: these are positive, z_rho is negative
             kref[:,depth] = np.argmin(np.abs(z_rho+zref),axis=1)
     
     for var_name in data_dict['var_list']:
