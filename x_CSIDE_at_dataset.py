@@ -200,7 +200,7 @@ for fname in f_list:
         zeta_tile = np.tile(zeta_rs,(1,nz))
         z_rho = zeta_tile + (zeta_tile + h0)*zr0_tile
         
-        kref = np.zeros((nt,ndepths))
+        kref = np.zeros((nt,ndepths),dtype='int')
         for depth in range(ndepths):
             zref = z_list[depth] #note: these are positive, z_rho is negative
             kref[:,depth] = np.argmin(np.abs(z_rho+zref),axis=1)
