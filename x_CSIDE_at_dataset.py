@@ -213,7 +213,7 @@ for fname in f_list:
         elif len(var.shape)==4:
             #3d variable
             if station=='SBOO': # note all variables at SBOO are 3d
-                for depth in ndepths:
+                for depth in range(ndepths):
                     CSIDE[var_name][z_list[depth]] = np.append(CSIDE[var_name][z_list[depth]],var[:,kref[:,depth],jref,iref])
             # in this case, use surface value only
             CSIDE[var_name] = np.append(CSIDE[var_name],var[:,-1,jref,iref])
