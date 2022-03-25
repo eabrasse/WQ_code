@@ -58,7 +58,7 @@ dir0 = '/data0/NADB'+year+'/'
 f_list = os.listdir(dir0)
 f_list.sort()
 f_list = [x for x in f_list if x[:14]=='ocean_his_NADB']
-testing=False
+testing=True
 if testing:
     f_list = f_list[:3]
 
@@ -215,8 +215,9 @@ for fname in f_list:
             if station=='SBOO': # note all variables at SBOO are 3d
                 for depth in range(ndepths):
                     CSIDE[var_name][z_list[depth]] = np.append(CSIDE[var_name][z_list[depth]],var[:,kref[:,depth],jref,iref])
-            # in this case, use surface value only
-            CSIDE[var_name] = np.append(CSIDE[var_name],var[:,-1,jref,iref])
+            else:
+                # in this case, use surface value only
+                CSIDE[var_name] = np.append(CSIDE[var_name],var[:,-1,jref,iref])
 
     ds.close()
     count+=1
