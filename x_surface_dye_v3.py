@@ -37,7 +37,7 @@ f_list = []
 for my_dir in [dir0,dir1,dir2]:
     f_list0 = os.listdir(my_dir)
     f_list0.sort()
-    f_list0 = [my_dir+x for x in f_list if x[:17]=='ocean_his_NADB_0_']
+    f_list0 = [my_dir+x for x in f_list0 if x[:9]=='ocean_his']
     f_list.extend(f_list0)
 
 testing=False
