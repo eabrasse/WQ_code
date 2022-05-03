@@ -32,6 +32,8 @@ for riv_fn in [riv_fn0,riv_fn1,riv_fn2]:
     
     Q0 = np.sum(dsr['river_transport'][:,:5],axis=1) # indeces 0–4 are TJRE, but they are all zero at the same times
     Q = np.append(Q,Q0,axis=0)
+    
+    dsr.close()
 
 f_list = []
 for my_dir in [dir0,dir1,dir2]:
@@ -63,7 +65,7 @@ for fn in f_list:
     
     ds = nc.Dataset(fn)
     
-    if NT==0:
+    if NT['total']==0:
         
         nt,nz,ny,nx = ds['salt'].shape
         
