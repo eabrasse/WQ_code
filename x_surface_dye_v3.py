@@ -162,6 +162,7 @@ toc = time.perf_counter()
 count_time = f"Dividing dye took {toc-tic:0.4f} seconds"
 print(count_time)
 
+ot = ot[ot>0]
 var_list = ['surf_dye_01','surf_dye_02','NT','Dwave','Q','ot','rt','lon_rho','lat_rho','mask_rho']
 
 D = dict()
