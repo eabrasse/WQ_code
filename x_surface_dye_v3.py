@@ -14,7 +14,7 @@ import time
 
 home = '/dataSIO/ebrasseale/'
 
-dir0 = '/dataSIO/NADB2017/NADB2017_0/Output/'
+dir0 = '/dataSIO/NADB2017/NADB2017_0_NEW/'
 dir1 = '/dataSIO/NADB2018/'
 dir2 = '/dataSIO/NADB2019/'
 
@@ -55,6 +55,8 @@ if testing:
     f_list = f_list[:3]
 
 nfiles = len(f_list)
+nt_guess = 240*nfiles
+ot = np.zeros((nt_guess))
 
 buoylon = -117.169
 buoylat = 32.570
@@ -64,12 +66,12 @@ shorenormal = 265
 # Time steps are inconsistent across files, so first count 'em up
 NT = {}
 NT['total'] = 0
-NT['N'] = 0
-NT['S'] = 0
-NT['NQ'] = 0
-NT['SQ'] = 0
+cond_list = 'N','S','NQ','SQ'
+for cond in cond_list:
+    NT[cond] = 0
+
 tic = time.perf_counter()
-print('Counting up time steps...')
+print('Counting up time steps and reading in surface dye...')
 count =0
 for fn in f_list:
     
@@ -89,99 +91,82 @@ for fn in f_list:
         buoy_x = np.where(refgrid==refgrid.min())[1][0]
         buoy_y = np.where(refgrid==refgrid.min())[0][0]
         
-        Dwave0 = ds['Dwave'][:]
-        Dwave = Dwave0[:,buoy_y,buoy_x]
-        nt_N = np.sum(Dwave>shorenormal)
-        nt_S = np.sum(Dwave<shorenormal)
-        
-        rtt0 = np.argmin(np.abs(rt-ds['ocean_time'][0]))
-        rtt1 = np.argmin(np.abs(rt-ds['ocean_time'][-1]))+1
-        nt_NQ = np.sum((Dwave>shorenormal)&(Q[rtt0:rtt1]<-5.0))
-        nt_SQ = np.sum((Dwave<shorenormal)&(Q[rtt0:rtt1]<-5.0))
+        surf_dye_01 = {}
+        surf_dye_02 = {}
+        for cond in cond_list:
+            surf_dye_01[cond] = np.zeros((ny,nx))
+            surf_dye_02[cond] = np.zeros((ny,nx))
 
     else:
         nt = ds['ocean_time'].shape[0]
-        Dwave0 = ds['Dwave'][:]
-        Dwave = Dwave0[:,buoy_y,buoy_x]
-        nt_N = np.sum(Dwave>shorenormal)
-        nt_S = np.sum(Dwave<shorenormal)
-        
-        rtt0 = np.argmin(np.abs(rt-ds['ocean_time'][0]))
-        rtt1 = np.argmin(np.abs(rt-ds['ocean_time'][-1]))+1
-        nt_NQ = np.sum((Dwave>shorenormal)&(Q[rtt0:rtt1]<-5.0))
-        nt_SQ = np.sum((Dwave<shorenormal)&(Q[rtt0:rtt1]<-5.0))
-        
+    
+    # count time steps for each condition
+    Dwave0 = ds['Dwave'][:]
+    Dwave = Dwave0[:,buoy_y,buoy_x]
+    nt_N = np.sum(Dwave>shorenormal)
+    nt_S = np.sum(Dwave<shorenormal)
+    
+    rtt0 = np.argmin(np.abs(rt-ds['ocean_time'][0]))
+    rtt1 = np.argmin(np.abs(rt-ds['ocean_time'][-1]))+1
+    nt_NQ = np.sum((Dwave>shorenormal)&(Q[rtt0:rtt1]<-5.0))
+    nt_SQ = np.sum((Dwave<shorenormal)&(Q[rtt0:rtt1]<-5.0))
+   
+    ot0 = ds['ocean_time'][:]
+    ot[NT['total']:NT['total']+nt] = ot0     
     NT['total'] += nt
     NT['N'] += nt_N
     NT['S'] += nt_S
     NT['NQ'] += nt_NQ
     NT['SQ'] += nt_SQ
     
+    # add up sea surface    
+    dye_01_0 = ds['dye_01'][:]
+    dye_02_0 = ds['dye_02'][:]
+    
+    for t in range(nt):
+
+        rtt = np.argmin(np.abs(rt-ot0[t]))
+        # if waves from north...
+        if Dwave[t]>shorenormal:
+            surf_dye_01['N'] += dye_01_0[t,-1,:,:]
+            surf_dye_02['N'] += dye_02_0[t,-1,:,:]
+
+            if Q[rtt]<-5.0:
+                surf_dye_02['NQ'] += dye_02_0[t,-1,:,:]
+
+        # if waves from south...
+        elif Dwave[t]<shorenormal:
+            surf_dye_01['S'] += dye_01_0[t,-1,:,:]
+            surf_dye_02['S'] += dye_02_0[t,-1,:,:]
+
+            if Q[rtt]<-5.0:
+                surf_dye_02['SQ'] += dye_02_0[t,-1,:,:]
+
     
     ds.close()
     count+=1
 
-print('Counting time steps complete!')
+print('Counting time steps and reading surface dye complete!')
 toc = time.perf_counter()
-riv_time = f"Counting time steps took {toc-tic:0.4f} seconds"
-print(riv_time)
+count_time = f"Counting time steps took {toc-tic:0.4f} seconds"
+print(count_time)
 
-# surf_dye_01 = {}
-# surf_dye_01['N'] = np.zeros((ny,nx))
-# surf_dye_01['S'] = np.zeros((ny,nx))
-#
-# surf_dye_02 = {}
-# surf_dye_02['N'] = np.zeros((ny,nx))
-# surf_dye_02['S'] = np.zeros((ny,nx))
-# surf_dye_02['NQ'] = np.zeros((ny,nx))
-# surf_dye_02['SQ'] = np.zeros((ny,nx))
-#
-# # Now do the extraction and processing
-# tt=0
-# old_nt = 0
-# for fn in f_list:
-#     print('file {:d} of {:d}'.format(tt,nfiles))
-#     ds = nc.Dataset(dir0+fn)
-#
-#     # read in dye and wave direction
-#
-#     dye_01_0 = ds['dye_01'][:]
-#     dye_02_0 = ds['dye_02'][:]
-#     Dwave0 = ds['Dwave'][:]
-#     ot = ds['ocean_time'][:]
-#
-#     # only consider wave direction at buoy
-#     Dwave = Dwave0[:,buoy_y,buoy_x]
-#     nt = Dwave.shape[0]
-#
-#     for t in range(nt):
-#
-#         rtt = np.argmin(np.abs(rt-ot[t]))
-#         # if waves from north...
-#         if Dwave[t]>shorenormal:
-#             dye_01_N += dye_01_0[t,-1,:,:]/NT_N
-#             dye_02_N += dye_02_0[t,-1,:,:]/NT_N
-#
-#             if Q[rtt]<-5.0:
-#                 dye_02_NQ += dye_02_0[t,-1,:,:]/NT_NQ
-#
-#         # if waves from south...
-#         elif Dwave[t]<shorenormal:
-#             dye_01_S += dye_01_0[t,-1,:,:]/NT_S
-#             dye_02_S += dye_02_0[t,-1,:,:]/NT_S
-#
-#             if Q[rtt]<-5.0:
-#                 dye_02_SQ += dye_02_0[t,-1,:,:]/NT_SQ
-#
-#
-#     ds.close()
-#     tt+=1
-#
-# var_list = ['dye_01_N','dye_01_S','dye_02_N','dye_02_S','dye_02_NQ','dye_02_SQ','NT_N','NT_S','NT_NQ','NT_SQ','NT','lon_rho','lat_rho','mask_rho']
-#
-# D = dict()
-# for var in var_list:
-#     D[var]=locals()[var]
-#
-# outfn = home + 'WQ_data/surface_dye_Q-5.p'
-# pickle.dump(D,open(outfn,'wb'))
+tic = time.perf_counter()
+print('Dividing cumulative surface dye by time steps to get mean...')
+# divide by time steps to get mean
+for cond in cond_list:
+    surf_dye_01[cond] = surf_dye_01[cond]/NT[cond]
+    surf_dye_02[cond] = surf_dye_02[cond]/NT[cond]
+toc = time.perf_counter()
+count_time = f"Dividing dye took {toc-tic:0.4f} seconds"
+print(count_time)
+
+var_list = ['surf_dye_01','surf_dye_02','NT','Dwave','Q','ot','rt','lon_rho','lat_rho','mask_rho']
+
+D = dict()
+for var in var_list:
+    D[var]=locals()[var]
+
+outfn = home + 'WQ_data/surface_dye_2017-2019_Q-5.p'
+print(f'Saving to {outfn}')
+pickle.dump(D,open(outfn,'wb'))
