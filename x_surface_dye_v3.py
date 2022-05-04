@@ -76,6 +76,7 @@ count =0
 for fn in f_list:
     
     printout = f'(working on file {count} of {nfiles})'
+    print(printout)
     
     ds = nc.Dataset(fn)
     
