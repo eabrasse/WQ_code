@@ -18,7 +18,7 @@ dir0 = '/dataSIO/NADB2017/NADB2017_0_NEW/'
 dir1 = '/dataSIO/NADB2018/'
 dir2 = '/dataSIO/NADB2019/'
 
-riv_fn0 = dir0+'river_tracer_4river_NADB2017_0.nc'
+riv_fn0 = '/dataSIO/NADB2017/NADB2017_0/Output/river_tracer_4river_NADB2017_0.nc'
 riv_fn1 = dir1+'Input/river_tracer_4river_NADB2018.nc'
 riv_fn2 = dir2+'Input/river_tracer_4river_NADB2019_0.nc'
 
