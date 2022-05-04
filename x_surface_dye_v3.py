@@ -10,6 +10,7 @@ import sys
 import pickle
 import numpy as np
 import netCDF4 as nc
+import time
 
 home = '/dataSIO/ebrasseale/'
 
@@ -21,10 +22,13 @@ riv_fn0 = dir0+'river_tracer_4river_NADB2017_0.nc'
 riv_fn1 = dir1+'Input/river_tracer_4river_NADB2018.nc'
 riv_fn2 = dir2+'Input/river_tracer_4river_NADB2019_0.nc'
 
+tic = time.perf_counter()
+print('Building multiyear river time series...')
 rt = np.array([])
 Q = np.array([])
 for riv_fn in [riv_fn0,riv_fn1,riv_fn2]:
     dsr = nc.Dataset(riv_fn)
+    print(f'loading {riv_fn}')
     
     rt0 = dsr['river_time'][:]
     rt0 = rt0 * 24*60*60 #river time is in days; match to ocean time in seconds
@@ -34,6 +38,10 @@ for riv_fn in [riv_fn0,riv_fn1,riv_fn2]:
     Q = np.append(Q,Q0,axis=0)
     
     dsr.close()
+print('Building multiyear river time series complete!')
+toc = time.perf_counter()
+riv_time = f"Building multiyear river time series took {toc-tic:0.4f} seconds"
+print(riv_time)
 
 f_list = []
 for my_dir in [dir0,dir1,dir2]:
@@ -60,12 +68,16 @@ NT['N'] = 0
 NT['S'] = 0
 NT['NQ'] = 0
 NT['SQ'] = 0
-
+tic = time.perf_counter()
+print('Counting up time steps...')
+count =0
 for fn in f_list:
+    
+    printout = f'(working on file {count} of {nfiles})'
     
     ds = nc.Dataset(fn)
     
-    if NT['total']==0:
+    if count==0:
         
         nt,nz,ny,nx = ds['salt'].shape
         
@@ -104,7 +116,15 @@ for fn in f_list:
     NT['S'] += nt_S
     NT['NQ'] += nt_NQ
     NT['SQ'] += nt_SQ
+    
+    
     ds.close()
+    count+=1
+
+print('Counting time steps complete!')
+toc = time.perf_counter()
+riv_time = f"Counting time steps took {toc-tic:0.4f} seconds"
+print(riv_time)
 
 # surf_dye_01 = {}
 # surf_dye_01['N'] = np.zeros((ny,nx))
