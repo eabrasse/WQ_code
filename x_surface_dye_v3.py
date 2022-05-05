@@ -32,10 +32,13 @@ for riv_fn in [riv_fn0,riv_fn1,riv_fn2]:
     
     rt0 = dsr['river_time'][:]
     rt0 = rt0 * 24*60*60 #river time is in days; match to ocean time in seconds
-    rt = np.append(rt,rt0,axis=0)
+    # there is overlap in river forcing files, so only append time steps after the end of the previous timeseries
+    rt1 = rt0[rt0>rt[-1]]
+    rt = np.append(rt,rt1,axis=0)
     
     Q0 = np.sum(dsr['river_transport'][:,:5],axis=1) # indeces 0–4 are TJRE, but they are all zero at the same times
-    Q = np.append(Q,Q0,axis=0)
+    Q1 = Q0[rt0>rt[-1]]
+    Q = np.append(Q,Q1,axis=0)
     
     dsr.close()
 print('Building multiyear river time series complete!')
