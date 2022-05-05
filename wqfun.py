@@ -55,9 +55,6 @@ def get_shore_inds(grid_fn):
         lonshore[j] = lon_rho[j,iis[j]]
         latshore[j] = lat_rho[j,iis[j]]
 
-    toc = time.perf_counter()
-    print(f"Finding shoreline took {toc-tic:0.4f} seconds")
-
     lon_diff = np.diff(lonshore)
     #cutoff before jumping at mouth of San Diego bay
     cutoff = np.argmax(np.abs(lon_diff))
