@@ -16,8 +16,12 @@ def get_shore_inds(grid_fn):
     
     ds = nc.Dataset(grid_fn)
     var_list = ['mask_rho','lon_rho','lat_rho']
-    for var in var_list:
-        locals()[var] = ds[var]
+    # I think locals doesn't work in a module
+    # for var in var_list:
+    #     locals()[var] = ds[var][:]
+    mask_rho = ds['mask_rho'][:]
+    lon_rho = ds['lon_rho'][:]
+    lat_rho = ds['lat_rho'][:]
 
     ny,nx = lat_rho.shape
     iis = np.zeros((ny),dtype=int)
