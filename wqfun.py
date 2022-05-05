@@ -9,7 +9,69 @@ Plot results of a particle tracking experime.
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
+import netCDF4 as nc
 
+
+def get_shore_inds(grid_fn):
+    
+    ds = nc.Dataset(grid_fn)
+    var_list = ['mask_rho','lon_rho','lat_rho']
+    for var in var_list:
+        locals()[var] = ds[var]
+
+    ny,nx = lat_rho.shape
+    iis = np.zeros((ny),dtype=int)
+    jjs = range(ny)
+    lonshore = np.zeros((ny))
+    latshore = np.zeros((ny))
+
+    #extract shoreline location
+    for j in jjs:
+    
+        # find the edge of the mask
+        mask_diff = np.where(np.diff(mask_rho[j,:]))[0]
+    
+        #if multiple edges, north of TJRE
+        if (len(mask_diff)>1)&(lat_rho[j,0]>32.6):
+            #look for the edge closest to the previously identified edge
+            iis[j] = mask_diff[np.argmin(np.abs(iis[j-1]-mask_diff))]
+        
+        #if multiple edges, south of TJRE
+        elif (len(mask_diff)>1)&(lat_rho[j,0]<32.6):
+            #do outermost edge
+            iis[j] = mask_diff[0]
+        
+        elif len(mask_diff)==1:
+            iis[j] = mask_diff[0]
+        
+        elif len(mask_diff)==0:
+            iis[j] = iis[j-1]
+        
+        #save lon/lat for finding where to trim around TJRE
+        lonshore[j] = lon_rho[j,iis[j]]
+        latshore[j] = lat_rho[j,iis[j]]
+
+    toc = time.perf_counter()
+    print(f"Finding shoreline took {toc-tic:0.4f} seconds")
+
+    lon_diff = np.diff(lonshore)
+    #cutoff before jumping at mouth of San Diego bay
+    cutoff = np.argmax(np.abs(lon_diff))
+    #find where mouth of TJRE is using the jump in longitude following shoreline
+    TJRE_inds = np.where(np.abs(lon_diff[:cutoff])>0.0036)[0]
+    TJ0 = TJRE_inds[0]
+    TJ1 = TJRE_inds[-1]+1
+
+    # rebuild iis and jjs around TJRE
+    iis = np.concatenate([iis[:TJ0],iis[TJ1:cutoff]])
+    jjs = np.concatenate([jjs[:TJ0],jjs[TJ1:cutoff]])
+
+    # trim a little more - optional
+    cutoff = 984
+    iis = iis[:cutoff]
+    jjs = jjs[:cutoff]
+
+    return iis,jjs
 
 def add_beaches_to_ax_RHS(ax,TJRE_line=False,xaxscale=0.02):
     beach_name_list = ['PB', 'TJRE', 'PTJ','SS','HdC','IB']
