@@ -8,6 +8,130 @@ Plot results of a particle tracking experime.
 
 import numpy as np
 import pickle
+import matplotlib.pyplot as plt
+
+
+def add_beaches_to_ax_RHS(ax,TJRE_line=False,xaxscale=0.02):
+    beach_name_list = ['PB', 'TJRE', 'PTJ','SS','HdC','IB']
+    beach_list = get_beach_location(beach_name_list)
+    [x0,x1] = ax.get_xlim()
+    [y0,y1] = ax.get_ylim()
+    # if type(x0)==np.float64:
+    #     xaxscale = 0.1
+    # else:
+    #     xaxscale = 0.02
+    for beach in beach_name_list:
+        beach_r_km = 0.001*(beach_list[beach]['r']-beach_list['PB']['r'])
+        if (beach_r_km>=y0) and (beach_r_km<=y1):
+            if beach=='PB':
+                beach_color='m'
+                beach_marker = '<'
+                text_color='k'
+            elif beach=='TJRE':
+                beach_color='yellowgreen'
+                beach_marker = '<'
+                text_color='k'
+                if TJRE_line:
+                    ax.axhline(y=0.001*(beach_list[beach]['r']-beach_list['PB']['r']),color=beach_color,linestyle='dashed',linewidth=1.0)
+            else:
+                beach_color='yellow'
+                beach_marker = 'o'
+                text_color='k'
+
+            ax.plot(x1,0.001*(beach_list[beach]['r']-beach_list['PB']['r']),marker=beach_marker,mec='k',mfc=beach_color,markersize=8,clip_on=False,zorder=500)
+            ax.set_xlim([x0,x1])
+            
+            ax.text(x1+xaxscale*(x1-x0),0.001*(beach_list[beach]['r']-beach_list['PB']['r']),beach,color=text_color,ha='left',va='center')
+    
+
+def wavebuoy_to_5m_isobath(Dbuoy):
+    g = 9.81
+    shorenormal = 263
+    rho0 = 1028
+    
+    WaveBuoy = {}
+    for var_name in ['Dwave','Lwave','Hwave']:
+        #the first timestep has Hwave=0
+        WaveBuoy[var_name] = Dbuoy[var_name][1:]
+    
+    WaveBuoy['Dprime'] = WaveBuoy['Dwave']-shorenormal
+    WaveBuoy['Dprime_rad'] = WaveBuoy['Dprime']*np.pi/180
+    WaveBuoy['k'] = (2*np.pi)/WaveBuoy['Lwave']
+    WaveBuoy['h'] = Dbuoy['h0'][1:][Dbuoy['bj'],Dbuoy['bi']]+Dbuoy['zeta'][1:]
+    kh = WaveBuoy['k']*WaveBuoy['h']
+    WaveBuoy['cp'] = np.sqrt((g/WaveBuoy['k'])*np.tanh(kh))
+    WaveBuoy['omega'] = WaveBuoy['cp']*WaveBuoy['k']
+    WaveBuoy['Twave'] = 2*np.pi/WaveBuoy['omega']
+    sechkh = 1/np.cosh(kh)
+    WaveBuoy['cg'] = 0.5*(g*np.tanh(kh)+g*kh*sechkh**2)/np.sqrt(g*WaveBuoy['k']*np.tanh(kh))
+    WaveBuoy['fit'] = 523.480
+
+    Isobath5m = {}
+    Isobath5m['h'] = 5
+    Isobath5m['cp'] = np.sqrt(g*Isobath5m['h'])
+    Isobath5m['Dprime_rad'] = np.arcsin(np.sin(WaveBuoy['Dprime']*np.pi/180)*(Isobath5m['cp']/WaveBuoy['cp']))
+    Isobath5m['Dprime'] = Isobath5m['Dprime_rad']*180/np.pi
+    Isobath5m['Dwave'] = Isobath5m['Dprime']+shorenormal
+    Isobath5m['cg'] = np.sqrt(g*Isobath5m['h']) # in shallow water, cg -> root(gh), same as cp
+    Isobath5m['Hwave'] = WaveBuoy['Hwave']*np.sqrt((WaveBuoy['cg']/Isobath5m['cg'])*(np.cos(WaveBuoy['Dprime_rad'])/np.cos(Isobath5m['Dprime_rad'])))
+    Isobath5m['omega'] = WaveBuoy['omega']
+    Isobath5m['k'] = Isobath5m['omega']/Isobath5m['cp']
+    Isobath5m['Twave'] = 2*np.pi/Isobath5m['omega']
+    Isobath5m['fit'] = 580.980
+    
+    for wave_loc in WaveBuoy,Isobath5m:
+        wave_loc['E'] = -(1/16)*rho0 * g* wave_loc['Hwave']**2
+        wave_loc['Sxy'] = wave_loc['E'] * (wave_loc['cg']/wave_loc['cp']) *  np.sin(wave_loc['Dprime_rad']) * np.cos(wave_loc['Dprime_rad'])
+        denominator = wave_loc['fit']*wave_loc['Hwave']
+        wave_loc['V'] = wave_loc['Sxy']/denominator
+        wave_loc['linear_fit'] = 820.29
+        
+        # test Wright and Thompson 1983
+        sigma = np.sqrt(g/wave_loc['h'])*wave_loc['Hwave']/4
+        v_sigma = wave_loc['V']/sigma
+        
+    
+    return WaveBuoy,Isobath5m
+
+def gen_plot_props(fs_big=12,fs_small=10,lw_big=2,lw_small=1):
+    plt.rc('xtick', labelsize=fs_small)
+    plt.rc('ytick', labelsize=fs_small)
+    plt.rc('xtick.major', size=8, pad=5, width=lw_small)
+    plt.rc('ytick.major', size=8, pad=5, width=lw_small)
+    plt.rc('axes', lw=lw_small)
+    plt.rc('lines', lw=lw_big)
+    plt.rc('font', size=fs_big)
+    plt.rc('grid', color='g', ls='-', lw=lw_small, alpha=.3)
+    plt.rc('axes', axisbelow=True)
+    
+    #default is a 1/4 page figure. If 1/2 or full page is desired, x2
+    # before using
+    fw_mm = 95 # in millimeters
+    fh_mm = 115 # in millimeters
+    
+    #conversion from millimeters to inches
+    mm2in = 1/25.4
+    fw = fw_mm*mm2in
+    fh = fh_mm*mm2in
+    
+    return(fw,fh)
+
+def find_nearest_ind_2D(x_mat,y_mat,x0,y0):
+    # designed to help locate the i and j location of points on non-plaid 2D grids
+    #
+    # NOTE: pay attention to i,j vs j,i order
+    # I used "i" to correspond to "x" and "j" to correspond to "y"
+    # for ROMS grids in python, the correct indexing order will be [t,z,y,x]
+    # So this code returns "i,j"
+    # but the desired grid cell will be x = x_mat[j,i], y = y_mat[j,i]
+    
+    xdiff = x_mat-x0
+    ydiff = y_mat-y0
+    xydiff = np.sqrt(xdiff**2+ydiff**2)
+    i = np.where(xydiff==xydiff.min())[1][0]
+    j = np.where(xydiff==xydiff.min())[0][0]
+    
+    return(i,j)
 
 def find_nearest_ind_2D(x_mat,y_mat,x0,y0):
     # designed to help locate the i and j location of points on non-plaid 2D grids
@@ -179,9 +303,9 @@ def get_beach_location(beach_name_list):
     # Identify some points of interest on the map
     PB = {'lat':32.446, 'name':'Punta Bandera'}
     TJRE = {'lat':32.553, 'name':'Tijuana River Estuary'}
-    PT = {'lat':32.518, 'name':'Playas Tijuana'}
-    IBP = {'lat':32.579, 'name':'Imperial Beach Pier'}
-    SSSB = {'lat':32.632, 'name':'Silver Strand State Beach'}
+    PTJ = {'lat':32.518, 'name':'Playas Tijuana'}
+    IB = {'lat':32.579, 'name':'Imperial Beach Pier'}
+    SS = {'lat':32.632, 'name':'Silver Strand State Beach'}
     HdC = {'lat':32.678, 'name':'Hotel del Coronado'}
 
     beach_list = {}
@@ -387,7 +511,7 @@ def get_shoreline_models(model_name_list):
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
     U_tuned['v'] = v0
-    U_tuned['label'] = '1D Wave advection model'
+    U_tuned['label'] = 'extracted near PB'
     
     #adv-diff model with uniform velocity
     U_tuned_2017_2018 = {}
@@ -443,7 +567,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_Kyy01['dye'] = da_model['c'][:,1:-1]
     U_Kyy01['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_Kyy01['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -456,7 +580,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_Kyy03['dye'] = da_model['c'][:,1:-1]
     U_Kyy03['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_Kyy03['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -469,7 +593,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_Kyy05['dye'] = da_model['c'][:,1:-1]
     U_Kyy05['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_Kyy05['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -482,7 +606,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_Kyy07['dye'] = da_model['c'][:,1:-1]
     U_Kyy07['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_Kyy07['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -495,7 +619,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_Kyy08['dye'] = da_model['c'][:,1:-1]
     U_Kyy08['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_Kyy08['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -508,7 +632,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_Kyy09['dye'] = da_model['c'][:,1:-1]
     U_Kyy09['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_Kyy09['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -521,7 +645,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_Kyy10['dye'] = da_model['c'][:,1:-1]
     U_Kyy10['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_Kyy10['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -534,7 +658,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa230['dye'] = da_model['c'][:,1:-1]
     U_sa230['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa230['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -547,7 +671,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa235['dye'] = da_model['c'][:,1:-1]
     U_sa235['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa235['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -560,7 +684,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa240['dye'] = da_model['c'][:,1:-1]
     U_sa240['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa240['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -574,7 +698,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa245['dye'] = da_model['c'][:,1:-1]
     U_sa245['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa245['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -587,7 +711,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa250['dye'] = da_model['c'][:,1:-1]
     U_sa250['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa250['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -600,7 +724,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa2525['dye'] = da_model['c'][:,1:-1]
     U_sa2525['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa2525['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -613,7 +737,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa255['dye'] = da_model['c'][:,1:-1]
     U_sa255['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa255['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -626,7 +750,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa2575['dye'] = da_model['c'][:,1:-1]
     U_sa2575['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa2575['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -639,7 +763,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa260['dye'] = da_model['c'][:,1:-1]
     U_sa260['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa260['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -652,12 +776,13 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa2625['dye'] = da_model['c'][:,1:-1]
     U_sa2625['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa2625['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
     U_sa2625['v'] = v0
-    U_sa2625['label'] = r'Adv-Diff model shorenormal $262.5^{\circ}$'
+    # U_sa2625['label'] = r'Adv-Diff model shorenormal $262.5^{\circ}$'
+    U_sa2625['label'] = r'Extracted near PB'
     
     #shorenormal tuning model
     U_sa265 = {}
@@ -665,7 +790,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa265['dye'] = da_model['c'][:,1:-1]
     U_sa265['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa265['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -678,7 +803,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa2675['dye'] = da_model['c'][:,1:-1]
     U_sa2675['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa2675['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -691,7 +816,7 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_sa270['dye'] = da_model['c'][:,1:-1]
     U_sa270['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_sa270['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
@@ -704,12 +829,173 @@ def get_shoreline_models(model_name_list):
     da_model = pickle.load(open(model_fn,'rb'))
     U_tunedBD['dye'] = da_model['c'][:,1:-1]
     U_tunedBD['y'] = da_model['y'][1:-1]
-    v00 = da_model2['v'][:]
+    v00 = da_model['v'][:]
     nt,nj = U_tunedBD['dye'].shape
     v00 = np.reshape(v00,(nt,1))
     v0 = np.tile(v00,(1,nj))
     U_tunedBD['v'] = v0
     U_tunedBD['label'] = r'Uniform V, tuned bottom drag coefficient'
+    
+    # tuned linear drag coefficient & shorenormal
+    U_tunedLDC_SN = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_IBP_kd-2.67E-05_tuned_shorenormal_lineardragcoef.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_tunedLDC_SN['dye'] = da_model['c'][:,1:-1]
+    U_tunedLDC_SN['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_tunedLDC_SN['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_tunedLDC_SN['v'] = v0
+    U_tunedLDC_SN['label'] = 'IBP bouy'
+    
+    # tuned linear drag coefficient & shorenormal
+    U_tunedLDC_SN_Lsz = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_IBP_kd-2.67E-05_tuned_shorenormal_lineardragcoef_varLsz.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_tunedLDC_SN_Lsz['dye'] = da_model['c'][:,1:-1]
+    U_tunedLDC_SN_Lsz['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_tunedLDC_SN_Lsz['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_tunedLDC_SN_Lsz['v'] = v0
+    U_tunedLDC_SN_Lsz['label'] = 'IBP bouy'
+    
+    # tuned linear drag coefficient & shorenormal
+    U_tunedLDC_SN_Lsz_kd = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_IBP_kd-1.40E-05_tuned_shorenormal_lineardragcoef_varLsz.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_tunedLDC_SN_Lsz_kd['dye'] = da_model['c'][:,1:-1]
+    U_tunedLDC_SN_Lsz_kd['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_tunedLDC_SN_Lsz_kd['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_tunedLDC_SN_Lsz_kd['v'] = v0
+    U_tunedLDC_SN_Lsz_kd['label'] = 'IBP bouy, tuned kd'
+    
+    # tuned linear drag coefficient & shorenormal
+    U_tunedLDC_SN_Lsz_kd_lowPB = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_IBP_kd-1.40E-05_tuned_shorenormal_lineardragcoef_varLsz_lowPB_in.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_tunedLDC_SN_Lsz_kd_lowPB['dye'] = da_model['c'][:,1:-1]
+    U_tunedLDC_SN_Lsz_kd_lowPB['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_tunedLDC_SN_Lsz_kd_lowPB['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_tunedLDC_SN_Lsz_kd_lowPB['v'] = v0
+    U_tunedLDC_SN_Lsz_kd_lowPB['label'] = 'IBP bouy, tuned kd, PB*1/10'
+    
+    # tuned linear drag coefficient & shorenormal
+    U_tunedLDC_SN_Lsz_kd_medPB = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_IBP_kd-1.40E-05_tuned_shorenormal_lineardragcoef_varLsz_medPB_in.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_tunedLDC_SN_Lsz_kd_medPB['dye'] = da_model['c'][:,1:-1]
+    U_tunedLDC_SN_Lsz_kd_medPB['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_tunedLDC_SN_Lsz_kd_medPB['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_tunedLDC_SN_Lsz_kd_medPB['v'] = v0
+    U_tunedLDC_SN_Lsz_kd_medPB['label'] = 'IBP bouy, tuned kd, PB*1/5'
+    
+    # tuned linear drag coefficient & shorenormal
+    U_isobath5m = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_5miso_kd-1.40E-05_tuned_shorenormal_medPB_in.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_isobath5m['dye'] = da_model['c'][:,1:-1]
+    U_isobath5m['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_isobath5m['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_isobath5m['v'] = v0
+    U_isobath5m['label'] = 'IBP bouy, propagated to 5m isobath'
+    
+    # tuned  shorenormal w/ tuned C0
+    U_isobath5m_C0 = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_5miso_kd-1.40E-05_tuned_shorenormal_PB_in0.012.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_isobath5m_C0['dye'] = da_model['c'][:,1:-1]
+    U_isobath5m_C0['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_isobath5m_C0['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_isobath5m_C0['v'] = v0
+    U_isobath5m_C0['label'] = 'IBP bouy, propagated to 5m isobath'
+    
+    # tuned linear drag coefficient & shorenormal
+    U_isobath5m_r = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_5miso_rayleigh_kd-1.40E-05_tuned_shorenormal_medPB_in.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_isobath5m_r['dye'] = da_model['c'][:,1:-1]
+    U_isobath5m_r['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_isobath5m_r['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_isobath5m_r['v'] = v0
+    U_isobath5m_r['label'] = 'IBP bouy, propagated to 5m isobath, Rayleigh friction'
+    
+    # tuned linear drag coefficient & shorenormal w/ tuned C0
+    U_isobath5m_r_C0 = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_uniformV_5miso_rayleigh_kd-1.40E-05_tuned_shorenormal_PB_in0.02.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_isobath5m_r_C0['dye'] = da_model['c'][:,1:-1]
+    U_isobath5m_r_C0['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_isobath5m_r_C0['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_isobath5m_r_C0['v'] = v0
+    U_isobath5m_r_C0['label'] = 'IBP bouy, propagated to 5m isobath, Rayleigh friction'
+    
+    # autotuned sawc drag coefficient & shorenormal w/ tuned C0
+    U_isobath5m_sawc_autotune_kd = {}
+    model_fn=dir0+'adv_diff_model/autotuned_sawc_kd1.3000E-05_uniformv_5miso_PB_in0.008.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_isobath5m_sawc_autotune_kd['dye'] = da_model['c'][:,1:-1]
+    U_isobath5m_sawc_autotune_kd['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj = U_isobath5m_sawc_autotune_kd['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_isobath5m_sawc_autotune_kd['v'] = v0
+    U_isobath5m_sawc_autotune_kd['label'] = 'IBP bouy, propagated to 5m isobath, SAWV, autotuned kd=-5.5e-6'
+    
+    # autotuned rayleigh drag coefficient & shorenormal w/ tuned C0
+    U_isobath5m_R_autotune_kd = {}
+    model_fn=dir0+'adv_diff_model/autotuned_rayleigh_kd1.3000E-05_uniformv_5miso_PB_in0.010.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    U_isobath5m_R_autotune_kd['dye'] = da_model['c'][:,1:-1]
+    U_isobath5m_R_autotune_kd['y'] = da_model['y'][1:-1]
+    v00 = da_model['v'][:]
+    nt,nj =U_isobath5m_R_autotune_kd['dye'].shape
+    v00 = np.reshape(v00,(nt,1))
+    v0 = np.tile(v00,(1,nj))
+    U_isobath5m_R_autotune_kd['v'] = v0
+    U_isobath5m_R_autotune_kd['label'] = 'IBP bouy, propagated to 5m isobath, Rayleigh friction, autotuned kd=-6.5e-6'
+    
+    # tuned linear drag coefficient & shorenormal
+    AV_recycled_tuned_medPB = {}
+    model_fn=dir0+'adv_diff_model/CSIDE_recycled_input_tuned_subsampled_medPB_in.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    AV_recycled_tuned_medPB['dye'] = da_model['c'][:,1:-1]
+    AV_recycled_tuned_medPB['y'] = da_model['y'][1:-1]
+    AV_recycled_tuned_medPB['v'] = da_model['v'][:,1:-1]
+    AV_recycled_tuned_medPB['label'] = 'alongshore-varying recycled SD Bight v'
+    
+    # tuned linear drag coefficient & shorenormal
+    AV_recycled_tuned_C0 = {}
+    model_fn=dir0+'adv_diff_model/autotuned_recycled_kd1.3000E-05_AVv_5miso_PB_in0.011.p'
+    da_model = pickle.load(open(model_fn,'rb'))
+    AV_recycled_tuned_C0['dye'] = da_model['c'][:,1:-1]
+    AV_recycled_tuned_C0['y'] = da_model['y'][1:-1]
+    AV_recycled_tuned_C0['v'] = da_model['v'][:,1:-1]
+    AV_recycled_tuned_C0['label'] = 'alongshore-varying recycled SD Bight v'
 
     model_dict_list = {}
 
