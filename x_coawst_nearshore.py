@@ -100,19 +100,6 @@ zeta = np.zeros((NT)) # SSH
 # time
 ot = np.zeros((NT)) # time
 
-#prepare index finding dictionaries
-WD_rho = {}
-WD_rho['ind'] = 0
-
-WD_u = {}
-WD_u['ind'] = 0
-
-WD_v = {}
-WD_v['ind'] = 0
-
-X5m = {}
-X5m['ind'] = 0
-
 # Now do the extraction and processing
 tt=0
 old_nt = 0
@@ -121,9 +108,7 @@ for fn in f_list:
     ds = nc.Dataset(fn)
 
     # select wave direction and significant wave height
-    WD_rho['data'] = ds['wetdry_mask_rho'][:]
-    WD_u['data'] = ds['wetdry_mask_u'][:]
-    WD_v['data'] = ds['wetdry_mask_v'][:]
+    wetdry_mask_rho = ds['wetdry_mask_rho'][:]
     dye_01_0 = ds['dye_01'][:]
     dye_02_0 = ds['dye_02'][:]
     Dwave0 = ds['Dwave'][:]
@@ -146,50 +131,38 @@ for fn in f_list:
     zeta[old_nt:old_nt+nt] = zeta0[:,bj,bi]
 
     for j in range(nj):
-        print(f'j = {(j+1)} of {nj}')
+        if np.mod(j,10)==0:
+            print(f'j = {(j+1)} of {nj}')
         #loop through time steps, 
         # because extraction indexes depend on time-varying wetdry mask
-        north_of_TJRE = lat_rho[jjs[j],0]>32.6
         for t in range(nt):
-            
-            for WD in WD_rho,WD_u,WD_v:
-                WD['diff'] = np.where(np.diff(WD['data'][t,jjs[j],:(iis[j]+2)])<0)[0]
-            
-            X5m['diff'] = np.where(np.diff(np.sign(H[t,jjs[j],:(iis[j]+2)]-ref_depth)))[0]
-        
-        
-            for DD in WD_rho,WD_u,WD_v,X5m:
-                if len(DD['diff'])==1:
-                    DD['ind'] = DD['diff'][0]
-                elif len(DD['diff'])>1:
-                    # south of TJRE, just choose the most western point
-                    # north of TJRE, San Diego Bay and Pt Loma get tricky
-                    if north_of_TJRE:
-                        # to avoid a weird problem where sometimes the wetdry mask leaves an isolated wet
-                        # spot in an otherwise dry tidal zone, make sure we're only considering wet areas with 2 wet indexes west
-                        # of them
-                        if DD in [WD_rho,WD_u,WD_v]:
-                            new_diff_list = []
-                            for ind_diff in DD['diff']:
-                                if ~np.any(DD['data'][t,jjs[j],(ind_diff-2):ind_diff]==0):
-                                    new_diff_list.append(ind_diff)
-                            DD['diff'] = new_diff_list
-                        DD['ind'] = DD['diff'][np.argmin(np.abs(DD['diff']-DD['ind']))]
-                    else:
-                        DD['ind'] = DD['diff'][0]
+            # find the edge of the mask
+            wd_mask_diff = np.where(np.diff(wetdry_mask_rho[t,jjs[j],:]))[0]
+            #find where depth crosses from deeper than ref_depth to shallower
+            depth_diff = np.where(np.diff(np.sign(H[t,jjs[j],:]-ref_depth)))[0]
+    
+            #if multiple edges, north of TJRE
+            if (len(mask_diff)>1)&(lat_rho[jjs[j],0]>32.6):
+                #look for the edge closest to the previously identified edge
+                x_wd_ind = wd_mask_diff[np.argmin(np.abs(x_wd_ind-wd_mask_diff))]
+                x_5m_ind = depth_diff[np.argmin(np.abs(x_5m_ind-depth_diff))]
 
-            WD_ind = np.min([WD_rho['ind'],WD_u['ind'],WD_v['ind']])
-        
-            if len(X5m['diff'])==0:
-                X5m['ind'] = WD_ind-2
-            
-            if (WD_ind-X5m['ind'])<2:
-                X5m['ind'] = WD_ind-2
-                
-            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(X5m['ind']):int(WD_ind)])
-            dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,jjs[j],int(X5m['ind']):int(WD_ind)])
-            u0[old_nt+t,j] = np.nanmean(u00[t,:,jjs[j],int(X5m['ind']):int(WD_ind)])
-            v0[old_nt+t,j] = np.nanmean(v00[t,:,jjs[j],int(X5m['ind']):int(WD_ind)])
+            #if multiple edges, south of TJRE
+            elif (len(mask_diff)>1)&(lat_rho[jjs[j],0]<32.6):
+                #do outermost edge
+                x_wd_ind = wd_mask_diff[0]
+                x_5m_ind = depth_diff[0]
+
+            elif len(mask_diff)==1:
+                x_wd_ind = wd_mask_diff[0]
+                x_5m_ind = depth_diff[0]
+
+            #go offshore of the wet/dry mask by a tad
+            # x_wd_ind = x_wd_ind - 2
+            dye_01[old_nt+t,j] = np.nanmean(dye_01_0[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
+            dye_02[old_nt+t,j] = np.nanmean(dye_02_0[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
+            u0[old_nt+t,j] = np.nanmean(u00[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
+            v0[old_nt+t,j] = np.nanmean(v00[t,:,jjs[j],int(x_5m_ind):int(x_wd_ind)])
 
     
     ot[old_nt:old_nt+nt] = ocean_time
