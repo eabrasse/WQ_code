@@ -79,7 +79,7 @@ for f in range(nfiles):
         ds0 = nc.Dataset(f_list[f-1])
     if f<nfiles-1: #open following file UNLESS f = nflies-1
         ds1 = nc.Dataset(f_list[f+1])
-    nt = ds['ocean_time'][:].shape
+    nt = ds['ocean_time'][:].shape[0]
     ndays = int(nt/24)
     
     #loop through variables, filtering and saving
