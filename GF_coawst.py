@@ -58,6 +58,7 @@ for dname, the_dim in ds.dimensions.items():
 
 #generate variables
 # for all variables that are not time varying, copy them into the new file
+tic = time.perf_counter()
 var_2gf_list = []
 for v_name,varin in ds.variables.items():
     outVar = ds2.createVariable(v_name, varin.datatype, varin.dimensions)
@@ -69,24 +70,40 @@ for v_name,varin in ds.variables.items():
         outVar[:] = np.zeros((shape))
     else:
         outVar[:] = varin[:]
+toc = time.perf_counter()
+init_var_time = f"Initializing variables took {toc-tic:0.4f} seconds"
+print(init_var_time)
 
+print('Begin filtering')
+tic0 = time.perf_counter()
 nvars = len(var_2gf_list)
 total_days = 0
 for f in range(nfiles):
     # if mod(f,5):
     print(f'Working on file {(f+1):} of {nfiles:}'+'\n'+f_list[f])
     ds = nc.Dataset(f_list[f])
+    
+    # if only one file, we'll lose two days, one at the beginning and one at the end
+    # if it's the first file of many, we'll lose one day at the beginning
+    # if it's the last file of many, we'll lose one day at the end
+    # so assume ndays will be at minimum (nt/24 - 2), with up to two days 'restored'
+    # how many days 'restored' will be ndays_mod
+    ndays_mod = 0
     if f>0: #open previous file UNLESS f=0
         ds0 = nc.Dataset(f_list[f-1])
+        ndays_mod+=1
     if f<nfiles-1: #open following file UNLESS f = nflies-1
         ds1 = nc.Dataset(f_list[f+1])
+        ndays_mod+=1
     nt = ds['ocean_time'][:].shape[0]
-    ndays = int(nt/24)
+    ndays = int(nt/24)-2+ndays_mod
+
     
     #loop through variables, filtering and saving
     varcount=0
     for var_name in var_2gf_list:
         print(f'   filtering {var_name}...')
+        tic = time.perf_counter()
         var = ds[var_name]
         dim = len(var.shape)
         
@@ -119,12 +136,18 @@ for f in range(nfiles):
             var_gf = wqfun.filt_godin_mat(var)
             ds2[var_name][total_days:total_days+ndays,:] = var_gf[35:-35:24,:] #trim leading & trailing nans and subsample 1/day
         varcount+=1
+        toc = time.perf_counter()
+        var_gf_time = f"   filtering {var_name} took {toc-tic:0.4f} seconds"
+        print(var_gf_time)
     # clean up
     total_days+=ndays
     if f>0:
         ds0.close()
         
 print('Finished!')
+toc = time.perf_counter()
+total_gf_time = f"Filtering all variables took {toc-tic0:0.4f} seconds"
+print(total_gf_time)
 ds.close() # since no new ds1 is loaded for the last day, ds1 should refer to the same file as ds
 ds2.close()
 print()
