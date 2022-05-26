@@ -60,17 +60,15 @@ for dname, the_dim in ds.dimensions.items():
 var_2gf_list = []
 for v_name,varin in ds.variables.items():
     outVar = ds2.createVariable(v_name, varin.datatype, varin.dimensions)
-    try:
-        if 'ocean_time' in varin.coordinates:
-            var_2gf_list.append(v_name) # if time-varying, add name to "to godin filter" list
-            shape = [s for s in varin.shape]
-            shape[0] = ndays_guess #change time index
-    
-            outVar[:] = np.zeros((shape))
-        else:
-            outVar[:] = varin[:]
-    except: # some variables don't have 'coordinates' attribute for some reason, hence the except
+    if 'ocean_time' in varin.dimensions:
+        var_2gf_list.append(v_name) # if time-varying, add name to "to godin filter" list
+        shape = [s for s in varin.shape]
+        shape[0] = ndays_guess #change time index
+
+        outVar[:] = np.zeros((shape))
+    else:
         outVar[:] = varin[:]
+
 nvars = len(var_2gf_list)
 total_days = 0
 for f in range(nfiles):
