@@ -11,6 +11,7 @@ import pickle
 import numpy as np
 import netCDF4 as nc
 import time
+import wqfun
 
 home = '/dataSIO/ebrasseale/'
 
