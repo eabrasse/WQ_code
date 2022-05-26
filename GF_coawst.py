@@ -143,7 +143,19 @@ for f in range(nfiles):
     total_days+=ndays
     if f>0:
         ds0.close()
-        
+    ds.close()
+    if f<nfiles-1:
+        ds1.close()
+
+# we initialized variables with ndays_guess, which will be higher than total_days
+# so trim the extra zeros
+for varname in var_2gf_list:
+    dim = len(ds2[varname].shape)
+    if dim==1:
+        ds2[varname] = ds2[varname][:total_days]
+    else:
+        ds2[varname] = ds2[varname][:total_days,:]
+
 print('Finished!')
 toc = time.perf_counter()
 total_gf_time = f"Filtering all variables took {toc-tic0:0.4f} seconds"
