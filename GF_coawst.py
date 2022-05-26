@@ -113,11 +113,11 @@ for f in range(nfiles):
         
         if dim==1: # if one dimensional
             var_gf = wqfun.filt_godin(var)
-            ds2[var][total_days:total_days+ndays] = var_gf[35:-35:24] #trim leading & trailing nans and subsample 1/day
+            ds2[var_name][total_days:total_days+ndays] = var_gf[35:-35:24] #trim leading & trailing nans and subsample 1/day
         else: # if multidimensional
             # filter
             var_gf = wqfun.filt_godin_mat(var)
-            ds2[var][total_days:total_days+ndays,:] = var_gf[35:-35:24,:] #trim leading & trailing nans and subsample 1/day
+            ds2[var_name][total_days:total_days+ndays,:] = var_gf[35:-35:24,:] #trim leading & trailing nans and subsample 1/day
         varcount+=1
     # clean up
     total_days+=ndays
