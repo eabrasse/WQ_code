@@ -12,6 +12,7 @@ import numpy as np
 import netCDF4 as nc
 import time
 import wqfun
+from datetime import datetime, timedelta
 
 home = '/dataSIO/ebrasseale/'
 
@@ -31,8 +32,17 @@ if testing:
     f_list = f_list[:2]
     print('TESTING!!!')
 
-nfiles = len(f_list)
-ndays_guess = nfiles*10 # not every file has ten days, but most do
+# calculate how many days we'll need
+# open first and last files and check time stamps
+ds0 = nc.Dataset(f_list[0])
+ot0 = ds0['ocean_time'][:]
+dt0 = datetime(1999,1,1) + timedelta(seconds=ot0[35])
+
+ds1 = nc.Dataset(f_list[-1])
+ot1 = ds1['ocean_time'][:]
+dt1 = datetime(1999,1,1) + timedelta(seconds=ot1[-35])
+
+ndays_guess = (dt1-dt0).days + 1
 
 # build new netCDF file
 gf_fn = home+'WQ_data/ocean_daily_gf_NADB2017-2018-2019.nc'
@@ -45,11 +55,8 @@ except OSError:
     pass # assume error was because the file did not exist
 ds2 = nc.Dataset(gf_fn, 'w', format='NETCDF3_64BIT_OFFSET')
 
-#open first file
-ds = nc.Dataset(f_list[0])
-
 # Copy dimensions to new netCDF file
-for dname, the_dim in ds.dimensions.items():
+for dname, the_dim in ds0.dimensions.items():
     if 'time' in dname:
         # for our new file, time will be ndays long
         ds2.createDimension(dname, ndays_guess)
@@ -60,7 +67,7 @@ for dname, the_dim in ds.dimensions.items():
 # for all variables that are not time varying, copy them into the new file
 tic = time.perf_counter()
 var_2gf_list = []
-for v_name,varin in ds.variables.items():
+for v_name,varin in ds0.variables.items():
     outVar = ds2.createVariable(v_name, varin.datatype, varin.dimensions)
     if 'ocean_time' in varin.dimensions:
         var_2gf_list.append(v_name) # if time-varying, add name to "to godin filter" list
@@ -73,6 +80,10 @@ for v_name,varin in ds.variables.items():
 toc = time.perf_counter()
 init_var_time = f"Initializing variables took {toc-tic:0.4f} seconds"
 print(init_var_time)
+
+#close to clean up, want to make sure we know exactly what's open
+ds0.close()
+ds1.close()
 
 print('Begin filtering')
 tic0 = time.perf_counter()
@@ -146,15 +157,6 @@ for f in range(nfiles):
     ds.close()
     if f<nfiles-1:
         ds1.close()
-
-# we initialized variables with ndays_guess, which will be higher than total_days
-# so trim the extra zeros
-for varname in var_2gf_list:
-    dim = len(ds2[varname].shape)
-    if dim==1:
-        ds2[varname] = ds2[varname][:total_days]
-    else:
-        ds2[varname] = ds2[varname][:total_days,:]
 
 print('Finished!')
 toc = time.perf_counter()
