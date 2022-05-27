@@ -32,6 +32,8 @@ if testing:
     f_list = f_list[:2]
     print('TESTING!!!')
 
+nfiles = len(f_list)
+
 # calculate how many days we'll need
 # open first and last files and check time stamps
 ds0 = nc.Dataset(f_list[0])
