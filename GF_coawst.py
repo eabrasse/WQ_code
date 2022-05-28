@@ -27,7 +27,7 @@ for my_dir in [dir0,dir1,dir2]:
     f_list0 = [my_dir+x for x in f_list0 if x[:9]=='ocean_his']
     f_list.extend(f_list0)
 
-testing=True
+testing=False
 if testing:
     f_list = f_list[:4]
     print('TESTING!!!')
@@ -86,10 +86,6 @@ print(init_var_time)
 #close to clean up, want to make sure we know exactly what's open
 ds0.close()
 ds1.close()
-
-###TESTING###
-var_2gf_list = ['ocean_time']
-#############
 
 print('Begin filtering')
 tic0 = time.perf_counter()
@@ -163,11 +159,6 @@ for f in range(nfiles):
     ds.close()
     if f<nfiles-1:
         ds1.close()
-
-###TESTING###
-ot = ds2['ocean_time'][:]
-dt_list = [datetime(1999,1,1)+timedelta(seconds=ot[t]) for t in range(len(ot))]
-#############
 
 print('Finished!')
 toc = time.perf_counter()
