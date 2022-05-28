@@ -73,10 +73,10 @@ for v_name,varin in ds0.variables.items():
     outVar = ds2.createVariable(v_name, varin.datatype, varin.dimensions)
     if 'ocean_time' in varin.dimensions:
         var_2gf_list.append(v_name) # if time-varying, add name to "to godin filter" list
-        shape = [s for s in varin.shape]
-        shape[0] = ndays_guess #change time index
+        shape0 = [s for s in varin.shape]
+        shape0[0] = ndays_guess #change time index
 
-        outVar[:] = np.zeros((shape))
+        outVar[:] = np.zeros((shape0))
     else:
         outVar[:] = varin[:]
 toc = time.perf_counter()
