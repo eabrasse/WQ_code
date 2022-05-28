@@ -56,7 +56,7 @@ try:
 except OSError:
     pass # assume error was because the file did not exist
 # ds2 = nc.Dataset(gf_fn, 'w', format='NETCDF3_64BIT_OFFSET')
-ds2 = nc.Dataset(gf_fn, 'w', format='NETCDF4_CLASSIC')
+ds2 = nc.Dataset(gf_fn, 'w', format='NETCDF4')
 
 # Copy dimensions to new netCDF file
 for dname, the_dim in ds0.dimensions.items():
