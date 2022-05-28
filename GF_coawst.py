@@ -47,7 +47,7 @@ dt1 = datetime(1999,1,1) + timedelta(seconds=ot1[-35])
 ndays_guess = (dt1-dt0).days + 1
 
 # build new netCDF file
-gf_fn = home+'WQ_data/ocean_daily_gf_NADB2017-2018-2019_ocean_time_test.nc'
+gf_fn = home+'WQ_data/ocean_daily_gf_NADB2017-2018-2019.nc'
 
 print(f'New netCDF file location: {gf_fn}')
 # get rid of the old version, if it exists
