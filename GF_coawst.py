@@ -75,8 +75,8 @@ for v_name,varin in ds0.variables.items():
         var_2gf_list.append(v_name) # if time-varying, add name to "to godin filter" list
         shape0 = [s for s in varin.shape]
         shape0[0] = ndays_guess #change time index
-
-        outVar[:] = np.zeros((shape0))
+        outVar_fill = np.zeros((shape0))
+        outVar[:] = outVar_fill
     else:
         outVar[:] = varin[:]
 toc = time.perf_counter()
