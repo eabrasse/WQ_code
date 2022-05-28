@@ -29,7 +29,7 @@ for my_dir in [dir0,dir1,dir2]:
 
 testing=True
 if testing:
-    f_list = f_list[:2]
+    f_list = f_list[:4]
     print('TESTING!!!')
 
 nfiles = len(f_list)
