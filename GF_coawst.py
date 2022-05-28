@@ -164,6 +164,5 @@ print('Finished!')
 toc = time.perf_counter()
 total_gf_time = f"Filtering all variables took {toc-tic0:0.4f} seconds"
 print(total_gf_time)
-ds.close() # since no new ds1 is loaded for the last day, ds1 should refer to the same file as ds
 ds2.close()
 print()
