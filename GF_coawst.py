@@ -76,7 +76,7 @@ for v_name,varin in ds0.variables.items():
         shape0 = [s for s in varin.shape]
         shape0[0] = ndays_guess #change time index
         outVar_fill = np.zeros((shape0))
-        outVar[:] = outVar_fill
+        outVar[:] = outVar_fill[:]
     else:
         outVar[:] = varin[:]
 toc = time.perf_counter()
