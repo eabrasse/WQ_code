@@ -47,7 +47,7 @@ dt1 = datetime(1999,1,1) + timedelta(seconds=ot1[-35])
 ndays_guess = (dt1-dt0).days + 1
 
 # build new netCDF file
-gf_fn = home+'WQ_data/ocean_daily_gf_NADB2017-2018-2019.nc'
+gf_fn = home+'WQ_data/ocean_daily_gf_NADB2017-2018-2019_ocean_time_test.nc'
 
 print(f'New netCDF file location: {gf_fn}')
 # get rid of the old version, if it exists
@@ -86,6 +86,10 @@ print(init_var_time)
 #close to clean up, want to make sure we know exactly what's open
 ds0.close()
 ds1.close()
+
+###TESTING###
+var_2gf_list = ['ocean_time']
+#############
 
 print('Begin filtering')
 tic0 = time.perf_counter()
@@ -127,9 +131,9 @@ for f in range(nfiles):
         # For the first and last files, those won't be available
         if f>0: #don't try to read in preceding file for f=0
             if dim==1: # if one dimensional
-                var0 = ds0[var_name][-24:]
+                var0 = ds0[var_name][-25:]
             else: # if multidimensional
-                var0 = ds0[var_name][-24:,:]
+                var0 = ds0[var_name][-25:,:]
             var = np.insert(var,0,var0,axis=0) # add earlier file data to start of array
         
         if f<nfiles-1: # don't try to read in following file when f = nfiles-1
@@ -159,6 +163,11 @@ for f in range(nfiles):
     ds.close()
     if f<nfiles-1:
         ds1.close()
+
+###TESTING###
+ot = ds2['ocean_time'][:]
+dt_list = [datetime(1999,1,1)+timedelta(seconds=ot[t]) for t in range(len(ot))]
+#############
 
 print('Finished!')
 toc = time.perf_counter()
