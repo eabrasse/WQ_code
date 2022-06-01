@@ -77,7 +77,7 @@ lat0,lon0 = 32.56957,-117.16880 # CDIP buoy location
 i0,j0 = wqfun.find_ll_inds(lon_rho,lat_rho,mask_rho,lon0,lat0)
 loc0 = [5,j0,i0]
 
-lat1,lon1 = 32.66,-117.12 # middle of SD Bay
+lat1,lon1 = 32.66,-117.13 # middle of SD Bay
 i1,j1 = wqfun.find_ll_inds(lon_rho,lat_rho,mask_rho,lon1,lat1)
 loc1 = [9,j1,i1]
 
@@ -175,6 +175,7 @@ for vname in var_time_list:
             if lcount<nloc-1:
                 ax.set_xticklabels([''])
             else:
+                
                 ax.set_xlabel('date')
                 ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %-d, %Y"))
                 plt.setp( ax.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
@@ -182,6 +183,7 @@ for vname in var_time_list:
             lcount+=1
         tcount+=1
     
+    fig.subplots_adjust(left=0.05,right=0.95,top=0.85)
     outfn = home+ f'WQ_plots/ocean_daily_gf_NADB2017-2018-2019_compare_{vname}.jpg'
     plt.savefig(outfn)
     plt.close()
