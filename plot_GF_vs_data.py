@@ -62,7 +62,7 @@ gft1 = [np.argwhere((dsgf['ocean_time'][:]-t1)<0)[-1][0] for t1 in t1_list]
 testing=True
 if testing:
     # just plot one variable
-    var_time_list = ['zeta','u','v','w','salt','temp']
+    var_time_list = ['zeta']#,'u','v','w','salt','temp']
 else:
     # make a list of time-varying variables
     var_time_list = [v_name for v_name,varin in dsgf.variables.items() if 'ocean_time' in varin.dimensions]
@@ -99,7 +99,7 @@ for vname in var_time_list:
         continue
     
     # open figure for this variable
-    fig=plt.figure(figsize=(10,6))
+    fig=plt.figure(figsize=(12,8))
     gs = GridSpec(nloc,nfile+1)
     
     # draw map on left for extraction location reference
@@ -156,7 +156,7 @@ for vname in var_time_list:
             ax = fig.add_subplot(gs[lcount,tcount+1])
             
             # plot unfilted local data
-            ax.plot(dt_list[tcount],var_local,lw=1.0,ls='solid',color=c10(lcount),label='data')
+            ax.plot(dt_list[tcount],var_local,lw=1.0,ls='solid',color=c10(lcount),label=f'{vname:} data')
             
             # plot locally filtered data
             ax.plot(dt_list[tcount],var_hourly_gf_local,lw=1.5,ls='dashed',color=c10(lcount),label='1D GF data')
@@ -180,13 +180,14 @@ for vname in var_time_list:
             else:
                 
                 ax.set_xlabel('date')
+                ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
                 ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %-d, %Y"))
                 plt.setp( ax.xaxis.get_majorticklabels(), rotation=30, ha="right",rotation_mode='anchor')
             
             lcount+=1
         tcount+=1
     
-    fig.subplots_adjust(left=0.08,right=0.98,top=0.95)
+    fig.subplots_adjust(left=0.08,right=0.98,top=0.95,wspace=0.2)
     outfn = home+ f'WQ_plots/ocean_daily_gf_NADB2017-2018-2019_compare_{vname}.jpg'
     plt.savefig(outfn)
     plt.close()
