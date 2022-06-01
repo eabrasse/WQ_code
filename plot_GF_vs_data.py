@@ -107,7 +107,7 @@ for vname in var_time_list:
     ax_map.contour(lon_rho,lat_rho,mask_rho,levels=[0.5],colors='gray',label=None)
     count = 0
     for loc in loc_list:
-        ax_map.plot(lon_rho[loc[1],loc[0]],lat_rho[loc[1],loc[0]],marker='*',color='none',markersize=15,mec='k',mfc=c10(count))
+        ax_map.plot(lon_rho[loc[1],loc[2]],lat_rho[loc[1],loc[2]],marker='*',color='none',markersize=15,mec='k',mfc=c10(count))
         count+=1
     wqfun.dar(ax_map)
     ax_map.set_xlabel('longitude')
@@ -142,7 +142,7 @@ for vname in var_time_list:
                 inds = tuple(inds_list) # convert list to tuple for indexing
                 
                 gf_inds_list = loc.copy # loc has [z, y, x], take all
-                gf_inds_list.insert(0,slice(gft0[lcount],gft1[lcount])) # t index from gft0 to gft1
+                gf_inds_list.insert(0,slice(gft0[tcount],gft1[tcount])) # t index from gft0 to gft1
                 gf_inds = tuple(gf_inds_list) # convert list to tuple for indexing
             
             # generate time series just at local point
@@ -162,7 +162,7 @@ for vname in var_time_list:
             ax.plot(dt_list[tcount],var_hourly_gf_local,lw=1.0,ls='dotted',color=c10(lcount),label='1D GF data')
             
             # plot globally filtered and subsampled local data
-            ax.plot(dt_listGF[gft0[lcount]:gft1[lcount]],var_GF_local,marker='x',ls='None',color='k',markersize=8,label='multi-D GF, 24hr subsampled data')
+            ax.plot(dt_listGF[gft0[tcount]:gft1[tcount]],var_GF_local,marker='x',ls='None',color='k',markersize=8,label='multi-D GF, 24hr subsampled data')
             
             if (tcount==0) and (lcount==0):
                 ax.legend()
