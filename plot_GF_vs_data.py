@@ -62,7 +62,7 @@ gft1 = [np.argwhere((dsgf['ocean_time'][:]-t1)<0)[-1][0] for t1 in t1_list]
 testing=True
 if testing:
     # just plot one variable
-    var_time_list = ['zeta']
+    var_time_list = ['zeta','u','v','w','salt','temp']
 else:
     # make a list of time-varying variables
     var_time_list = [v_name for v_name,varin in dsgf.variables.items() if 'ocean_time' in varin.dimensions]
@@ -104,7 +104,7 @@ for vname in var_time_list:
     
     # draw map on left for extraction location reference
     ax_map = fig.add_subplot(gs[:,0])
-    ax_map.contour(lon_rho,lat_rho,mask_rho,levels=[0.5],colors='gray',label=None)
+    ax_map.contour(lon_rho,lat_rho,mask_rho,levels=[0.5],colors='gray')
     count = 0
     for loc in loc_list:
         ax_map.plot(lon_rho[loc[1],loc[2]],lat_rho[loc[1],loc[2]],marker='*',color='none',markersize=15,mec='k',mfc=c10(count))
@@ -183,7 +183,7 @@ for vname in var_time_list:
             lcount+=1
         tcount+=1
     
-    fig.subplots_adjust(left=0.05,right=0.95,top=0.92)
+    fig.subplots_adjust(left=0.08,right=0.98,top=0.95)
     outfn = home+ f'WQ_plots/ocean_daily_gf_NADB2017-2018-2019_compare_{vname}.jpg'
     plt.savefig(outfn)
     plt.close()
