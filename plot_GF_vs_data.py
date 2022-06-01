@@ -132,7 +132,7 @@ for vname in var_time_list:
                 inds = tuple(inds_list) # convert list to tuple for indexing
                 
                 gf_inds_list = loc[1:] # loc has [z, y, x], just take [y, x]
-                gf_inds_list.insert(0,slice(gft0[lcount],gft1[lcount])) # t index from gft0 to gft1
+                gf_inds_list.insert(0,slice(gft0[tcount],gft1[tcount])) # t index from gft0 to gft1
                 gf_inds = tuple(gf_inds_list) # convert list to tuple for indexing
                 
             elif ndim==4:
