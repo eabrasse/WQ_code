@@ -62,7 +62,7 @@ gft1 = [np.argwhere((dsgf['ocean_time'][:]-t1)<0)[-1][0] for t1 in t1_list]
 testing=True
 if testing:
     # just plot one variable
-    var_time_list = ['zeta']#,'u','v','w','salt','temp']
+    var_time_list = ['zeta','u','v','w','salt','temp']
 else:
     # make a list of time-varying variables
     var_time_list = [v_name for v_name,varin in dsgf.variables.items() if 'ocean_time' in varin.dimensions]
@@ -159,7 +159,7 @@ for vname in var_time_list:
             ax.plot(dt_list[tcount],var_local,lw=1.0,ls='solid',color=c10(lcount),label=f'{vname:} data')
             
             # plot locally filtered data
-            ax.plot(dt_list[tcount],var_hourly_gf_local,lw=2,ls='dotted',color=c10(lcount),label='1D GF data')
+            ax.plot(dt_list[tcount],var_hourly_gf_local,lw=2,ls='solid',color=c10(lcount),label='1D GF data')
             
             # plot globally filtered and subsampled local data
             ax.plot(dt_listGF[gft0[tcount]:gft1[tcount]],var_GF_local,marker='x',ls='None',color='k',markersize=8,label='multi-D GF, 24hr subsampled data')
