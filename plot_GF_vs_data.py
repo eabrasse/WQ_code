@@ -156,10 +156,10 @@ for vname in var_time_list:
             ax = fig.add_subplot(gs[lcount,tcount+1])
             
             # plot unfilted local data
-            ax.plot(dt_list[tcount],var_local,lw=1.5,ls='solid',color=c10(lcount),label='data')
+            ax.plot(dt_list[tcount],var_local,lw=1.0,ls='solid',color=c10(lcount),label='data')
             
             # plot locally filtered data
-            ax.plot(dt_list[tcount],var_hourly_gf_local,lw=1.0,ls='dotted',color=c10(lcount),label='1D GF data')
+            ax.plot(dt_list[tcount],var_hourly_gf_local,lw=1.5,ls='dashed',color=c10(lcount),label='1D GF data')
             
             # plot globally filtered and subsampled local data
             ax.plot(dt_listGF[gft0[tcount]:gft1[tcount]],var_GF_local,marker='x',ls='None',color='k',markersize=8,label='multi-D GF, 24hr subsampled data')
