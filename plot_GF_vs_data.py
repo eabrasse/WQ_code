@@ -169,7 +169,10 @@ for vname in var_time_list:
                 
             # add units to y-axis on far left hand side only
             if tcount<1:
-                ax.set_ylabel(ds[vname].units)
+                try:
+                    ax.set_ylabel(ds[vname].units)
+                except:
+                    ax.set_ylabel(vname)
             
             # add time to x-axis on bottom plots only
             if lcount<nloc-1:
