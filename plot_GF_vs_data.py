@@ -183,7 +183,7 @@ for vname in var_time_list:
             lcount+=1
         tcount+=1
     
-    fig.subplots_adjust(left=0.05,right=0.95,top=0.85)
+    fig.subplots_adjust(left=0.05,right=0.95,top=0.92)
     outfn = home+ f'WQ_plots/ocean_daily_gf_NADB2017-2018-2019_compare_{vname}.jpg'
     plt.savefig(outfn)
     plt.close()
