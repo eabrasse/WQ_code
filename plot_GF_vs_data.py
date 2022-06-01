@@ -74,15 +74,15 @@ mask_rho = dsgf['mask_rho'][:]
 
 # z,y,x
 lat0,lon0 = 32.56957,-117.16880 # CDIP buoy location
-i0,j0 = wqfun.find_ll_inds(lon_rho,lat_rho,lon0,lat0)
+i0,j0 = wqfun.find_ll_inds(lon_rho,lat_rho,mask_rho,lon0,lat0)
 loc0 = [5,j0,i0]
 
 lat1,lon1 = 32.66,-117.12 # middle of SD Bay
-i1,j1 = wqfun.find_ll_inds(lon_rho,lat_rho,lon1,lat1)
+i1,j1 = wqfun.find_ll_inds(lon_rho,lat_rho,mask_rho,lon1,lat1)
 loc1 = [9,j1,i1]
 
 lat2,lon2 = 32.5,-117.2 # further south and offshore
-i2,j2 = wqfun.find_ll_inds(lon_rho,lat_rho,lon2,lat2)
+i2,j2 = wqfun.find_ll_inds(lon_rho,lat_rho,mask_rho,lon2,lat2)
 loc2 = [2,j2,i2]
 
 # note: z's were chosen randomly
