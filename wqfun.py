@@ -12,7 +12,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import netCDF4 as nc
 
-def find_ll_inds(lon_rho,lat_rho,lon0,lat0):
+def find_ll_inds(lon_rho,lat_rho,mask_rho,lon0,lat0):
     
     #note add new modifier to keep form extracting on land for NOAA tide gauge - don't universally shift by 0.005!
     latlondiff = np.sqrt((lat_rho-lat0)**2 + (lon_rho-lon0)**2)
