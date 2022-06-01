@@ -8,9 +8,24 @@ Plot results of a particle tracking experime.
 
 import numpy as np
 import pickle
+import matplotlib
 import matplotlib.pyplot as plt
 import netCDF4 as nc
 
+def find_ll_inds(lon_rho,lat_rho,lon0,lat0):
+    
+    #note add new modifier to keep form extracting on land for NOAA tide gauge - don't universally shift by 0.005!
+    latlondiff = np.sqrt((lat_rho-lat0)**2 + (lon_rho-lon0)**2)
+    
+    #mask latlondiff before finding min
+    latlondiff[mask_rho==0] = np.nan
+    
+    lld_nanmin = np.where(latlondiff==np.nanmin(latlondiff))
+    
+    iref = lld_nanmin[1][0]
+    jref = lld_nanmin[0][0]
+    
+    return iref,jref
 
 def get_shore_inds(grid_fn):
     
@@ -79,6 +94,8 @@ def add_beaches_to_ax_RHS(ax,TJRE_line=False,xaxscale=0.02):
     beach_list = get_beach_location(beach_name_list)
     [x0,x1] = ax.get_xlim()
     [y0,y1] = ax.get_ylim()
+    ax.set_ylim([2,y1])
+    [y0,y1] = ax.get_ylim()
     # if type(x0)==np.float64:
     #     xaxscale = 0.1
     # else:
@@ -105,6 +122,7 @@ def add_beaches_to_ax_RHS(ax,TJRE_line=False,xaxscale=0.02):
             ax.set_xlim([x0,x1])
             
             ax.text(x1+xaxscale*(x1-x0),0.001*(beach_list[beach]['r']-beach_list['PB']['r']),beach,color=text_color,ha='left',va='center')
+
     
 
 def wavebuoy_to_5m_isobath(Dbuoy):
@@ -166,6 +184,7 @@ def gen_plot_props(fs_big=12,fs_small=10,lw_big=2,lw_small=1):
     plt.rc('font', size=fs_big)
     plt.rc('grid', color='g', ls='-', lw=lw_small, alpha=.3)
     plt.rc('axes', axisbelow=True)
+    matplotlib.rcParams['mathtext.fontset'] = 'cm'
     
     #default is a 1/4 page figure. If 1/2 or full page is desired, x2
     # before using
