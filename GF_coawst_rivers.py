@@ -123,6 +123,7 @@ for f in range(nfiles):
         print(f'   filtering {var_name}...')
         tic = time.perf_counter()
         var = ds[var_name]
+        dim = len(var.shape)
         
         # use r0 to trim overlap with previous file
         if dim==1:
