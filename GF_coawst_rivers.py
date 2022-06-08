@@ -113,7 +113,7 @@ for f in range(nfiles):
         ndays_mod+=1
     else:
         r1=-1
-    nt = rt.shape[0]
+    nt = rt[r0:].shape[0]
     ndays = int(nt/24)-2+ndays_mod
 
     
