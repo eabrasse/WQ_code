@@ -18,8 +18,8 @@ home = '/dataSIO/ebrasseale/'
 
 
 f_list = ['/dataSIO/NADB2017/NADB2017_0/Output/river_tracer_4river_NADB2017_0.nc',\
-    '/dataSIO/NADB2018/river_tracer_4river_NADB2018.nc',\
-    '/dataSIO/NADB2019/river_tracer_4river_NADB2019_0.nc']
+    '/dataSIO/NADB2018/Input/river_tracer_4river_NADB2018.nc',\
+    '/dataSIO/NADB2019/Input/river_tracer_4river_NADB2019_0.nc']
 
 nfiles = len(f_list)
 
