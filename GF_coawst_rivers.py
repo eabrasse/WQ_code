@@ -30,8 +30,8 @@ ot0 = ds0['river_time'][:]
 dt0 = datetime(1999,1,1) + timedelta(days=ot0[35])
 
 ds_1 = nc.Dataset(f_list[-1])
-ot_1 = ds1['river_time'][:]
-dt_1 = datetime(1999,1,1) + timedelta(days=ot1[-35])
+ot_1 = ds_1['river_time'][:]
+dt_1 = datetime(1999,1,1) + timedelta(days=ot_1[-35])
 
 ndays_guess = (dt_1-dt0).days + 1
 
