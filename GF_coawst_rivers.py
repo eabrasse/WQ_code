@@ -172,7 +172,7 @@ for var_name in var_2gf_list:
     for ds in ds_list:
         var0 = ds[var_name]
         
-        if dscount=0:
+        if dscount==0:
             dim = len(var.shape)
 
         # use r0 to trim overlap with previous file
