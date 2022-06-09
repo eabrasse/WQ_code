@@ -111,7 +111,7 @@ for f in range(nfiles):
         # rt is in days, so 12 noon is at 0.5
         # find the distance from noon at each point
         rt0_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt0])
-        last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]
+        last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]-1
         r0 = np.argwhere(rt>rt0[last_rt0_noon_ind])[0][0]
         
         ndays_mod+=1
@@ -138,24 +138,6 @@ for f in range(nfiles):
     rt_start = datetime(1999,1,1)+timedelta(days=rt[r0])
     rt_end = datetime(1999,1,1)+timedelta(days=rt[-1])
     print('rt goes from '+rt_start.strftime("%m/%d/%Y, %H:%M:%S")+' to '+rt_end.strftime("%m/%d/%Y, %H:%M:%S"))
-    
-    # if rt_start.hour!=12:
-    #     hr_list = [(datetime(1999,1,1)+timedelta(days=rtt)).hour for rtt in rt]
-    #     r00 = hr_list.index(12)
-    #     rt = rt[r00:]
-    #     rt_start = datetime(1999,1,1)+timedelta(days=rt[0])
-    #     print('rt modified to begin from '+rt_start.strftime("%m/%d/%Y, %H:%M:%S"))
-    #
-    #
-    # if rt_end.hour!=12:
-    #     hr_list = [(datetime(1999,1,1)+timedelta(days=rtt)).hour for rtt in rt]
-    #     hr_list.reverse()
-    #     r000 = hr_list.index(12)
-    #     r11=len(hr_list) - r000 - 1
-    #     rt=rt[:r11+1]
-    #     rt_end = datetime(1999,1,1)+timedelta(days=rt[-1])
-    #     print('rt modified to end on '+rt_end.strftime("%m/%d/%Y, %H:%M:%S"))
-        
         
     ndays = int(nt/24)-2+ndays_mod
     
