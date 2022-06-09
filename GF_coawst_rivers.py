@@ -86,8 +86,9 @@ tic0 = time.perf_counter()
 # nvars = len(var_2gf_list)
 rt = np.array([])
 r0_list = []
-ds_list = ds[nc.Dataset(fn) for fn in f_list]
-for ds in ds_list:
+ds_list = []
+for fn in f_list:
+    ds = nc.Dataset(fn)
     rt0 = ds['river_time'][:]
     # there is overlap in river forcing files, so only append time steps after the end of the previous timeseries
     if len(rt)>0:
@@ -96,6 +97,7 @@ for ds in ds_list:
         r0=0
     rt = np.append(rt,rt0[r0:],axis=0)
     r0_list.append(r0)
+    ds_list.append(ds)
 
 # for f in range(nfiles):
 #     # if mod(f,5):
