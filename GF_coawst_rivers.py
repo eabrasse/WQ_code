@@ -168,7 +168,7 @@ for var_name in var_2gf_list:
     tic = time.perf_counter()
     
     ntrun = 0
-    ds_count=0
+    dscount=0
     for ds in ds_list:
         var0 = ds[var_name][:]
         
