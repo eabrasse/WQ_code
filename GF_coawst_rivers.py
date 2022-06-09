@@ -69,8 +69,7 @@ for v_name,varin in ds0.variables.items():
         var_2gf_list.append(v_name) # if time-varying, add name to "to godin filter" list
         shape0 = [s for s in varin.shape]
         shape0[0] = ndays_guess #change time index
-        outVar_fill = np.zeros((shape0))
-        outVar[:] = outVar_fill[:]
+        outVar[:] = np.zeros((shape0))
     else:
         outVar[:] = varin[:]
 toc = time.perf_counter()
@@ -84,129 +83,158 @@ ds_1.close()
 
 print('Begin filtering')
 tic0 = time.perf_counter()
-nvars = len(var_2gf_list)
-total_days = 0
-for f in range(nfiles):
-    # if mod(f,5):
-    print(f'Working on file {(f+1):} of {nfiles:}'+'\n'+f_list[f])
-    ds = nc.Dataset(f_list[f])
+# nvars = len(var_2gf_list)
+rt = np.array([])
+r0_list = []
+ds_list = ds[nc.Dataset(fn) for fn in f_list]
+for ds in ds_list:
+    rt0 = ds['river_time'][:]
+    # there is overlap in river forcing files, so only append time steps after the end of the previous timeseries
+    if len(rt)>0:
+        r0 = np.argwhere(rt0>rt[-1]])[0][0]
+    else:
+        r0=0
+    rt = np.append(rt,rt0[r0:],axis=0)
+    r0_list.append(r0)
+
+# for f in range(nfiles):
+#     # if mod(f,5):
+#     print(f'Working on file {(f+1):} of {nfiles:}'+'\n'+f_list[f])
+#     ds = nc.Dataset(f_list[f])
     
-    rt = ds['river_time'][:]
-    nrt = len(rt)
-    print(f'rt length is {nrt}')
+
+    # nrt = len(rt)
+    # print(f'rt length is {nrt}')
     
-    rt_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt])
-    first_rt_noon_ind = np.argwhere(rt_rd<0.01)[0][0]
-    last_rt_noon_ind = np.argwhere(rt_rd<0.01)[-1][0]
+    # rt_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt])
+    # first_rt_noon_ind = np.argwhere(rt_rd<0.01)[0][0]
+    # last_rt_noon_ind = np.argwhere(rt_rd<0.01)[-1][0]
     
     # if only one file, we'll lose two days, one at the beginning and one at the end
     # if it's the first file of many, we'll lose one day at the beginning
     # if it's the last file of many, we'll lose one day at the end
     # so assume ndays will be at minimum (nt/24 - 2), with up to two days 'restored'
     # how many days 'restored' will be ndays_mod
-    ndays_mod = 0
-    if f>0: #open previous file UNLESS f=0
-        print('f>0')
-        ds0 = nc.Dataset(f_list[f-1])
-        rt0 = ds0['river_time'][:]
-        #make sure this one has 12 o'clock time stamp, or closest to 12 o'clock
-        # rt is in days, so 12 noon is at 0.5
-        # find the distance from noon at each point
-        rt0_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt0])
-        last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]
-        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind-1])[0][0]
-        
-        ndays_mod+=1
-    else:
-        print('f==0')
-        r0 = first_rt_noon_ind
-    print(f'r0 = {r0}')
-    
-    if f<nfiles-1: #open following file UNLESS f = nflies-1
-        print('f<nfiles-1')
-        ds1 = nc.Dataset(f_list[f+1])
-        rt1 = ds1['river_time'][:]
-        
-        r1 = np.argwhere(rt1>rt[last_rt_noon_ind-1])[0][0]
-        
-        ndays_mod+=1
-    else:
-        print('f==nfiles-1')
-        r1=last_rt_noon_ind
-    print(f'r1 = {r1}')
-    
-    nt = rt[r0:last_rt_noon_ind+1].shape[0]
-    print(f'rt trimmed to {nt}')
-    
-    rt_start = datetime(1999,1,1)+timedelta(days=rt[r0])
-    rt_end = datetime(1999,1,1)+timedelta(days=rt[last_rt_noon_ind])
-    print('rt goes from '+rt_start.strftime("%m/%d/%Y, %H:%M:%S")+' to '+rt_end.strftime("%m/%d/%Y, %H:%M:%S"))
-        
-    ndays = int(nt/24)-2+ndays_mod
+    # ndays_mod = 0
+    # if f>0: #open previous file UNLESS f=0
+#         print('f>0')
+#         ds0 = nc.Dataset(f_list[f-1])
+#         rt0 = ds0['river_time'][:]
+#         #make sure this one has 12 o'clock time stamp, or closest to 12 o'clock
+#         # rt is in days, so 12 noon is at 0.5
+#         # find the distance from noon at each point
+#         rt0_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt0])
+#         last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]
+#         r0 = np.argwhere(rt>rt0[last_rt0_noon_ind-1])[0][0]
+#
+#         # ndays_mod+=1
+#     else:
+#         print('f==0')
+#         r0 = first_rt_noon_ind
+#     print(f'r0 = {r0}')
+#
+#     if f<nfiles-1: #open following file UNLESS f = nflies-1
+#         print('f<nfiles-1')
+#         ds1 = nc.Dataset(f_list[f+1])
+#         rt1 = ds1['river_time'][:]
+#
+#         r1 = np.argwhere(rt1>rt[last_rt_noon_ind-1])[0][0]
+#
+#         ndays_mod+=1
+#     else:
+#         print('f==nfiles-1')
+#         r1=last_rt_noon_ind
+#     print(f'r1 = {r1}')
+#
+#     nt = rt[r0:last_rt_noon_ind+1].shape[0]
+#     print(f'rt trimmed to {nt}')
+#
+#     rt_start = datetime(1999,1,1)+timedelta(days=rt[r0])
+#     rt_end = datetime(1999,1,1)+timedelta(days=rt[last_rt_noon_ind])
+#     print('rt goes from '+rt_start.strftime("%m/%d/%Y, %H:%M:%S")+' to '+rt_end.strftime("%m/%d/%Y, %H:%M:%S"))
+#
+#     ndays = int(nt/24)-2+ndays_mod
     
 
     
-    #loop through variables, filtering and saving
-    varcount=0
-    for var_name in var_2gf_list:
-        print(f'   filtering {var_name}...')
-        tic = time.perf_counter()
-        var = ds[var_name]
-        dim = len(var.shape)
+#loop through variables, filtering and saving
+# varcount=0
+for var_name in var_2gf_list:
+    
+    print(f'   filtering {var_name}...')
+    tic = time.perf_counter()
+    
+    var = np.array([])
+    
+    dscount =0
+    for ds in ds_list:
+        var0 = ds[var_name]
         
+        if dscount=0:
+            dim = len(var.shape)
+
         # use r0 to trim overlap with previous file
         if dim==1:
-            var = var[r0:last_rt_noon_ind]
+            var0 = var0[r0_list[dscount]:]
         else:
-            var = var[r0:last_rt_noon_ind,:]
-        dim = len(var.shape)
+            var0 = var0[r0_list[dscount]:,:]
         
-        #godin filtering uses 35 hourly time steps
-        # to get one value for the first and last days of each file,
-        # we need to include extra hourly time steps from 
-        # the files directly before and after.
-        # For the first and last files, those won't be available
-        if f>0: #don't try to read in preceding file for f=0
-            if dim==1: # if one dimensional
-                var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind]
-            else: # if multidimensional
-                var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind,:]
-            var = np.insert(var,0,var0,axis=0) # add earlier file data to start of array
+        var = np.append(var,var0,axis=0)
+        dscount+=1
         
-        if f<nfiles-1: # don't try to read in following file when f = nfiles-1
-            if dim==1:
-                # use r1 to trim overlap with next file
-                var1 = ds1[var_name][r1:(r1+24)]
-            else:
-                var1 = ds1[var_name][r1:(r1+24),:] 
-            var = np.append(var,var1,axis=0) # add later file data to end of array
-        
-        # pick out daily values
-        
-        if dim==1: # if one dimensional
-            var_gf = wqfun.filt_godin(var)
-            ds2[var_name][total_days:total_days+ndays] = var_gf[35:-35:24] #trim leading & trailing nans and subsample 1/day
-        else: # if multidimensional
-            # filter
-            var_gf = wqfun.filt_godin_mat(var)
-            ds2[var_name][total_days:total_days+ndays,:] = var_gf[35:-35:24,:] #trim leading & trailing nans and subsample 1/day
-        varcount+=1
-        toc = time.perf_counter()
-        var_gf_time = f"   filtering {var_name} took {toc-tic:0.4f} seconds"
-        print(var_gf_time)
-    # clean up
-    total_days+=ndays
-    if f>0:
-        ds0.close()
-    ds.close()
-    if f<nfiles-1:
-        ds1.close()
+    if dim==1: # if one dimensional
+        var_gf = wqfun.filt_godin(var)
+        ds2[var_name][:] = var_gf[35:-35:24] #trim leading & trailing nans and subsample 1/day
+    else: # if multidimensional
+        # filter
+        var_gf = wqfun.filt_godin_mat(var)
+        ds2[var_name][:] = var_gf[35:-35:24,:] #trim leading & trailing nans and subsample 1/day
+    # varcount+=1
+    toc = time.perf_counter()
+    var_gf_time = f"   filtering {var_name} took {toc-tic:0.4f} seconds"
+    print(var_gf_time)
+    # dim = len(var0.shape)
+    
+    # #godin filtering uses 35 hourly time steps
+    # # to get one value for the first and last days of each file,
+    # # we need to include extra hourly time steps from
+    # # the files directly before and after.
+    # # For the first and last files, those won't be available
+    # if f>0: #don't try to read in preceding file for f=0
+    #     if dim==1: # if one dimensional
+    #         var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind]
+    #     else: # if multidimensional
+    #         var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind,:]
+    #     var = np.insert(var,0,var0,axis=0) # add earlier file data to start of array
+    #
+    # if f<nfiles-1: # don't try to read in following file when f = nfiles-1
+    #     if dim==1:
+    #         # use r1 to trim overlap with next file
+    #         var1 = ds1[var_name][r1:(r1+24)]
+    #     else:
+    #         var1 = ds1[var_name][r1:(r1+24),:]
+         # add later file data to end of array
+    
+    # pick out daily values
+    
+# clean up
+# total_days+=ndays
+# if f>0:
+#     ds0.close()
+# ds.close()
+# if f<nfiles-1:
+#     ds1.close()
+
 
 print('Finished!')
 toc = time.perf_counter()
 total_gf_time = f"Filtering all variables took {toc-tic0:0.4f} seconds"
 print(total_gf_time)
 
+for ds in ds_list:
+    ds.close()
+
+#check to see if steps filtered correctly
 ds2.close()
 ds2 = nc.Dataset(gf_fn)
 rt = ds2['river_time'][:]
