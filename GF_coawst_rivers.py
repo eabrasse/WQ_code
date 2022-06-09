@@ -114,7 +114,7 @@ for f in range(nfiles):
         # find the distance from noon at each point
         rt0_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt0])
         last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]
-        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind])[0][0]
+        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind-1])[0][0]
         
         ndays_mod+=1
     else:
@@ -168,9 +168,9 @@ for f in range(nfiles):
         # For the first and last files, those won't be available
         if f>0: #don't try to read in preceding file for f=0
             if dim==1: # if one dimensional
-                var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind]
+                var0 = ds0[var_name][(last_rt0_noon_ind-24):last_rt0_noon_ind+1]
             else: # if multidimensional
-                var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind,:]
+                var0 = ds0[var_name][(last_rt0_noon_ind-24):last_rt0_noon_ind+1,:]
             var = np.insert(var,0,var0,axis=0) # add earlier file data to start of array
         
         if f<nfiles-1: # don't try to read in following file when f = nfiles-1
