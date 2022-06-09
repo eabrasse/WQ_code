@@ -92,6 +92,11 @@ for f in range(nfiles):
     ds = nc.Dataset(f_list[f])
     
     rt = ds['river_time'][:]
+    nrt = len(rt)
+    print(f'rt length is {nrt}')
+    rt_start = datetime(1999,1,1)+timedelta(days=rt[0])
+    rt_end = datetime(1999,1,1)+timedelta(days=rt[-1])
+    print('rt goes from '+rt_start.strftime()+' to '+st_end.strftime())
     
     # if only one file, we'll lose two days, one at the beginning and one at the end
     # if it's the first file of many, we'll lose one day at the beginning
@@ -100,21 +105,32 @@ for f in range(nfiles):
     # how many days 'restored' will be ndays_mod
     ndays_mod = 0
     if f>0: #open previous file UNLESS f=0
+        print('f>0')
         ds0 = nc.Dataset(f_list[f-1])
         rt0 = ds0['river_time'][:]
         r0 = np.argwhere(rt>rt0[-1])[0][0]
         ndays_mod+=1
     else:
+        print('f==0')
         r0 = 0
+    print(f'r0 = {r0}')
+    
     if f<nfiles-1: #open following file UNLESS f = nflies-1
+        print('f<nfiles-1')
         ds1 = nc.Dataset(f_list[f+1])
         rt1 = ds1['river_time'][:]
         r1 = np.argwhere(rt1>rt[-1])[0][0]
+        
         ndays_mod+=1
     else:
+        print('f==nfiles-1')
         r1=-1
+    print(f'r1 = {r1}')
+    
     nt = rt[r0:].shape[0]
+    print(f'rt trimmed to {nt}')
     ndays = int(nt/24)-2+ndays_mod
+    
 
     
     #loop through variables, filtering and saving
