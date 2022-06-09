@@ -168,11 +168,12 @@ for var_name in var_2gf_list:
     tic = time.perf_counter()
     
     ntrun = 0
+    ds_count=0
     for ds in ds_list:
         var0 = ds[var_name][:]
         
         
-        if ntrun==0:
+        if dscount==0:
             dim = len(var0.shape)
             shape0 = [s for s in var0.shape]
             shape0[0] = nt #change time index 
@@ -186,6 +187,7 @@ for var_name in var_2gf_list:
             var[ntrun:(ntrun+nt0),:] = var0[r0_list[dscount]:,:]
         
         ntrun+=nt0
+        dscount+=1
 
         
     if dim==1: # if one dimensional
