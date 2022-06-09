@@ -95,7 +95,9 @@ for f in range(nfiles):
     nrt = len(rt)
     print(f'rt length is {nrt}')
     
-    
+    rt_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt])
+    first_rt_noon_ind = np.argwhere(rt_rd<0.01)[0][0]
+    last_rt_noon_ind = np.argwhere(rt_rd<0.01)[-1][0]
     
     # if only one file, we'll lose two days, one at the beginning and one at the end
     # if it's the first file of many, we'll lose one day at the beginning
@@ -111,20 +113,21 @@ for f in range(nfiles):
         # rt is in days, so 12 noon is at 0.5
         # find the distance from noon at each point
         rt0_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt0])
-        last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]-1
-        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind])[0][0]
+        last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]
+        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind-1])[0][0]
         
         ndays_mod+=1
     else:
         print('f==0')
-        r0 = 0
+        r0 = first_rt_noon_ind
     print(f'r0 = {r0}')
     
     if f<nfiles-1: #open following file UNLESS f = nflies-1
         print('f<nfiles-1')
         ds1 = nc.Dataset(f_list[f+1])
         rt1 = ds1['river_time'][:]
-        r1 = np.argwhere(rt1>rt[-1])[0][0]
+        
+        r1 = np.argwhere(rt1>rt[last_rt_noon_ind-1])[0][0]
         
         ndays_mod+=1
     else:
@@ -132,7 +135,7 @@ for f in range(nfiles):
         r1=-1
     print(f'r1 = {r1}')
     
-    nt = rt[r0:].shape[0]
+    nt = rt[r0:last_rt_noon_ind].shape[0]
     print(f'rt trimmed to {nt}')
     
     rt_start = datetime(1999,1,1)+timedelta(days=rt[r0])
@@ -153,9 +156,9 @@ for f in range(nfiles):
         
         # use r0 to trim overlap with previous file
         if dim==1:
-            var = var[r0:]
+            var = var[r0:last_rt_noon_ind]
         else:
-            var = var[r0:,:]
+            var = var[r0:last_rt_noon_ind,:]
         dim = len(var.shape)
         
         #godin filtering uses 35 hourly time steps
@@ -206,8 +209,8 @@ print(total_gf_time)
 
 dt = [datetime(1999,1,1)+timedelta(days=rt) for rt in ds2['river_time'][:]]
 dt_diff = [dt[i]-dt[i-1] for i in range(1,len(dt))]
-for diff in dt_diff:
-    print(diff)
+# for diff in dt_diff:
+#     print(diff)
 dt_diff_list = [dt[i] for i in range(0,len(dt)-1) if dt_diff[i]>timedelta(days=1)]
 if len(dt_diff_list)==0:
     print('no steps were too long')
