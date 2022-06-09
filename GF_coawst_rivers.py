@@ -97,6 +97,23 @@ for f in range(nfiles):
     rt_start = datetime(1999,1,1)+timedelta(days=rt[0])
     rt_end = datetime(1999,1,1)+timedelta(days=rt[-1])
     print('rt goes from '+rt_start.strftime("%m/%d/%Y, %H:%M:%S")+' to '+rt_end.strftime("%m/%d/%Y, %H:%M:%S"))
+    if rt_start.hour!=12:
+        hr_list = [(datetime(1999,1,1)+timedelta(days=rtt)).hour for rtt in rt]
+        r0 = hr_list.index(12)
+        rt = rt[r0:]
+        rt_start = datetime(1999,1,1)+timedelta(days=rt[0])
+        print('rt modified to begin from '+rt_start.strftime("%m/%d/%Y, %H:%M:%S"))
+        
+    
+    if rt_end.hour!=12:
+        hr_list = [(datetime(1999,1,1)+timedelta(days=rtt)).hour for rtt in rt]
+        hr_list.reverse()
+        r0 = hr_list.index(12)
+        r1=len(hr_list) - r0 - 1
+        rt=rt[:r1+1]
+        rt_end = datetime(1999,1,1)+timedelta(days=rt[-1])
+        print('rt modified to end on '+rt_end.strftime("%m/%d/%Y, %H:%M:%S"))
+    
     
     # if only one file, we'll lose two days, one at the beginning and one at the end
     # if it's the first file of many, we'll lose one day at the beginning
