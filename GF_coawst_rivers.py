@@ -135,7 +135,7 @@ for f in range(nfiles):
         r1=last_rt_noon_ind
     print(f'r1 = {r1}')
     
-    nt = rt[r0:last_rt_noon_ind].shape[0]
+    nt = rt[r0:last_rt_noon_ind+1].shape[0]
     print(f'rt trimmed to {nt}')
     
     rt_start = datetime(1999,1,1)+timedelta(days=rt[r0])
@@ -156,9 +156,9 @@ for f in range(nfiles):
         
         # use r0 to trim overlap with previous file
         if dim==1:
-            var = var[r0:last_rt_noon_ind]
+            var = var[r0:last_rt_noon_ind+1]
         else:
-            var = var[r0:last_rt_noon_ind,:]
+            var = var[r0:last_rt_noon_ind+1,:]
         dim = len(var.shape)
         
         #godin filtering uses 35 hourly time steps
@@ -168,9 +168,9 @@ for f in range(nfiles):
         # For the first and last files, those won't be available
         if f>0: #don't try to read in preceding file for f=0
             if dim==1: # if one dimensional
-                var0 = ds0[var_name][(last_rt0_noon_ind-24):last_rt0_noon_ind+1]
+                var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind]
             else: # if multidimensional
-                var0 = ds0[var_name][(last_rt0_noon_ind-24):last_rt0_noon_ind+1,:]
+                var0 = ds0[var_name][(last_rt0_noon_ind-25):last_rt0_noon_ind,:]
             var = np.insert(var,0,var0,axis=0) # add earlier file data to start of array
         
         if f<nfiles-1: # don't try to read in following file when f = nfiles-1
