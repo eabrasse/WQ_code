@@ -109,7 +109,7 @@ for f in range(nfiles):
     if f<nfiles-1: #open following file UNLESS f = nflies-1
         ds1 = nc.Dataset(f_list[f+1])
         rt1 = ds1['river_time'][:]
-        r1 = np.argwhere(rt1>rt[-1])[0][0]
+        r1 = np.argwhere(rt1<rt[-1])[-1][0]
         ndays_mod+=1
     else:
         r1=-1
