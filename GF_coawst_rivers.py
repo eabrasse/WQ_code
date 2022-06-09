@@ -92,7 +92,7 @@ for fn in f_list:
     rt0 = ds['river_time'][:]
     # there is overlap in river forcing files, so only append time steps after the end of the previous timeseries
     if len(rt)>0:
-        r0 = np.argwhere(rt0>rt[-1]])[0][0]
+        r0 = np.argwhere(rt0>rt[-1])[0][0]
     else:
         r0=0
     rt = np.append(rt,rt0[r0:],axis=0)
