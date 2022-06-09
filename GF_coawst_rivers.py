@@ -107,7 +107,13 @@ for f in range(nfiles):
         print('f>0')
         ds0 = nc.Dataset(f_list[f-1])
         rt0 = ds0['river_time'][:]
-        r0 = np.argwhere(rt>rt0[-1])[0][0]
+        #make sure this one has 12 o'clock time stamp, or closest to 12 o'clock
+        # rt is in days, so 12 noon is at 0.5
+        # find the distance from noon at each point
+        rt0_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt0])
+        last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]
+        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind])[0][0]
+        
         ndays_mod+=1
     else:
         print('f==0')
