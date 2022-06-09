@@ -98,6 +98,7 @@ for fn in f_list:
     rt = np.append(rt,rt0[r0:],axis=0)
     r0_list.append(r0)
     ds_list.append(ds)
+nt = len(rt)
 
 # for f in range(nfiles):
 #     # if mod(f,5):
@@ -166,23 +167,26 @@ for var_name in var_2gf_list:
     print(f'   filtering {var_name}...')
     tic = time.perf_counter()
     
-    var = np.array([])
-    
-    dscount =0
+    ntrun = 0
     for ds in ds_list:
-        var0 = ds[var_name]
+        var0 = ds[var_name][:]
         
-        if dscount==0:
+        
+        if ntrun==0:
             dim = len(var.shape)
-
+            shape0 = [s for s in var.shape]
+            shape0[0] = nt #change time index 
+            var = np.zeros((shape0))
+            
+        nt0 = var0.shape[0]
         # use r0 to trim overlap with previous file
         if dim==1:
-            var0 = var0[r0_list[dscount]:]
+            var[ntrun:(ntrun+nt0)] = var0[r0_list[dscount]:]
         else:
-            var0 = var0[r0_list[dscount]:,:]
+            var[ntrun:(ntrun+nt0),:] = var0[r0_list[dscount]:,:]
         
-        var = np.append(var,var0,axis=0)
-        dscount+=1
+        ntrun+=nt0
+
         
     if dim==1: # if one dimensional
         var_gf = wqfun.filt_godin(var)
