@@ -179,11 +179,13 @@ for var_name in var_2gf_list:
             shape0[0] = nt #change time index 
             var = np.zeros((shape0))
             
-        nt0 = var0.shape[0]
+        
         # use r0 to trim overlap with previous file
         if dim==1:
+            nt0 = var0[r0_list[dscount]:].shape[0]
             var[ntrun:(ntrun+nt0)] = var0[r0_list[dscount]:]
         else:
+            nt0 = var0[r0_list[dscount]:,:].shape[0]
             var[ntrun:(ntrun+nt0),:] = var0[r0_list[dscount]:,:]
         
         ntrun+=nt0
