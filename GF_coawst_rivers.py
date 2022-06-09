@@ -114,7 +114,7 @@ for f in range(nfiles):
         # find the distance from noon at each point
         rt0_rd = np.array([np.abs(rtt - np.floor(rtt) -0.5) for rtt in rt0])
         last_rt0_noon_ind = np.argwhere(rt0_rd<0.01)[-1][0]
-        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind-1])[0][0]
+        r0 = np.argwhere(rt>rt0[last_rt0_noon_ind])[0][0]
         
         ndays_mod+=1
     else:
