@@ -173,7 +173,7 @@ for var_name in var_2gf_list:
         
         
         if ntrun==0:
-            dim = len(var.shape)
+            dim = len(var0.shape)
             shape0 = [s for s in var.shape]
             shape0[0] = nt #change time index 
             var = np.zeros((shape0))
