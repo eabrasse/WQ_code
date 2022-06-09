@@ -214,7 +214,7 @@ dt = [datetime(1999,1,1)+timedelta(days=rtt) for rtt in rt]
 dt_diff = [dt[i]-dt[i-1] for i in range(1,len(dt))]
 # for diff in dt_diff:
 #     print(diff)
-dt_diff_list = [dt[i] for i in range(0,len(dt)-1) if dt_diff[i]>timedelta(days=1)]
+dt_diff_list = [dt[i] for i in range(0,len(dt)-1) if dt_diff[i]!=timedelta(days=1)]
 if len(dt_diff_list)==0:
     print('no steps were too long')
 else:
