@@ -180,12 +180,14 @@ print(total_gf_time)
 
 dt = [datetime(1999,1,1)+timedelta(days=rt) for rt in ds2['river_time'][:]]
 dt_diff = [dt[i]-dt[i-1] for i in range(1,len(dt))]
-print(diff) for diff in dt_diff
+for diff in dt_diff:
+    print(diff)
 dt_diff_list = [dt[i] for i in range(0,len(dt)-1) if dt_diff[i]>timedelta(days=1)]
 if len(dt_diff_list)==0:
     print('no steps were too long')
 else:
     print('some time steps were too long')
-    print(dtd) for dtd in dt_diff_list
+    for dtd in dt_diff_list:
+        print(dtd)
     
 ds2.close()
