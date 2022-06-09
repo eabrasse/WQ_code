@@ -96,7 +96,7 @@ for f in range(nfiles):
     print(f'rt length is {nrt}')
     rt_start = datetime(1999,1,1)+timedelta(days=rt[0])
     rt_end = datetime(1999,1,1)+timedelta(days=rt[-1])
-    print('rt goes from '+rt_start.strftime()+' to '+st_end.strftime())
+    print('rt goes from '+rt_start.strftime("%m/%d/%Y, %H:%M:%S")+' to '+st_end.strftime("%m/%d/%Y, %H:%M:%S"))
     
     # if only one file, we'll lose two days, one at the beginning and one at the end
     # if it's the first file of many, we'll lose one day at the beginning
