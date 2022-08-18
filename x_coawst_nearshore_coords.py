@@ -146,9 +146,10 @@ for fn in f_list:
     ds.close()
     tt+=1
 
+stupidvar = 6
 
 var_list = ['lon_rho','lat_rho','mask_rho','h0',\
-'mask_extract','ot']
+'mask_extract','ot','stupidvar']
 
 D = dict()
 for var in var_list:
