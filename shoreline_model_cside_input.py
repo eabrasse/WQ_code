@@ -114,5 +114,5 @@ v_ss = Vmod_sm[::scale,:]
 ###### SAVE VARIABLES IN PICKLE FILE ######
 D = {'c':c_ss,'t':t0,'y':y,'kt':kt,'kd':kd,'adv':adv_ss,'v':v_ss}
 # outfn = home+'/WQ_data/adv_diff_model/CSIDE_recycled_input_tuned_kd{kd:.2E}_PB_in{PB_in:0.3f}_2017–2019.p'
-outfn = home+'/WQ_data/CSIDE_recycled_input_tuned_kd{kd:.2E}_PB_in{PB_in:0.3f}_2017–2019.p'
+outfn = home+f'/WQ_data/CSIDE_recycled_input_tuned_kd{kd:.2E}_PB_in{PB_in:0.3f}_2017–2019.p'
 pickle.dump(D,open(outfn,'wb'))
