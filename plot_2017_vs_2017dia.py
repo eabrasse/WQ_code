@@ -114,16 +114,16 @@ for vname in var_time_list:
         ax = fig.add_subplot(gs[lcount,1])
         
         # plot unfilted local data
-        var_xw = ds_xw[vname][:]
-        ax.plot(dt_list,var_xw[inds],lw=1.0,ls='solid',color=c10(0))
-        var_dia = ds_dia[vname][:]
-        ax.plot(dt_list,var_dia[inds],lw=1.0,ls='dashed',color=c10(1))
+        var_xw = ds_xw[vname][inds]
+        ax.plot(dt_list,var_xw,lw=1.0,ls='solid',color=c10(0))
+        var_dia = ds_dia[vname][inds]
+        ax.plot(dt_list,var_dia,lw=1.0,ls='dashed',color=c10(1))
         
         ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
         
         # add units to y-axis on far left hand side only
         try:
-            ax.set_ylabel(ds[vname].units)
+            ax.set_ylabel(ds_xw[vname].units)
         except:
             ax.set_ylabel(vname)
         
