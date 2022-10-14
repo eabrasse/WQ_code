@@ -139,7 +139,7 @@ for vname in var_time_list:
         lcount+=1
     
     fig.subplots_adjust(left=0.08,right=0.98,top=0.95,wspace=0.3)
-    outfn = home+ f'WQ_plots/NADB2017_dia_validation/compare_NADB2017_NADB2017dia_{vname}.jpg'
+    outfn = home+ f'WQ_plots/NADB2017dia_validation/compare_NADB2017_NADB2017dia_{vname}.jpg'
     plt.savefig(outfn)
     plt.close()
 
