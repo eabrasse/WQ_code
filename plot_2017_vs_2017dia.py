@@ -33,6 +33,11 @@ fn_dia = dir1+'ocean_his_NADB_0_new_00001.nc'
 ds_xw = nc.Dataset(fn_xw)
 ds_dia = nc.Dataset(fn_dia)
 
+ot = ds_xw['ocean_time'][:]
+dt_list = []
+for ott in ot:
+    dt_list.append(datetime(1999,1,1)+timedelta(seconds=ott))
+
 testing=True
 if testing:
     # just plot one variable
