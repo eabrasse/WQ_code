@@ -17,6 +17,7 @@ import netCDF4 as nc
 from datetime import datetime, timedelta
 import matplotlib.dates as mdates
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+import cmocean as cmo
 
 plt.close('all')
 c10 = plt.get_cmap('tab10')
