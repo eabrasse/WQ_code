@@ -42,7 +42,6 @@ var_list = ['vbar_cor','vbar_hadv','vbar_hjvf','vbar_wbrk','vbar_prsgrd','vbar_s
 lonv = ds['lon_v'][:]
 latv = ds['lat_v'][:]
 maskv = ds['mask_v'][:]
-wd_maskv = ds['wetdry_mask_v']
 
 # # z,y,x
 # lat0,lon0 = 32.56957,-117.16880 # CDIP buoy location
@@ -77,7 +76,7 @@ for varname,ax in zip(var_list,axs.ravel()):
     
     # load in and mask data
     var = ds[varname][t,:]
-    var = np.ma.masked_where(wd_maskv[t,:],var)
+    var = np.ma.masked_where(var==0,var)
     
     # label
     ax.text(0.9,0.9,varname,color='k',fontweight='bold',transform=ax.transAxes,ha='right',va='top')
