@@ -65,7 +65,7 @@ else:
 fig,axs=plt.subplots(nrows=nrows,ncols=ncols,figsize=(12,8))
 
 vmaxs = []
-t=-1
+Dgf = {}
 for varname,ax in zip(var_list,axs.ravel()):
     
     # draw map
@@ -73,7 +73,10 @@ for varname,ax in zip(var_list,axs.ravel()):
     wqfun.dar(ax)
     
     # load in and mask data
-    var = ds[varname][t,:]
+    var = ds[varname][:]
+    var_gf = wqfun.filt_godin_mat(var)
+    Dgf[varname] = var_gf[-36,:] # last 35 time steps are masked
+    
     # try to determine what the best colorbar axis is going to be
     # it needs to be symmetric around zero
     vmaxs.append(np.percentile(np.abs(var),80))
@@ -87,7 +90,7 @@ vmax = 0.8*np.max(vmaxs)
 
 for varname,ax in zip(var_list,axs.ravel()):
     
-    var = ds[varname][t,:]
+    var = Dgf[varname][:]
     var = np.ma.masked_where(var==0,var)
     # plot data
     p = ax.pcolormesh(lonv,latv,var,cmap='bwr_r',vmin=-vmax,vmax=vmax)
