@@ -97,16 +97,16 @@ cbaxes = inset_axes(axs[-1,ncols-1], width="6%", height="40%", loc='lower left',
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
 cb.set_label('m/s2',fontsize=8)
 
-for ax in axs[0,:]:
+for ax in axs[-1,:]:
     ax.set_xlabel('Longitude')
-for ax in axs[1:,:].ravel():
+for ax in axs[:-1,:].ravel():
     ax.set_xticklabels([''])
 for ax in axs[:,0]:
     ax.set_ylabel('Latitude')
 for ax in axs[:,1:].ravel():
     ax.set_yticklabels([''])
     
-fig.subplots_adjust(left=0.08,right=0.98,top=0.95,wspace=0.3)
+fig.subplots_adjust(left=0.08,right=0.98,top=0.95,bottom=0.05,wspace=0.05,hspace=0.05)
 outfn = home+ f'WQ_plots/NADB2017_vbar_dia_snapshot.jpg'
 plt.savefig(outfn)
 plt.close()
