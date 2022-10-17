@@ -27,12 +27,9 @@ seacol = 'white'
 
 cmap_mask = matplotlib.colors.ListedColormap([landcol,seacol])
 
-# home = '/dataSIO/ebrasseale/'
+home = '/dataSIO/ebrasseale/'
 
-#build up list of file names for model output
-dir0 = '/dataSIO/ebrasseale/NADB2017_0_dia/'
-
-fn = dir0+'ocean_dia_NADB_0_new_00001.nc'
+fn = home+'NADB2017_0_dia/ocean_dia_NADB_0_new_00001.nc'
 
 ds = nc.Dataset(fn)
 
