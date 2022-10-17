@@ -90,7 +90,7 @@ for varname,ax in zip(var_list,axs.ravel()):
     var = ds[varname][t,:]
     var = np.ma.masked_where(var==0,var)
     # plot data
-    p = ax.pcolormesh(lonv,latv,var,cmap='bwr_R',vmin=-vmax,vmax=vmax)
+    p = ax.pcolormesh(lonv,latv,var,cmap='bwr_r',vmin=-vmax,vmax=vmax)
     ax.axis([-117.23,-117.09,32.43,32.7])
 
 cbaxes = inset_axes(axs[-1,ncols-1], width="6%", height="40%", loc='lower left',bbox_transform=axs[-1,ncols-1].transAxes,bbox_to_anchor=(0.,0,1,1))
