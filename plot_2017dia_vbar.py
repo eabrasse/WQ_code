@@ -90,8 +90,8 @@ for varname,ax in zip(var_list,axs.ravel()):
     vmaxs.append(np.max(np.abs(var)))
 
 vmax = 0.8*np.max(vmaxs)
-for ax in axs.ravel():
-    ax.set_clim([-vmax,vmax])
+# for ax in axs.ravel():
+plt.clim([-vmax,vmax])
 
 cbaxes = inset_axes(axs[-1,ncols-1], width="6%", height="40%", loc='lower left',bbox_transform=axs[-1,ncols-1].transAxes,bbox_to_anchor=(0.,0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
