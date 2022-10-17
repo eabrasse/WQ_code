@@ -76,7 +76,7 @@ for varname,ax in zip(var_list,axs.ravel()):
     var = ds[varname][t,:]
     # try to determine what the best colorbar axis is going to be
     # it needs to be symmetric around zero
-    vmaxs.append(np.max(np.abs(var)))
+    vmaxs.append(np.percentile(np.abs(var),80))
     
     
     # label
