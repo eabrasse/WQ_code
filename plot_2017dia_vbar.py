@@ -96,11 +96,11 @@ for varname,ax in zip(var_list,axs.ravel()):
     p = ax.pcolormesh(lonv,latv,var,cmap='bwr_r',vmin=-vmax,vmax=vmax)
     ax.axis([-117.23,-117.09,32.43,32.7])
 
-cbaxes = inset_axes(axs[-1,ncols-1], width="6%", height="40%", loc='lower left',bbox_transform=axs[-1,ncols-1].transAxes,bbox_to_anchor=(0.,0,1,1))
+cbaxes = inset_axes(axs[-1,ncols-2], width="6%", height="40%", loc='lower left',bbox_transform=axs[-1,ncols-1].transAxes,bbox_to_anchor=(0.,0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
 cb.set_label('m/s2',fontsize=8)
 
-for ax in axs[-1,:]:
+for ax in axs[-1,:-1]:
     ax.set_xlabel('Longitude')
 for ax in axs[:-1,:].ravel():
     ax.set_xticklabels([''])
@@ -110,7 +110,7 @@ for ax in axs[:,1:].ravel():
     ax.set_yticklabels([''])
     
 fig.subplots_adjust(left=0.08,right=0.98,top=0.95,bottom=0.05,wspace=0.05,hspace=0.05)
-outfn = home+ f'WQ_plots/NADB2017_vbar_dia_snapshot.jpg'
+outfn = home+ f'WQ_plots/NADB2017_vbar_dia_gf_snapshot.jpg'
 plt.savefig(outfn)
 plt.close()
 
