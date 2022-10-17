@@ -82,16 +82,15 @@ for varname,ax in zip(var_list,axs.ravel()):
     # label
     ax.text(0.9,0.9,varname,color='k',fontweight='bold',transform=ax.transAxes,ha='right',va='top')
     
-    # plot data
-    p = ax.pcolormesh(lonv,latv,var,cmap=cmo.cm.balance)
-    
     # try to determine what the best colorbar axis is going to be
     # it needs to be symmetric around zero
     vmaxs.append(np.max(np.abs(var)))
 
 vmax = 0.8*np.max(vmaxs)
-# for ax in axs.ravel():
-plt.clim([-vmax,vmax])
+
+for ax in axs.ravel():
+    # plot data
+    p = ax.pcolormesh(lonv,latv,var,cmap=cmo.cm.balance,vmin=-vmax,vmax=vmax)
 
 cbaxes = inset_axes(axs[-1,ncols-1], width="6%", height="40%", loc='lower left',bbox_transform=axs[-1,ncols-1].transAxes,bbox_to_anchor=(0.,0,1,1))
 cb = fig.colorbar(p, cax=cbaxes, orientation='vertical')
