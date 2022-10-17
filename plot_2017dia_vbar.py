@@ -77,18 +77,21 @@ for varname,ax in zip(var_list,axs.ravel()):
     
     # load in and mask data
     var = ds[varname][t,:]
-    var = np.ma.masked_where(var==0,var)
+    # try to determine what the best colorbar axis is going to be
+    # it needs to be symmetric around zero
+    vmaxs.append(np.max(np.abs(var)))
+    
     
     # label
     ax.text(0.9,0.9,varname,color='k',fontweight='bold',transform=ax.transAxes,ha='right',va='top')
     
-    # try to determine what the best colorbar axis is going to be
-    # it needs to be symmetric around zero
-    vmaxs.append(np.max(np.abs(var)))
 
 vmax = 0.8*np.max(vmaxs)
 
-for ax in axs.ravel():
+for varname,ax in zip(var_list,axs.ravel()):
+    
+    var = ds[varname][t,:]
+    var = np.ma.masked_where(var==0,var)
     # plot data
     p = ax.pcolormesh(lonv,latv,var,cmap=cmo.cm.balance,vmin=-vmax,vmax=vmax)
 
@@ -98,7 +101,7 @@ cb.set_label('m/s2',fontsize=8)
 
 for ax in axs[0,:]:
     ax.set_xlabel('Longitude')
-for ax in axs[1:,:]:
+for ax in axs[1:,:].ravel():
     ax.set_xticklabels([''])
 for ax in axs[:,0]:
     ax.set_ylabel('Latitude')
